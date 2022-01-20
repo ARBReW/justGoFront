@@ -1,7 +1,21 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import {
+  Center,
+  Stack,
+  Image,
+  Heading,
+  Text,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+  Button,
+  Divider,
+} from "@chakra-ui/react";
+import type { NextPage } from "next";
+import Head from "next/head";
+import Link from "next/link";
+import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   return (
@@ -12,9 +26,54 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-       <div>WELCOME TO LOGIN</div>
-    </div>
-  )
-}
+      <Center h="100vh" bg="teal.500">
+        <Stack boxShadow="md" bg="whiteAlpha.900" p="20" rounded="md">
+          <Image
+            src="http://en.ikanji.jp/user_data/images/upload/character/original/E4BA94.png"
+            mb="8"
+            mx="auto"
+          />
+          <Heading as="h1"> Log in and Just GO. </Heading>
+          <Text fontSize="lg" color="gray.600">
+            Let's start with your username and password.
+          </Text>
 
-export default Home
+          <FormControl>
+            <FormLabel htmlFor="email">Email address:</FormLabel>
+            <Input
+              placeholder="Enter your email here"
+              id="email"
+              type="email"
+            />
+            <FormLabel htmlFor="password" marginTop="5px">
+              Password:
+            </FormLabel>
+            <Input
+              placeholder="Enter your password here"
+              id="password"
+              type="password"
+            />
+            <FormHelperText></FormHelperText>
+            <Center>
+              <Button colorScheme="teal" variant="outline">
+                Log in
+              </Button>
+            </Center>
+          </FormControl>
+
+          <Divider orientation="horizontal" paddingTop="5px"/>
+
+          <Center paddingTop="15px">
+            <Link href="/selection">
+              <Button colorScheme="orange" variant="solid">
+                Guest Login
+              </Button>
+            </Link>
+          </Center>
+        </Stack>
+      </Center>
+    </div>
+  );
+};
+
+export default Home;
