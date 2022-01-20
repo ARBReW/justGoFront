@@ -58,10 +58,10 @@ export default function selection() {
                     </Button>
                   );
                 })}
-                <Link href="/place">
+                <Link href="/place" passHref>
                   <Button onClick={handleSelection}>JUST GO</Button>
                 </Link>
-                <Link href="/otsukare">
+                <Link href="/otsukare" passHref>
                   <Button onClick={handleEnd}>Go To Otsukare</Button>
                 </Link>
               </Stack>
