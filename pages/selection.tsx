@@ -1,11 +1,24 @@
+import { Button, Center, HStack, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 
 export default function selection() {
   return (
     <>
-      <div>WELCOME TO SELECTION</div>
-      <Link href="/place">Go to Place</Link>
-      <Link href='/otsukare'>Go to Otsukare</Link>
+      <HStack>
+        <Button>Left</Button>
+        <Center>
+          <Stack>
+            <div>WELCOME TO SELECTION</div>
+            <Link href="/place">
+              <Button>Go To Place</Button>
+            </Link>
+            <Link href="/otsukare">
+              <Button>Go To Otsukare</Button>
+            </Link>
+          </Stack>
+        </Center>
+        <Button>Right</Button>
+      </HStack>
     </>
   );
 }
