@@ -4,7 +4,11 @@ import Link from "next/link";
 
 export default function selection() {
   const images: string[] = [
-    "https://images.squarespace-cdn.com/content/v1/58fd82dbbf629ab224f81b68/1530854536400-U501LPJSRZ0W57S9SH4V/Shirahige-Shinto-Shrine.jpg?format=1000w",
+    "https://parks.pflugervilletx.gov/home/showpublishedimage/15033/637641079093830000",
+    'noimage',
+    'noimage',
+    'noimage',
+    "https://media-cdn.tripadvisor.com/media/photo-s/12/92/53/4a/1f.jpg"
   ];
 
   const names: string[] = [
@@ -14,6 +18,8 @@ export default function selection() {
     "Wesley Store",
     "Roman Mall",
   ];
+
+  const placeData = names.map((name: string, i) => [name, images[i]])
 
   function changeRoute(event: any) {
     const direction: string = event.target.attributes.direction.value;
@@ -39,8 +45,8 @@ export default function selection() {
             <Center>
               <Stack>
                 <div>WELCOME TO SELECTION</div>
-                {names.map((name: string) => {
-                  return <div>{name}</div>;
+                {placeData.map((place, i) => {
+                  return <Button key={i*3.14} img={place[1]}>{place[0]}</Button>;
                 })}
                 <Link href="/place">
                   <Button onClick={handleSelection}>JUST GO</Button>
