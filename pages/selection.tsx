@@ -9,11 +9,25 @@ export default function selection() {
   const { places } = useRecoilValue(locationStates);
 
   const [selectRoute, setSelectRoute] = useState(0);
-  const [bg, setBg] = useState("");
+  const [bg, setBg] = useState(routesList[selectRoute][0]?.img);
 
   function changeRoute(event: any) {
     const direction: string = event.target.attributes.direction.value;
+   
     if (direction === "left") {
+      if (selectRoute === 0) {
+        setSelectRoute(routesList.length - 1);
+      } else {
+        setSelectRoute(selectRoute - 1);
+      }
+    }
+
+    if (direction === "right") {
+      if (selectRoute === routesList.length - 1) {
+        setSelectRoute(0);
+      } else {
+        setSelectRoute(selectRoute + 1);
+      }
     }
   }
 
@@ -27,7 +41,7 @@ export default function selection() {
 
   function changeBg(event: any) {
     const placeId = Number.parseInt(event.target.attributes.placeid.value);
-    setBg(places.find(place => place.placeId === placeId)!.img)
+    setBg(places.find((place) => place.placeId === placeId)!.img);
   }
 
   return (
