@@ -1,8 +1,11 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-import teststate from "../states/teststate";
+import Link from "next/link";
 
 export default function place() {
-  const [test, setTest]= useRecoilState(teststate)
-  //setTest('hi')
-  return <div>WELCOME TO PLACE {test}</div>;
+  return (
+    <>
+      <div>WELCOME TO PLACE</div>
+      <Link href='/selection'>Go to Selection</Link>
+      <Link href='/navigation'>Go to Navigation</Link>
+    </>
+  );
 }

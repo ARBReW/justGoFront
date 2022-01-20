@@ -1,7 +1,7 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from "next";
+import Head from "next/head";
+import Link from "next/link";
+import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   return (
@@ -12,9 +12,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-       <div>WELCOME TO LOGIN</div>
-    </div>
-  )
-}
+      <div>WELCOME TO LOGIN</div>
 
-export default Home
+      <Link href='/selection'>Go to Selection</Link>
+    </div>
+  );
+};
+
+export default Home;
