@@ -31,11 +31,12 @@ const Home: NextPage = () => {
           <Image
             src="http://en.ikanji.jp/user_data/images/upload/character/original/E4BA94.png"
             mb="8"
+            alt="JustGoLogo"
             mx="auto"
           />
           <Heading as="h1"> Log in and Just GO. </Heading>
           <Text fontSize="lg" color="gray.600">
-            Let's start with your username and password.
+            Enter your username and password.
           </Text>
 
           <FormControl>
@@ -61,10 +62,10 @@ const Home: NextPage = () => {
             </Center>
           </FormControl>
 
-          <Divider orientation="horizontal" paddingTop="5px"/>
+          <Divider orientation="horizontal" paddingTop="5px" />
 
           <Center paddingTop="15px">
-            <Link href="/selection">
+            <Link href="/selection" passHref>
               <Button colorScheme="orange" variant="solid">
                 Guest Login
               </Button>
