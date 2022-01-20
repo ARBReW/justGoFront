@@ -1,4 +1,4 @@
-import { Box, Button, Center, HStack, Stack } from "@chakra-ui/react";
+import { Button, Center, HStack, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -35,10 +35,6 @@ export default function selection() {
         setSelectRoute(selectRoute + 1);
       }
     }
-  }
-
-  function handleSelection() {
-    console.log("selectedPlace");
   }
 
   function handleEnd() {
@@ -85,7 +81,7 @@ export default function selection() {
                   );
                 })}
               <Link href="/place" passHref>
-                <Button onClick={handleSelection}>JUST GO</Button>
+                <Button>JUST GO</Button>
               </Link>
               <Link href="/otsukare" passHref>
                 <Button onClick={handleEnd}>Go To Otsukare</Button>

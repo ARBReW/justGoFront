@@ -6,6 +6,7 @@ const placeDetail = atom({
     placeId: 0,
     name: "",
     coord: [],
+    img: '',
     hours: { open: -1, close: -1 },
     type: "",
   },
