@@ -1,19 +1,20 @@
 import { Box, Button, Center, HStack, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import locationStates, { routes } from "../states/locationStates";
+import placeDetail from "../states/placeDetail";
 
 export default function selection() {
   const routesList = useRecoilValue(routes);
   const { places } = useRecoilValue(locationStates);
-
   const [selectRoute, setSelectRoute] = useState(0);
-  const [bg, setBg] = useState(routesList[selectRoute][0]?.img);
+  const [selectPlace, setSelectPlace] = useState(0);
+  const [bg, setBg] = useState(routesList[selectRoute][selectPlace]?.img);
+  const [placeInfo, setPlaceInfo] = useRecoilState(placeDetail)
 
   function changeRoute(event: any) {
     const direction: string = event.target.attributes.direction.value;
-   
     if (direction === "left") {
       if (selectRoute === 0) {
         setSelectRoute(routesList.length - 1);
@@ -29,6 +30,8 @@ export default function selection() {
         setSelectRoute(selectRoute + 1);
       }
     }
+  
+    setBg(routesList[selectRoute][selectPlace]?.img)
   }
 
   function handleSelection() {
@@ -39,9 +42,12 @@ export default function selection() {
     console.log(routesList);
   }
 
-  function changeBg(event: any) {
+  function handlePlaceClick(event: any) {
     const placeId = Number.parseInt(event.target.attributes.placeid.value);
-    setBg(places.find((place) => place.placeId === placeId)!.img);
+    const place = places.find((place) => place.placeId === placeId);
+    setSelectPlace(routesList[selectRoute].map(place => place?.placeId).indexOf(placeId))
+    setBg(place!.img);
+    setPlaceInfo(place || {});
   }
 
   return (
@@ -62,7 +68,7 @@ export default function selection() {
                       <Button
                         key={place?.placeId}
                         placeid={place?.placeId}
-                        onClick={changeBg}
+                        onClick={handlePlaceClick}
                       >
                         {place?.name}
                       </Button>
