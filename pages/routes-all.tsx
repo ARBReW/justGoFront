@@ -5,7 +5,7 @@ import { Box } from "@chakra-ui/react";
 
 const allData = locationStates;
 
-export default function showAllRoutess() {
+export default function showAllRoutes() {
     const { routes } = useRecoilValue(allData);
 
     return (
