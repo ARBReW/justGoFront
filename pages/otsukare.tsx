@@ -17,10 +17,10 @@ import Link from "next/link";
 
 export default function showRoute() {
   const { places } = useRecoilValue(locationStates);
-  const route = useRecoilValue(currentRoute)
-  //const endImg = places[route[route.length-1].placeId].img;
-  const endImg = places[1].img;
-  console.log("thisRoute",route[0])
+  const route = useRecoilValue(currentRoute);  
+  const stops = route.stops;
+  const endImg = stops[stops.length -1].img;
+  console.log("thisRoute", stops[stops.length -1])
  
   return (
     <Center h="100vh" bg="teal.500">
@@ -50,11 +50,11 @@ export default function showRoute() {
         </Stack>
 
         <div>
-          {route.slice()
+          {stops.slice()
             .reverse()
             .map((stop) => (
               <Box key={stop.placeId * 8.4216}>
-                {"✅"} {route.indexOf(stop) + 1}: {stop.name} {stop.type}
+                {"✅"} {stops.indexOf(stop) + 1}: {stop.name} {stop.type}
               </Box>
             ))}
         </div>
