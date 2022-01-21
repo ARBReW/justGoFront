@@ -56,7 +56,7 @@ export default function selection() {
         .indexOf(placeId)
     );
     setBg(place!.img);
-    setPlaceInfo(place);
+    //setPlaceInfo(place);
   }
 
   return (
