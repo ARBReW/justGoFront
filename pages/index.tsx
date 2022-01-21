@@ -26,8 +26,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Center h="100vh" bg="teal.500">
-        <Stack boxShadow="md" bg="whiteAlpha.900" p="20" rounded="md">
+      <Center h="100vh" bg="teal.500" w="100vw">
+        <Stack boxShadow="md" bg="whiteAlpha.900" p="20" rounded="md" min-height="95vh" min-w="40vw">
           <Image
             src="http://en.ikanji.jp/user_data/images/upload/character/original/E4BA94.png"
             mb="8"
