@@ -15,7 +15,7 @@ export default function selection() {
 
   useEffect(() => {
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
-    setBg('placeInfo.img');
+    setBg(placeInfo.img);
   }, [selectRoute, placeInfo]);
 
   function changeRoute(event: any) {
@@ -62,7 +62,7 @@ export default function selection() {
       >
         <HStack>
           <Button direction="left" onClick={changeRoute}>
-            Left
+            {'<'}
           </Button>
           <Center>
             <Stack>
@@ -89,7 +89,7 @@ export default function selection() {
             </Stack>
           </Center>
           <Button direction="right" onClick={changeRoute}>
-            Right
+            {'>'}
           </Button>
         </HStack>
       </Center>
