@@ -10,15 +10,18 @@ import {
   AspectRatio
 } from '@chakra-ui/react';
 import locationStates from "../states/locationStates";
-import { useRecoilValue } from "recoil";
+import currentRoute from "../states/currentRoute";
+import { useRecoilValue} from "recoil";
 import Link from "next/link";
 
-const allData = locationStates;
 
-export default function ProductSimple() {
-  const { places } = useRecoilValue(allData);
-  const img = places[places.length-1].img;
-
+export default function showRoute() {
+  const { places } = useRecoilValue(locationStates);
+  const route = useRecoilValue(currentRoute);  
+  const stops = route.stops;
+  const endImg = stops[stops.length -1].img;
+  console.log("thisRoute", stops[stops.length -1])
+ 
   return (
     <Center h="100vh" bg="teal.500">
       <Stack boxShadow="md" bg="whiteAlpha.900" p="20" rounded="md">
@@ -31,7 +34,7 @@ export default function ProductSimple() {
 
         <AspectRatio minW='100px' ratio={4 / 3}>
           <Image
-            src={img}
+            src={endImg}
             rounded='lg'
             objectFit='cover'
             objectPosition="50%"
@@ -47,11 +50,11 @@ export default function ProductSimple() {
         </Stack>
 
         <div>
-          {places.slice()
+          {stops.slice()
             .reverse()
-            .map((place) => (
-              <Box key={place.placeId * 8.4216}>
-                {"✅"} {places.indexOf(place) + 1}: {place.name} {place.type}
+            .map((stop) => (
+              <Box key={stop.placeId * 8.4216}>
+                {"✅"} {stops.indexOf(stop) + 1}: {stop.name} {stop.type}
               </Box>
             ))}
         </div>

@@ -18,6 +18,7 @@ export default function selection() {
   useEffect(() => {
     setCurrRoute(routesList[selectRoute]);
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
+    setCurrRoute(routesList[selectRoute]);
     setBg(placeInfo.img);
   }, [selectRoute, placeInfo]);
 
