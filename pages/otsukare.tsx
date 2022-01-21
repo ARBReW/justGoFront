@@ -51,7 +51,7 @@ export default function ProductSimple() {
             .reverse()
             .map((place) => (
               <Box key={place.placeId * 8.4216}>
-                {"✅"} {places.indexOf(place) + 1}: {place.name}
+                {"✅"} {places.indexOf(place) + 1}: {place.name} {place.type}
               </Box>
             ))}
         </div>
