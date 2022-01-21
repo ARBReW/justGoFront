@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { Center, Stack, Button, ButtonGroup, Box } from '@chakra-ui/react';
 import { useRecoilValue } from "recoil";
 import locationStates from "../states/locationStates";
@@ -8,9 +9,11 @@ export default function place() {
 
   console.log(places);
 
+
   return (
     <>
       <Center h='100vh' bg='teal.500'>
+
         <Stack
           h='95vh'
           boxShadow='md'
@@ -47,6 +50,7 @@ export default function place() {
             align='center'
             pt={250}
             pb={50}>
+
             <Link href='/selection'>
               <Button bg='green.100'>
                 Go to Selection
