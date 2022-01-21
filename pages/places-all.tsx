@@ -1,6 +1,6 @@
-import locations from "../data/locationsData"
+import locations from "../data/locationsData";
 import { useRecoilValue } from "recoil";
-import locationStates from "../states/locationStates"
+import locationStates from "../states/locationStates";
 import { Box } from "@chakra-ui/react";
 
 const allData = locationStates;
