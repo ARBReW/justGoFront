@@ -2,6 +2,7 @@ import { Button, Center, HStack, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import currentRoute from "../states/currentRoute";
 import locationStates, { routes } from "../states/locationStates";
 import placeDetail from "../states/placeDetail";
 
@@ -12,6 +13,7 @@ export default function selection() {
   const [selectPlace, setSelectPlace] = useState(0);
   const [bg, setBg] = useState(routesList[selectRoute].stops[selectPlace]?.img);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
+  const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
 
   useEffect(() => {
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
@@ -35,6 +37,10 @@ export default function selection() {
         setSelectRoute(selectRoute + 1);
       }
     }
+  }
+
+  function handleRouteSelect() {
+    setCurrRoute(routesList[selectRoute]);
   }
 
   function handleEnd() {
@@ -81,7 +87,7 @@ export default function selection() {
                   );
                 })}
               <Link href="/place" passHref>
-                <Button>JUST GO</Button>
+                <Button onClick={handleRouteSelect}>JUST GO</Button>
               </Link>
               <Link href="/otsukare" passHref>
                 <Button onClick={handleEnd}>Go To Otsukare</Button>
