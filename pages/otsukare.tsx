@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Center,
   useColorModeValue,
   Heading,
@@ -9,20 +10,28 @@ import {
   AspectRatio
 } from '@chakra-ui/react';
 import locationStates from "../states/locationStates";
+import { useRecoilValue } from "recoil";
+import Link from "next/link";
 
-
-const IMAGE =
-  'https://images.unsplash.com/photo-1518051870910-a46e30d9db16?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80';
 const allData = locationStates;
 
 export default function ProductSimple() {
+  const { places } = useRecoilValue(allData);
+  const img = places[places.length-1].img;
+
   return (
     <Center h="100vh" bg="teal.500">
       <Stack boxShadow="md" bg="whiteAlpha.900" p="20" rounded="md">
 
-        <AspectRatio minW='100px' ratio={1 / 3}>
+        <Stack pt={10} align={'center'}>
+          <Heading align={"centre"} fontSize={'2xl'} fontFamily={'body'} fontWeight={500}>
+            Otsukare
+          </Heading>
+        </Stack>
+
+        <AspectRatio minW='100px' ratio={4 / 3}>
           <Image
-            src={IMAGE}
+            src={img}
             rounded='lg'
             objectFit='cover'
             objectPosition="50%"
@@ -30,20 +39,27 @@ export default function ProductSimple() {
         </AspectRatio>
 
         <Stack pt={10} align={'center'}>
-          <Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>
-            Brand
+
+          <Text fontSize={'sm'} textTransform={'uppercase'}>
+            Your route:
           </Text>
-          <Heading fontSize={'2xl'} fontFamily={'body'} fontWeight={500}>
-            Nice Chair, pink
-          </Heading>
-          <Stack direction={'row'} align={'center'}>
-            <Text fontWeight={800} fontSize={'xl'}>
-              $57
-            </Text>
-            <Text textDecoration={'line-through'} color={'gray.600'}>
-              $199
-            </Text>
-          </Stack>
+
+        </Stack>
+
+        <div>
+          {places.slice()
+            .reverse()
+            .map((place) => (
+              <Box key={place.placeId * 8.4216}>
+                {"✅"} {places.indexOf(place) + 1}: {place.name}
+              </Box>
+            ))}
+        </div>
+
+        <Stack pt={10} align={'center'}>
+          <Link href="/" passHref>
+            <Button>{"Return to login"}</Button>
+          </Link>
         </Stack>
       </Stack>
     </Center>
