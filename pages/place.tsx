@@ -2,13 +2,11 @@ import Link from "next/link";
 
 import { Center, Stack, Button, ButtonGroup, Box } from '@chakra-ui/react';
 import { useRecoilValue } from "recoil";
-import locationStates from "../states/locationStates";
+import placeDetail from "../states/placeDetail";
 
 export default function place({}) {
-  const { places } = useRecoilValue(locationStates);
-
-  console.log(places);
-
+  const places = useRecoilValue(placeDetail);
+  
 
   return (
     <>
@@ -19,7 +17,7 @@ export default function place({}) {
           boxShadow='md'
           bg='whiteAlpha.900'
           p='20' rounded='md'
-          backgroundImage={`url(${places[0].img})`}
+          backgroundImage={`url(${places.img})`}
           backgroundRepeat='no-repeat'
           backgroundPosition='center'
           backgroundSize='cover'>
@@ -33,7 +31,7 @@ export default function place({}) {
               w='50%'
               p={4}
               align='center'>
-              {places[0].name}
+              {places.name}
             </Box>
             <Box
               bg='green.100'
@@ -41,7 +39,7 @@ export default function place({}) {
               p={4}
               color='grey.700'
               align='center'>
-              Open {places[0].hours.open} to {places[0].hours.close}
+              Open {places.hours.open} to {places.hours.close}
             </Box>
           </Stack>
           <ButtonGroup

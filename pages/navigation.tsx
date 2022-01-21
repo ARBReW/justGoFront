@@ -1,12 +1,18 @@
 import Link from "next/link";
 import { Center, Stack, Button, ButtonGroup, Box } from '@chakra-ui/react';
-import { useRecoilValue } from "recoil";
-import locationStates from "../states/locationStates";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import placeDetail from "../states/placeDetail";
+import currentRoute from "../states/currentRoute";
 
 export default function navigation() {
-  const { places } = useRecoilValue(locationStates);
+  const places = useRecoilValue(placeDetail);
+  const currRoute = useRecoilValue(currentRoute);
+  const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail)
 
-  console.log(places);
+
+  const nextPlace = () => {
+    setPlaceInfo(currRoute.stops[currRoute.stops.indexOf(places) + 1])
+  }
 
   return (
     <>
@@ -16,7 +22,7 @@ export default function navigation() {
           boxShadow='md'
           bg='whiteAlpha.900'
           p='20' rounded='md'
-          backgroundImage={`url(${places[0].img})`}
+          backgroundImage={`url(${places.img})`}
           backgroundRepeat='no-repeat'
           backgroundPosition='center'
           backgroundSize='cover'>
@@ -30,7 +36,7 @@ export default function navigation() {
               w='50%'
               p={4}
               align='center'>
-              {places[0].name}
+              {places.name}
             </Box>
             <Box
               bg='whiteAlpha.900'
@@ -53,7 +59,7 @@ export default function navigation() {
               </Button>
             </Link>
             <Link href='/place'>
-              <Button bg='green.100'>
+              <Button bg='green.100' onClick={nextPlace}>
                 Go to Next Place
               </Button>
             </Link>
@@ -63,17 +69,3 @@ export default function navigation() {
     </>
   );
 }
-
-
-/* original code: changed first link to Place, as per mockup (?)
-
-export default function navigation() {
-  return (
-    <>
-      <div>WELCOME TO NAVIGATION</div>
-      <Link href="/selection">Go to Selection</Link>
-      <Link href="/selection"> Go to Selection</Link>
-    </>
-  );
-}
-*/
