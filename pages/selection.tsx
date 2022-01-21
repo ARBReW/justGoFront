@@ -78,7 +78,7 @@ export default function selection() {
                 .map((place) => {
                   return (
                     <Button
-                      key={place?.placeId}
+                      key={place?.placeId * 3.1425}
                       placeid={place?.placeId}
                       onClick={handlePlaceClick}
                     >
