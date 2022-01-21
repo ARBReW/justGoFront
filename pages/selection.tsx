@@ -1,4 +1,4 @@
-import { Button, Center, HStack, Stack } from "@chakra-ui/react";
+import { Button, Center, Heading, HStack, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -51,7 +51,9 @@ export default function selection() {
     const placeId = Number.parseInt(event.target.attributes.placeid.value);
     const place = places.find((place) => place.placeId === placeId);
     setSelectPlace(
-      routesList[selectRoute].stops.map((place) => place?.placeId).indexOf(placeId)
+      routesList[selectRoute].stops
+        .map((place) => place?.placeId)
+        .indexOf(placeId)
     );
     setBg(place!.img);
     setPlaceInfo(place);
@@ -68,7 +70,7 @@ export default function selection() {
       >
         <HStack>
           <Button direction="left" onClick={changeRoute}>
-            {'<'}
+            {"<"}
           </Button>
           <Center>
             <Stack>
@@ -82,7 +84,7 @@ export default function selection() {
                       placeid={place?.placeId}
                       onClick={handlePlaceClick}
                     >
-                      {place?.name}
+                      {`${place?.name} [${place?.type}]`}
                     </Button>
                   );
                 })}
@@ -90,12 +92,12 @@ export default function selection() {
                 <Button onClick={handleRouteSelect}>JUST GO</Button>
               </Link>
               <Link href="/otsukare" passHref>
-                <Button onClick={handleEnd}>Go To Otsukare</Button>
-              </Link>
+            <Button onClick={handleEnd}>Done for the day</Button>
+          </Link>
             </Stack>
           </Center>
           <Button direction="right" onClick={changeRoute}>
-            {'>'}
+            {">"}
           </Button>
         </HStack>
       </Center>
