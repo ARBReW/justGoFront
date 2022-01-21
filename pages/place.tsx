@@ -4,7 +4,7 @@ import { Center, Stack, Button, ButtonGroup, Box } from '@chakra-ui/react';
 import { useRecoilValue } from "recoil";
 import locationStates from "../states/locationStates";
 
-export default function place() {
+export default function place({}) {
   const { places } = useRecoilValue(locationStates);
 
   console.log(places);

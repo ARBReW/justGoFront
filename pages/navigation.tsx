@@ -52,9 +52,9 @@ export default function navigation() {
                 Go back to Place
               </Button>
             </Link>
-            <Link href='/selection'>
+            <Link href='/place'>
               <Button bg='green.100'>
-                Go to Selection
+                Go to Next Place
               </Button>
             </Link>
           </ButtonGroup>
