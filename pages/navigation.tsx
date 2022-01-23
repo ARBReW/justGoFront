@@ -12,11 +12,16 @@ export default function navigation() {
   const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
 
   const nextPlace = () => {
-    setPlaceInfo(currRoute.stops[currRoute.stops.indexOf(places) + 1]);
+    let placeIndex = currRoute.stops.indexOf(places) + 1;
+    if (placeIndex > currRoute.stops.length - 1) {
+      setPlaceInfo(currRoute.stops[placeIndex - 1]);
+    } else {
+      setPlaceInfo(currRoute.stops[placeIndex]);
+    }
   }
 
   const updateUserRoute = () => {
-    setTraveledRoute({...traveledRoute, completedRoute:[...traveledRoute.completedRoute, placeInfo]});
+    setTraveledRoute({ ...traveledRoute, completedRoute: [...traveledRoute.completedRoute, placeInfo] });
     nextPlace();
   }
   return (
@@ -54,7 +59,7 @@ export default function navigation() {
             </Link>
             {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ?
               (<Link href="/otsukare">
-                <Button bg="green.100">
+                <Button bg="green.100" onClick={updateUserRoute}>
                   Done for the day
                 </Button>
               </Link>)
