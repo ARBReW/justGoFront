@@ -1,10 +1,19 @@
-import { Button, Center, Heading, HStack, Stack } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Heading,
+  HStack,
+  Stack,
+  Divider,
+  Text,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import currentRoute from "../states/currentRoute";
 import locationStates, { routes } from "../states/locationStates";
 import placeDetail from "../states/placeDetail";
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 
 export default function selection() {
   const routesList = useRecoilValue(routes);
@@ -63,43 +72,73 @@ export default function selection() {
 
   return (
     <>
-      <Center
-        h="100vh"
-        bg="teal.500"
-        backgroundImage={bg}
-        backgroundRepeat="no-repeat"
-        backgroundPosition="center"
-      >
-        <HStack>
-          <Button direction="left" onClick={changeRoute}>
-            {"<"}
+      <Center h="100vh" bg="teal.500" w="100vw">
+        <HStack
+          boxShadow="md"
+          pt="5"
+          pb="5"
+          pr="10"
+          pl="10"
+          rounded="md"
+          h="90vh"
+          minW="40vw"
+          maxW={["60vw", "90vw", "90vw", "70vw"]}
+          backgroundImage={bg}
+          backgroundRepeat="no-repeat"
+          backgroundPosition="center"
+          backgroundSize="cover"
+        >
+          <Button
+            colorScheme="blackAlpha"
+            direction="left"
+            onClick={changeRoute}
+          >
+            <ArrowLeftIcon color="white" boxSize={8}></ArrowLeftIcon>
           </Button>
-          <Center>
-            <Stack>
-              {routesList[selectRoute].stops
-                .slice()
-                .reverse()
-                .map((place) => {
-                  return (
-                    <Button
-                      key={place?.placeId * 3.1425}
-                      placeid={place?.placeId}
-                      onClick={handlePlaceClick}
-                    >
-                      {`${place?.name} [${place?.type}]`}
-                    </Button>
-                  );
-                })}
-              <Link href="/place" passHref>
-                <Button onClick={handleRouteSelect}>JUST GO</Button>
-              </Link>
-              <Link href="/otsukare" passHref>
-            <Button onClick={handleEnd}>Done for the day</Button>
-          </Link>
-            </Stack>
-          </Center>
-          <Button direction="right" onClick={changeRoute}>
-            {">"}
+          <Stack
+            pt="20px"
+            spacing={19}
+            direction="column"
+            align="center"
+            marginTop="20px"
+          >
+            {routesList[selectRoute].stops
+              .slice()
+              .reverse()
+              .map((place) => {
+                return (
+                  <Button
+                    key={place?.placeId * 3.1425}
+                    placeid={place?.placeId}
+                    onClick={handlePlaceClick}
+                  >
+                    {`${place?.type} ${place?.name} `}
+                  </Button>
+                );
+              })}
+            <Divider orientation="horizontal" />
+            <Link href="/place" passHref>
+              <Button colorScheme="orange" onClick={handleRouteSelect}>
+                JUST GO
+              </Button>
+            </Link>
+            <Link href="/otsukare" passHref>
+              <Button
+                onClick={handleEnd}
+                colorScheme="telegram"
+                variant="solid"
+              >
+                Done for the day
+              </Button>
+            </Link>
+          </Stack>
+          <Button colorScheme="blackAlpha" direction="right">
+            <ArrowRightIcon
+              color="white"
+              boxSize={8}
+              direction="right"
+              onClick={changeRoute}
+            ></ArrowRightIcon>
           </Button>
         </HStack>
       </Center>
