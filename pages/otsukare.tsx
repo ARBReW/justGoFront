@@ -20,8 +20,7 @@ export default function showRoute() {
   const route = useRecoilValue(currentRoute);  
   const stops = route.stops;
   const endImg = stops[stops.length -1].img;
-  console.log("thisRoute", stops[stops.length -1])
- 
+   
   return (
     <Center h="100vh" bg="teal.500">
       <Stack boxShadow="md" bg="whiteAlpha.900" p="20" rounded="md">
