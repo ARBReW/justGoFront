@@ -16,7 +16,9 @@ export default function selection() {
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
 
   useEffect(() => {
+    setCurrRoute(routesList[selectRoute]);
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
+    setCurrRoute(routesList[selectRoute]);
     setBg(placeInfo.img);
   }, [selectRoute, placeInfo]);
 
@@ -56,7 +58,7 @@ export default function selection() {
         .indexOf(placeId)
     );
     setBg(place!.img);
-    setPlaceInfo(place);
+    //setPlaceInfo(place);
   }
 
   return (
