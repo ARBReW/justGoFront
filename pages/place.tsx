@@ -1,11 +1,28 @@
 import Link from "next/link";
 
 import { Center, Stack, Button, ButtonGroup, Box } from '@chakra-ui/react';
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
+import { useState } from "react";
+import userGeoLocation from "../states/userGeoLocation"
 
 export default function place({}) {
   const places = useRecoilValue(placeDetail);
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+
+  async function handleOnClick() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setUserLocation({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+      }) 
+    })
+
+    //api call to google directions use coordinates
+    //response data will have to update a some recoil directions state
+  };
   
 
   return (
@@ -55,7 +72,7 @@ export default function place({}) {
               </Button>
             </Link>
             <Link href='/navigation'>
-              <Button bg='green.100'>
+              <Button bg='green.100' onClick={handleOnClick}>
                 Go to Navigation
               </Button>
             </Link>
