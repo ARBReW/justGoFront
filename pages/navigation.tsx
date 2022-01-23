@@ -3,17 +3,22 @@ import { Center, Stack, Button, ButtonGroup, Box } from '@chakra-ui/react';
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
+import userRoute, { userRouteInterface } from "../states/userRoute";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
   const currRoute = useRecoilValue(currentRoute);
-  const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail)
-
+  const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
+  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
 
   const nextPlace = () => {
-    setPlaceInfo(currRoute.stops[currRoute.stops.indexOf(places) + 1])
+    setPlaceInfo(currRoute.stops[currRoute.stops.indexOf(places) + 1]);
   }
 
+  const updateUserRoute = () => {
+    setTraveledRoute({...traveledRoute, completedRoute:[...traveledRoute.completedRoute, placeInfo]});
+    nextPlace();
+  }
   return (
     <>
       <Center h="100vh" bg="teal.500">
@@ -55,7 +60,7 @@ export default function navigation() {
               </Link>)
               :
               (<Link href="/place">
-                <Button bg="green.100" onClick={nextPlace}>
+                <Button bg="green.100" onClick={updateUserRoute}>
                   Go to Next Place
                 </Button>
               </Link>)}
