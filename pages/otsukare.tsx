@@ -11,15 +11,24 @@ import {
 } from '@chakra-ui/react';
 import locationStates from "../states/locationStates";
 import currentRoute from "../states/currentRoute";
-import { useRecoilValue} from "recoil";
+import { useRecoilValue, useResetRecoilState} from "recoil";
 import Link from "next/link";
-
+import userRoute from '../states/userRoute';
+import placeDetail from '../states/placeDetail';
 
 export default function showRoute() {
-  const { places } = useRecoilValue(locationStates);
-  const route = useRecoilValue(currentRoute);  
-  const stops = route.stops;
-  const endImg = stops[stops.length -1].img;
+  const { completedRoute } = useRecoilValue(userRoute);
+  const route = useRecoilValue(currentRoute);   
+  const endImg = completedRoute[completedRoute.length -1]?.img;
+  const clearPlace = useResetRecoilState(placeDetail);
+  const clearCurrentRoute = useResetRecoilState(currentRoute);
+  const clearUserRoute = useResetRecoilState(userRoute);
+  
+  const clearUser = () => {
+    clearPlace();
+    clearCurrentRoute();
+    clearUserRoute();
+  }
    
   return (
     <Center h="100vh" bg="teal.500">
@@ -49,18 +58,18 @@ export default function showRoute() {
         </Stack>
 
         <div>
-          {stops.slice()
+          {completedRoute.slice()
             .reverse()
             .map((stop) => (
               <Box key={stop.placeId * 8.4216}>
-                {"✅"} {stops.indexOf(stop) + 1}: {stop.name} {stop.type}
+                {"✅"} {stop.name} {stop.type}
               </Box>
             ))}
         </div>
 
         <Stack pt={10} align={'center'}>
           <Link href="/" passHref>
-            <Button>{"Return to login"}</Button>
+            <Button onClick={clearUser}>Return to login</Button>
           </Link>
         </Stack>
       </Stack>
