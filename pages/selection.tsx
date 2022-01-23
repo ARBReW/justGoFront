@@ -1,7 +1,8 @@
-import { Button, Center, HStack, Stack } from "@chakra-ui/react";
+import { Button, Center, Heading, HStack, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import currentRoute from "../states/currentRoute";
 import locationStates, { routes } from "../states/locationStates";
 import placeDetail from "../states/placeDetail";
 
@@ -10,11 +11,12 @@ export default function selection() {
   const { places } = useRecoilValue(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
   const [selectPlace, setSelectPlace] = useState(0);
-  const [bg, setBg] = useState(routesList[selectRoute][selectPlace]?.img);
+  const [bg, setBg] = useState(routesList[selectRoute].stops[selectPlace]?.img);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
+  const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
 
   useEffect(() => {
-    setPlaceInfo(routesList[selectRoute][selectPlace]);
+    setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
     setBg(placeInfo.img);
   }, [selectRoute, placeInfo]);
 
@@ -37,6 +39,10 @@ export default function selection() {
     }
   }
 
+  function handleRouteSelect() {
+    setCurrRoute(routesList[selectRoute]);
+  }
+
   function handleEnd() {
     console.log(routesList);
   }
@@ -45,7 +51,9 @@ export default function selection() {
     const placeId = Number.parseInt(event.target.attributes.placeid.value);
     const place = places.find((place) => place.placeId === placeId);
     setSelectPlace(
-      routesList[selectRoute].map((place) => place?.placeId).indexOf(placeId)
+      routesList[selectRoute].stops
+        .map((place) => place?.placeId)
+        .indexOf(placeId)
     );
     setBg(place!.img);
     setPlaceInfo(place);
@@ -62,34 +70,34 @@ export default function selection() {
       >
         <HStack>
           <Button direction="left" onClick={changeRoute}>
-            Left
+            {"<"}
           </Button>
           <Center>
             <Stack>
-              {routesList[selectRoute]
+              {routesList[selectRoute].stops
                 .slice()
                 .reverse()
                 .map((place) => {
                   return (
                     <Button
-                      key={place?.placeId}
+                      key={place?.placeId * 3.1425}
                       placeid={place?.placeId}
                       onClick={handlePlaceClick}
                     >
-                      {place?.name}
+                      {`${place?.name} [${place?.type}]`}
                     </Button>
                   );
                 })}
               <Link href="/place" passHref>
-                <Button>JUST GO</Button>
+                <Button onClick={handleRouteSelect}>JUST GO</Button>
               </Link>
               <Link href="/otsukare" passHref>
-                <Button onClick={handleEnd}>Go To Otsukare</Button>
-              </Link>
+            <Button onClick={handleEnd}>Done for the day</Button>
+          </Link>
             </Stack>
           </Center>
           <Button direction="right" onClick={changeRoute}>
-            Right
+            {">"}
           </Button>
         </HStack>
       </Center>
