@@ -54,7 +54,7 @@ export default function navigation() {
             </Link>
             {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ?
               (<Link href="/otsukare">
-                <Button bg="green.100">
+                <Button bg="green.100" onClick={updateUserRoute}>
                   Done for the day
                 </Button>
               </Link>)
