@@ -16,7 +16,6 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
-
 const Home: NextPage = () => {
   return (
     <div>
@@ -28,55 +27,76 @@ const Home: NextPage = () => {
         <Stack
           boxShadow="md"
           bg="whiteAlpha.900"
-          p="10"
+          pt="5"
+          pb="5"
+          pr="10"
+          pl="10"
           rounded="md"
-          max-height="80vh"
-          min-height="30vh"
-          min-w="40vw"
-          max-width={["50vw", "35vw", "35vw"]}
+          h="90vh"
+          minW="40vw"
+          maxW={["60vw", "90vw", "90vw"]}
         >
           <Image
             src="http://en.ikanji.jp/user_data/images/upload/character/original/E4BA94.png"
-            mb="8"
+            mb="6"
+            mt="3"
             alt="JustGoLogo"
             mx="auto"
-            max-width="20wh"
-            width="100%"
+            maxW={["15vh", "15vh", "20vh", "25vh"]}
+            width="10wh"
             height="auto"
           />
-          <Heading as="h1"> Log in and Just GO. </Heading>
-          <Text fontSize="lg" color="gray.600">
+          <Heading as="h1" fontSize={["2vh", "2vh", "3vh", "4vh"]}>
+            Log in and Just GO.{" "}
+          </Heading>
+          <Text fontSize={["1.9vh", "1.9vh", "1.9vh", "2vh"]} color="gray.600">
             Enter your username and password.
           </Text>
 
-          <FormControl>
-            <FormLabel htmlFor="email">Email address:</FormLabel>
+          <FormControl pt="15px">
+            <FormLabel htmlFor="email" fontSize={["2vh", "2vh", "2vh", "2vh"]}>
+              Email address:
+            </FormLabel>
             <Input
               placeholder="Enter your email here"
               id="email"
               type="email"
+              fontSize={["2vh", "2vh", "2vh", "2vh"]}
             />
-            <FormLabel htmlFor="password" marginTop="5px">
+            <FormLabel
+              htmlFor="password"
+              marginTop="5px"
+              fontSize={["2vh", "2vh", "2vh", "2vh"]}
+            >
               Password:
             </FormLabel>
             <Input
               placeholder="Enter your password here"
               id="password"
               type="password"
+              fontSize={["2vh", "2vh", "2vh", "2vh"]}
             />
             <FormHelperText></FormHelperText>
-            <Center>
-              <Button colorScheme="teal" variant="outline">
+            <Center pt="10px">
+              <Button
+                colorScheme="teal"
+                variant="outline"
+                fontSize={["2vh", "2vh", "2vh", "2vh"]}
+              >
                 Log in
               </Button>
             </Center>
           </FormControl>
 
-          <Divider orientation="horizontal" paddingTop="5px" />
+          <Divider orientation="horizontal" paddingTop="15px" />
 
           <Center paddingTop="15px">
             <Link href="/selection" passHref>
-              <Button colorScheme="orange" variant="solid">
+              <Button
+                colorScheme="orange"
+                variant="solid"
+                fontSize={["2vh", "2vh", "2vh", "2vh"]}
+              >
                 Guest Login
               </Button>
             </Link>
