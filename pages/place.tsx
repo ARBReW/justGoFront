@@ -1,6 +1,5 @@
 import Link from "next/link";
-require('dotenv').config();
-import { Center, Stack, Button, ButtonGroup, Box } from '@chakra-ui/react';
+import { Center, Stack, Button, ButtonGroup, Box, Divider, Text } from '@chakra-ui/react';
 import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
 import { useState } from "react";
@@ -8,7 +7,7 @@ import userGeoLocation from "../states/userGeoLocation"
 import axios from "axios";
 
 
-export default function place({}) {
+export default function place() {
   const places = useRecoilValue(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   
@@ -30,7 +29,7 @@ export default function place({}) {
     console.log(userLocation);
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
-    const response = await axios.get<any>(`${process.env.LOCAL_HOST}/directions/json`, {
+    const response = await axios.get<any>(`https://cc24-seniorprojectbackend.herokuapp.com/directions/json`, {
       params : { origin: coordinateString, destination: places.coord.toString() }, 
     });
   
@@ -41,56 +40,61 @@ export default function place({}) {
 
   return (
     <>
-      <Center h='100vh' bg='teal.500'>
-
+      <Center h="100vh" bg="teal.500" w="100vw">
         <Stack
-          h='95vh'
-          boxShadow='md'
-          bg='whiteAlpha.900'
-          p='20' rounded='md'
+          boxShadow="md"
+          pt="5"
+          pb="5"
+          pr="5"
+          pl="5"
+          rounded="md"
+          h="90vh"
+          minW="90vw"
+          maxW={["90vw", "90vw", "90vw", "70vw"]}
           backgroundImage={`url(${places.img})`}
-          backgroundRepeat='no-repeat'
-          backgroundPosition='center'
-          backgroundSize='cover'>
-          <Stack
-            direction='column'
-            spacing={4}
-            align='center'>
+          backgroundRepeat="no-repeat"
+          backgroundPosition="center"
+          backgroundSize="cover"
+        >
+          <Stack direction="column" spacing={4} align="center">
             <Box
-              bg='green.100'
-              borderWidth='1px'
-              w='50%'
+              bg="green.100"
+              borderWidth="1px"
+              w="50%"
               p={4}
-              align='center'>
-              {places.name}
-            </Box>
-            <Box
-              bg='green.100'
-              w='50%'
-              p={4}
-              color='grey.700'
-              align='center'>
-              Open {places.hours.open} to {places.hours.close}
+              align="center"
+              colorScheme={"whiteAlpha"}
+              bgColor="gray.500"
+              fontSize={20}
+              textColor="whitesmoke"
+              fontWeight="bold"
+            >
+              {places.name}{" "}
+              <Divider orientation="horizontal" pt="0.8rem"></Divider>
+              <Text
+                fontStyle="italic"
+                fontWeight="normal"
+                fontSize={15}
+                pt="0.8rem"
+              >
+                Business Hours:
+              </Text>
+              <Text fontWeight="bold" fontSize={15}>
+                Open {places.hours.open} to {places.hours.close}
+              </Text>
             </Box>
           </Stack>
-          <ButtonGroup
-            direction='row'
-            spacing={4}
-            align='center'
-            pt={250}
-            pb={50}>
-
-            <Link href='/selection'>
-              <Button bg='green.100'>
-                Go to Selection
-              </Button>
-            </Link>
-            <Link href='/navigation'>
-              <Button bg='green.100' onClick={handleOnClick}>
-                Go to Navigation
-              </Button>
-            </Link>
-          </ButtonGroup>
+          <Divider orientation="horizontal" pt="47vh" marginBottom="5vh" />
+          <Link href="/navigation">
+            <Button bg="blackAlpha.600" textColor="white">
+              Go to {places.name}
+            </Button>
+          </Link>
+          <Link href="/selection">
+            <Button bg="gray.400" textColor="white">
+              Back to route selection
+            </Button>
+          </Link>
         </Stack>
       </Center>
     </>
