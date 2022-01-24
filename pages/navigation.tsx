@@ -5,11 +5,13 @@ import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import place from "./place";
+import currentStop from "../states/viewedStops";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
   const currRoute = useRecoilValue(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
+
   const [traveledRoute, setTraveledRoute] =
     useRecoilState<userRouteInterface>(userRoute);
 
