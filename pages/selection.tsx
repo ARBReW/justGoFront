@@ -51,8 +51,6 @@ export default function selection() {
   }
 
   function changeToLeftRoute() {
-    console.log(placeInfo, "this is placeInfo")
-    console.log(placeDetail, "this is placeDetail")
     if (selectRoute === 0) {
       setSelectRoute(routesList.length - 1);
     } else {
@@ -62,6 +60,10 @@ export default function selection() {
 
   function handleRouteSelect() {
     setCurrRoute(routesList[selectRoute]);
+    setVStop({
+      ...vStop,
+      viewedStops: [...vStop.viewedStops, placeInfo],
+    });
   }
 
   function handleEnd() {
