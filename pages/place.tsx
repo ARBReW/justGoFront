@@ -5,15 +5,16 @@ import placeDetail from "../states/placeDetail";
 import { useState } from "react";
 import userGeoLocation from "../states/userGeoLocation"
 import axios from "axios";
-
+import viewedStops from "../states/viewedStops";
 
 export default function place() {
   const places = useRecoilValue(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-  
+  const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
+  const [vStop, setVStop] = useRecoilState(viewedStops);
 
   async function handleOnClick() {
-
+    
     //get the users location from the front end and pass the coordinates to the backend
     //the server will use the coordinates to make a request to the google directions api
     //then, server will send the front end an object with the returned google directions api data
@@ -33,10 +34,16 @@ export default function place() {
       params : { origin: coordinateString, destination: places.coord.toString() }, 
     });
   
-    console.log(response);
+    console.log(response, "response");
    
   };
   
+  function addToViewedStops() { 
+    setVStop({
+      ...vStop,
+      viewedStops: [...vStop.viewedStops, placeInfo],
+    });
+  }
 
   return (
     <>
@@ -86,12 +93,12 @@ export default function place() {
           </Stack>
           <Divider orientation="horizontal" pt="47vh" marginBottom="5vh" />
           <Link href="/navigation">
-            <Button bg="blackAlpha.600" textColor="white">
+            <Button bg="blackAlpha.600" textColor="white" onClick={handleOnClick}>
               Go to {places.name}
             </Button>
           </Link>
           <Link href="/selection">
-            <Button bg="gray.400" textColor="white">
+            <Button bg="gray.400" textColor="white" onClick={addToViewedStops}>
               Back to route selection
             </Button>
           </Link>
