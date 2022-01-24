@@ -119,10 +119,10 @@ export default function selection() {
               p="2"
               marginBottom={20}
               fontWeight="bold"
-          
             >
               Select a route
             </Text>
+
             {routesList[selectRoute].stops
               .slice()
               .reverse()
@@ -132,14 +132,23 @@ export default function selection() {
                     key={place?.placeId * 3.1425}
                     placeid={place?.placeId}
                     onClick={handlePlaceClick}
+                    {...(traveledRoute.completedRoute.includes(place)
+                      ? { bg: "gray", color: "gray.400" }
+                      : { bg: "white", color: "black" })}
                   >
                     {`${place?.type} ${place?.name} `}
                   </Button>
                 );
               })}
-            <ArrowUpIcon w="20" h="20" color="black"/>
+            <ArrowUpIcon w="20" h="20" color="black" />
             <Link href="/place" passHref>
-              <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="orange" onClick={handleRouteSelect}>
+              <Button
+                borderRadius="50%"
+                w="5rem"
+                h="5rem"
+                colorScheme="orange"
+                onClick={handleRouteSelect}
+              >
                 JUST GO
               </Button>
             </Link>

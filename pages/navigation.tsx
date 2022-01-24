@@ -95,7 +95,7 @@ export default function navigation() {
                 textColor="white"
                 onClick={updateUserRoute}
               >
-                Go to {currRoute.stops[currRoute.stops.indexOf(places) + 1].name}
+                I'm done here. <br></br> Take me to {currRoute.stops[currRoute.stops.indexOf(places) + 1].name}
               </Button>
             </Link>
           )}
