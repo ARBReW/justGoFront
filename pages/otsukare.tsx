@@ -7,52 +7,52 @@ import {
   Text,
   Stack,
   Image,
-  AspectRatio
-} from '@chakra-ui/react';
+  AspectRatio,
+} from "@chakra-ui/react";
 import locationStates from "../states/locationStates";
 import currentRoute from "../states/currentRoute";
-import { useRecoilValue, useResetRecoilState} from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import Link from "next/link";
-import userRoute from '../states/userRoute';
-import placeDetail from '../states/placeDetail';
+import userRoute from "../states/userRoute";
+import placeDetail from "../states/placeDetail";
 
 export default function showRoute() {
   const { completedRoute } = useRecoilValue(userRoute);
-  const route = useRecoilValue(currentRoute);   
-  const endImg = completedRoute[completedRoute.length -1]?.img;
+  const route = useRecoilValue(currentRoute);
+  const endImg = completedRoute[completedRoute.length - 1]?.img;
   const clearPlace = useResetRecoilState(placeDetail);
   const clearCurrentRoute = useResetRecoilState(currentRoute);
   const clearUserRoute = useResetRecoilState(userRoute);
-  
+
   const clearUser = () => {
     clearPlace();
     clearCurrentRoute();
     clearUserRoute();
-  }
-   
+  };
+
   return (
-    <Center h="100vh" bg="teal.500" w="100vw" overflow="scroll">
+    <Center h="100vh" bg="teal.500" w="100vw">
       <Stack
         boxShadow="md"
-        bg="whiteAlpha.900"
         pt="5"
         pb="5"
-        pr="10"
-        pl="10"
+        pr="5"
+        pl="5"
         rounded="md"
         h="90vh"
         minW="90vw"
-        maxW={["60vw", "90vw", "90vw"]}
+        maxW={["90vw", "90vw", "90vw", "70vw"]}
+        bg="whiteAlpha.900"
       >
         <Stack pt={10} align={"center"}>
           <Heading
             align={"centre"}
-            fontSize={["2vh", "2vh", "3vh", "4vh"]}
+            fontSize={["5vh", "5vh", "5vh", "5vh"]}
             fontFamily={"body"}
             fontWeight="bold"
             color="tomato"
           >
-            🎊 Otsukare 🎊
+            🎊Otsukare 🎊
           </Heading>
         </Stack>
 
@@ -67,7 +67,7 @@ export default function showRoute() {
 
         <Stack pt={10} align={"center"}>
           <Text
-            fontSize={["1.9vh", "1.9vh", "1.9vh", "2vh"]}
+            fontSize={["2.2vh", "2.2vh", "2.2vh", "2.2vh"]}
             textTransform={"uppercase"}
           >
             Your route:

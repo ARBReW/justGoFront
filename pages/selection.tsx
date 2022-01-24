@@ -6,6 +6,8 @@ import {
   Stack,
   Divider,
   Text,
+  VStack,
+  IconButton,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -13,7 +15,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import currentRoute from "../states/currentRoute";
 import locationStates, { routes } from "../states/locationStates";
 import placeDetail from "../states/placeDetail";
-import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import { ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from "@chakra-ui/icons";
+import userRoute, { userRouteInterface } from "../states/userRoute";
+
 
 export default function selection() {
   const routesList = useRecoilValue(routes);
@@ -23,6 +27,8 @@ export default function selection() {
   const [bg, setBg] = useState(routesList[selectRoute].stops[selectPlace]?.img);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
+  const [traveledRoute, setTraveledRoute] =
+   useRecoilState<userRouteInterface>(userRoute);
 
   useEffect(() => {
     setCurrRoute(routesList[selectRoute]);
@@ -31,22 +37,19 @@ export default function selection() {
     setBg(placeInfo.img);
   }, [selectRoute, placeInfo]);
 
-  function changeRoute(event: any) {
-    const direction: string = event.target.attributes.direction.value;
-    if (direction === "left") {
-      if (selectRoute === 0) {
-        setSelectRoute(routesList.length - 1);
-      } else {
-        setSelectRoute(selectRoute - 1);
-      }
+  function changeToRightRoute() {
+    if (selectRoute === routesList.length - 1) {
+      setSelectRoute(0);
+    } else {
+      setSelectRoute(selectRoute + 1);
     }
+  }
 
-    if (direction === "right") {
-      if (selectRoute === routesList.length - 1) {
-        setSelectRoute(0);
-      } else {
-        setSelectRoute(selectRoute + 1);
-      }
+  function changeToLeftRoute() {
+    if (selectRoute === 0) {
+      setSelectRoute(routesList.length - 1);
+    } else {
+      setSelectRoute(selectRoute - 1);
     }
   }
 
@@ -73,35 +76,53 @@ export default function selection() {
   return (
     <>
       <Center h="100vh" bg="teal.500" w="100vw">
-        <HStack
+        <Stack
           boxShadow="md"
           pt="5"
           pb="5"
-          pr="10"
-          pl="10"
+          pr="5"
+          pl="5"
           rounded="md"
           h="90vh"
-          minW="40vw"
+          minW="90vw"
           maxW={["60vw", "90vw", "90vw", "70vw"]}
           backgroundImage={bg}
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
           backgroundSize="cover"
+          direction="row"
         >
-          <Button
-            colorScheme="blackAlpha"
-            direction="left"
-            onClick={changeRoute}
-          >
-            <ArrowLeftIcon color="white" boxSize={8}></ArrowLeftIcon>
-          </Button>
+          <IconButton
+            aria-label="right button"
+            icon={<ArrowLeftIcon />}
+            pr="5"
+            variant="link"
+            direction="right"
+            onClick={changeToLeftRoute}
+            fontSize="40"
+          ></IconButton>
+
           <Stack
-            pt="20px"
-            spacing={19}
+            p="3px"
+            spacing={30}
             direction="column"
             align="center"
-            marginTop="20px"
+            marginTop="2px"
+            maxH="80vh"
           >
+            <Text
+              colorScheme={"whiteAlpha"}
+              bgColor="gray.500"
+              fontSize={20}
+              textColor="whitesmoke"
+              textTransform={"uppercase"}
+              p="2"
+              marginBottom={20}
+              fontWeight="bold"
+          
+            >
+              Select a route
+            </Text>
             {routesList[selectRoute].stops
               .slice()
               .reverse()
@@ -116,9 +137,9 @@ export default function selection() {
                   </Button>
                 );
               })}
-            <Divider orientation="horizontal" />
+            <ArrowUpIcon w="20" h="20" color="black"/>
             <Link href="/place" passHref>
-              <Button colorScheme="orange" onClick={handleRouteSelect}>
+              <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="orange" onClick={handleRouteSelect}>
                 JUST GO
               </Button>
             </Link>
@@ -132,15 +153,16 @@ export default function selection() {
               </Button>
             </Link>
           </Stack>
-          <Button colorScheme="blackAlpha" direction="right">
-            <ArrowRightIcon
-              color="white"
-              boxSize={8}
-              direction="right"
-              onClick={changeRoute}
-            ></ArrowRightIcon>
-          </Button>
-        </HStack>
+          <IconButton
+            aria-label="right button"
+            icon={<ArrowRightIcon />}
+            pl="5"
+            variant="link"
+            direction="right"
+            onClick={changeToRightRoute}
+            fontSize="40"
+          ></IconButton>
+        </Stack>
       </Center>
     </>
   );

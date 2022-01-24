@@ -14,14 +14,16 @@ interface place {
 
 export interface userRouteInterface {
     completedRoute: place[],
-    isCurrentRoute: boolean
+    isCurrentRoute: boolean,
+    // isUniquePlace: boolean,
 }
 
 const userRoute = atom<userRouteInterface>({
     key: "userRoute",
     default: {
         completedRoute: [],
-        isCurrentRoute: false
+        isCurrentRoute: false,
+        // isUniquePlace: false,
     }
 });
 

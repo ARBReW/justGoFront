@@ -1,15 +1,17 @@
 import Link from "next/link";
-import { Center, Stack, Button, ButtonGroup, Box } from '@chakra-ui/react';
+import { Center, Stack, Button, Box, Divider } from "@chakra-ui/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
+import place from "./place";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
   const currRoute = useRecoilValue(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
-  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
+  const [traveledRoute, setTraveledRoute] =
+    useRecoilState<userRouteInterface>(userRoute);
 
   const nextPlace = () => {
     let placeIndex = currRoute.stops.indexOf(places) + 1;
@@ -18,59 +20,90 @@ export default function navigation() {
     } else {
       setPlaceInfo(currRoute.stops[placeIndex]);
     }
-  }
+  };
 
   const updateUserRoute = () => {
-    setTraveledRoute({ ...traveledRoute, completedRoute: [...traveledRoute.completedRoute, placeInfo] });
+    if (!traveledRoute.completedRoute.includes(places)) {
+      setTraveledRoute({
+        ...traveledRoute,
+        completedRoute: [...traveledRoute.completedRoute, placeInfo],
+      })};
     nextPlace();
-  }
+  };
+
   return (
     <>
-      <Center h="100vh" bg="teal.500">
+      <Center h="100vh" bg="teal.500" w="100vw">
         <Stack
-          h="95vh"
           boxShadow="md"
-          bg="whiteAlpha.900"
-          p="20"
+          pt="5"
+          pb="5"
+          pr="5"
+          pl="5"
           rounded="md"
+          h="90vh"
+          minW="90vw"
+          maxW={["90vw", "90vw", "90vw", "70vw"]}
           backgroundImage={`url(${places.img})`}
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
           backgroundSize="cover"
+          overflow="scroll"
         >
           <Stack direction="column" spacing={4} align="center">
-            <Box bg="green.100" borderWidth="1px" w="50%" p={4} align="center">
-              {places.name}
+            <Box
+              bg="green.100"
+              borderWidth="1px"
+              w="50%"
+              p={4}
+              align="center"
+              colorScheme={"whiteAlpha"}
+              bgColor="gray.500"
+              fontSize={20}
+              textColor="whitesmoke"
+              fontWeight="bold"
+            >
+              {places.name} <br></br>
             </Box>
             <Box
               bg="whiteAlpha.900"
               w="100%"
               h="100%"
-              p={140}
+              p={100}
               color="grey.700"
               align="center"
             >
               Directions
             </Box>
           </Stack>
-          <ButtonGroup direction="row" spacing={4} align="center" pb={50}>
-            <Link href="/place">
-              <Button bg="green.100">Go back to Place</Button>
+          <Divider orientation="horizontal" pt="20vh" marginBottom="5vh" />
+
+          {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
+            <Link href="/otsukare">
+              <Button
+                bg="blackAlpha.600"
+                textColor="white"
+                onClick={updateUserRoute}
+              >
+                Done for the day
+              </Button>
             </Link>
-            {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ?
-              (<Link href="/otsukare">
-                <Button bg="green.100" onClick={updateUserRoute}>
-                  Done for the day
-                </Button>
-              </Link>)
-              :
-              (<Link href="/place">
-                <Button bg="green.100" onClick={updateUserRoute}>
-                  Go to Next Place
-                </Button>
-              </Link>)}
-            )
-          </ButtonGroup>
+          ) : (
+            <Link href="/place">
+              <Button
+                bg="blackAlpha.600"
+                textColor="white"
+                onClick={updateUserRoute}
+              >
+                Go to {currRoute.stops[currRoute.stops.indexOf(places) + 1].name}
+              </Button>
+            </Link>
+          )}
+          <Link href="/place">
+            <Button bg="gray.400" textColor="white">
+              Go back to {places.name}
+            </Button>
+          </Link>
         </Stack>
       </Center>
     </>
