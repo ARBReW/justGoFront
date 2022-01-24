@@ -37,7 +37,7 @@ const Home: NextPage = () => {
           maxW={["60vw", "90vw", "90vw"]}
         >
           <Image
-            src="http://en.ikanji.jp/user_data/images/upload/character/original/E4BA94.png"
+            src="https://kanji-symbol.net/common/images/txt/num0008-gyo.gif"
             mb="6"
             mt="3"
             alt="JustGoLogo"

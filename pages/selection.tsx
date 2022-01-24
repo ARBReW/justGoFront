@@ -17,6 +17,7 @@ import locationStates, { routes } from "../states/locationStates";
 import placeDetail from "../states/placeDetail";
 import { ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import userRoute, { userRouteInterface } from "../states/userRoute";
+import viewedStops from "../states/viewedStops";
 
 
 export default function selection() {
@@ -27,13 +28,17 @@ export default function selection() {
   const [bg, setBg] = useState(routesList[selectRoute].stops[selectPlace]?.img);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
-  const [traveledRoute, setTraveledRoute] =
-   useRecoilState<userRouteInterface>(userRoute);
+  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
+  const [vStop, setVStop] = useRecoilState(viewedStops);
+
 
   useEffect(() => {
     setCurrRoute(routesList[selectRoute]);
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
     setCurrRoute(routesList[selectRoute]);
+    if (vStop.viewedStops.length > 1) {
+      setBg(vStop.viewedStops[vStop.viewedStops.length-1].img)
+    } else
     setBg(placeInfo.img);
   }, [selectRoute, placeInfo]);
 
@@ -55,10 +60,13 @@ export default function selection() {
 
   function handleRouteSelect() {
     setCurrRoute(routesList[selectRoute]);
+    setVStop({
+      ...vStop,
+      viewedStops: [...vStop.viewedStops, placeInfo],
+    });
   }
 
   function handleEnd() {
-    console.log(routesList);
   }
 
   function handlePlaceClick(event: any) {

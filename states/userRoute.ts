@@ -15,7 +15,6 @@ interface place {
 export interface userRouteInterface {
     completedRoute: place[],
     isCurrentRoute: boolean,
-    // isUniquePlace: boolean,
 }
 
 const userRoute = atom<userRouteInterface>({
@@ -23,7 +22,6 @@ const userRoute = atom<userRouteInterface>({
     default: {
         completedRoute: [],
         isCurrentRoute: false,
-        // isUniquePlace: false,
     }
 });
 
