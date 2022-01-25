@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
-import { useState } from "react";
 import userGeoLocation from "../states/userGeoLocation";
 import axios from "axios";
 import viewedStops from "../states/viewedStops";
@@ -32,9 +31,11 @@ export default function place() {
       }
     );
 
+    console.log("response", response);
+
     const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
-      instructionsList.push(step.html_instructions.replace(/<[^>]+>/g, " "));
+      instructionsList.push(step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " "));
       //cleanup HTML for direction instruction text
     }
     await setCurrInstructions({ ...currInstructions, instructions: instructionsList });
