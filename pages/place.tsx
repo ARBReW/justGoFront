@@ -26,15 +26,17 @@ export default function place() {
         }
       }) 
     })
-
     console.log(userLocation);
+    
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
-
-    const response = await axios.get<any>(`https://cc24-seniorprojectbackend.herokuapp.com/directions/json`, {
+    try{
+      const response = await axios.get<any>(`http://localhost:3000/directions/coordinates`, {
       params : { origin: coordinateString, destination: places.coord.toString() }, 
     });
-  
-    console.log(response, "response");
+    console.log("response:", response);
+    }catch(error){
+      console.error(error)
+    }
    
   };
   
