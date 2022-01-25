@@ -1,12 +1,8 @@
 import {
   Button,
   Center,
-  Heading,
-  HStack,
   Stack,
-  Divider,
   Text,
-  VStack,
   IconButton,
 } from "@chakra-ui/react";
 import Link from "next/link";
