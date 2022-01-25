@@ -2,14 +2,12 @@ import {
   Box,
   Button,
   Center,
-  useColorModeValue,
   Heading,
   Text,
   Stack,
   Image,
   AspectRatio,
 } from "@chakra-ui/react";
-import locationStates from "../states/locationStates";
 import currentRoute from "../states/currentRoute";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import Link from "next/link";
