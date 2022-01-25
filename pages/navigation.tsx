@@ -1,12 +1,9 @@
-import { useEffect } from "react";
 import Link from "next/link";
 import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
-import place from "./place";
-import currentStop from "../states/viewedStops";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
 
@@ -21,11 +18,6 @@ export default function navigation() {
   );
   const [traveledRoute, setTraveledRoute] =
     useRecoilState<userRouteInterface>(userRoute);
-
-  
-  // useEffect(() => {
-  //   setCurrInstructions(currInstructions);
-  // }, [currInstructions]);
 
   const nextPlace = () => {
     let placeIndex = currRoute.stops.indexOf(places) + 1;
