@@ -59,7 +59,6 @@ export default function navigation() {
               w="50%"
               p={4}
               align="center"
-              colorScheme={"whiteAlpha"}
               bgColor="gray.500"
               fontSize={20}
               textColor="whitesmoke"
