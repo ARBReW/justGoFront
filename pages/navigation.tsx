@@ -99,7 +99,7 @@ export default function navigation() {
               )
             })}
           </Stack>
-          <Divider orientation="horizontal" pt="20vh" marginBottom="5vh" />
+          <Divider orientation="horizontal" pt="5vh" marginBottom="5vh" />
 
           {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
             <Link href="/otsukare">

@@ -34,7 +34,8 @@ export default function place() {
 
     const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
-      instructionsList.push(step.html_instructions);
+      instructionsList.push(step.html_instructions.replace(/<[^>]+>/g, " "));
+      //cleanup HTML for direction instruction text
     }
     await setCurrInstructions({ ...currInstructions, instructions: instructionsList });
     console.log("currIntructions", currInstructions);
