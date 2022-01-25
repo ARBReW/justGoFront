@@ -15,8 +15,24 @@ import {
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import userGeoLocation from "../states/userGeoLocation";
+import { useRecoilState } from "recoil";
+
 
 const Home: NextPage = () => {
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+  
+  function handleOnClick() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setUserLocation({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+      });
+    });
+  }
+
   return (
     <div>
       <Head>
@@ -96,6 +112,7 @@ const Home: NextPage = () => {
                 colorScheme="orange"
                 variant="solid"
                 fontSize={["2vh", "2vh", "2vh", "2vh"]}
+                onClick={handleOnClick}
               >
                 Guest Login
               </Button>
@@ -105,6 +122,6 @@ const Home: NextPage = () => {
       </Center>
     </div>
   );
-};
+};;
 
 export default Home;

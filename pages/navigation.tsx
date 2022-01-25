@@ -1,19 +1,31 @@
+import { useEffect } from "react";
 import Link from "next/link";
-import { Center, Stack, Button, Box, Divider } from "@chakra-ui/react";
+import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import place from "./place";
 import currentStop from "../states/viewedStops";
+import userGeoLocation from "../states/userGeoLocation";
+import instructionsToLocation from "../states/instructionsToLocation";
+
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
   const currRoute = useRecoilValue(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
-
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+  const [currInstructions, setCurrInstructions] = useRecoilState(
+    instructionsToLocation
+  );
   const [traveledRoute, setTraveledRoute] =
     useRecoilState<userRouteInterface>(userRoute);
+
+  
+  // useEffect(() => {
+  //   setCurrInstructions(currInstructions);
+  // }, [currInstructions]);
 
   const nextPlace = () => {
     let placeIndex = currRoute.stops.indexOf(places) + 1;
@@ -25,6 +37,14 @@ export default function navigation() {
   };
 
   const updateUserRoute = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setUserLocation({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+      });
+    });
     if (!traveledRoute.completedRoute.includes(places)) {
       setTraveledRoute({
         ...traveledRoute,
@@ -32,7 +52,7 @@ export default function navigation() {
       })};
     nextPlace();
   };
-
+  
   return (
     <>
       <Center h="100vh" bg="teal.500" w="100vw">
@@ -59,7 +79,6 @@ export default function navigation() {
               w="50%"
               p={4}
               align="center"
-              colorScheme={"whiteAlpha"}
               bgColor="gray.500"
               fontSize={20}
               textColor="whitesmoke"
@@ -67,16 +86,18 @@ export default function navigation() {
             >
               {places.name} <br></br>
             </Box>
-            <Box
-              bg="whiteAlpha.900"
-              w="100%"
-              h="100%"
-              p={100}
-              color="grey.700"
-              align="center"
-            >
-              Directions
-            </Box>
+            {currInstructions.instructions.slice().map((step:string, index: number) => {
+              return (<Text
+                key={index * 5.1245}
+                bg="whiteAlpha.900"
+                w="auto"
+                h="auto"
+                color="grey.700"
+                align="center">
+                   {step}
+              </Text>
+              )
+            })}
           </Stack>
           <Divider orientation="horizontal" pt="20vh" marginBottom="5vh" />
 
@@ -97,7 +118,8 @@ export default function navigation() {
                 textColor="white"
                 onClick={updateUserRoute}
               >
-                I'm done here. <br></br> Take me to {currRoute.stops[currRoute.stops.indexOf(places) + 1].name}
+                I'm done here. <br></br> Take me to{" "}
+                {currRoute.stops[currRoute.stops.indexOf(places) + 1].name}
               </Button>
             </Link>
           )}
