@@ -17,7 +17,6 @@ import Head from "next/head";
 import Link from "next/link";
 import userGeoLocation from "../states/userGeoLocation";
 import { useRecoilState } from "recoil";
-import axios from "axios";
 
 
 const Home: NextPage = () => {

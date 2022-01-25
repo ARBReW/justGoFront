@@ -1,42 +1,42 @@
 import Link from "next/link";
-import { Center, Stack, Button, ButtonGroup, Box, Divider, Text } from '@chakra-ui/react';
+import { Center, Stack, Button, Box, Divider, Text } from '@chakra-ui/react';
 import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
 import { useState } from "react";
 import userGeoLocation from "../states/userGeoLocation"
 import axios from "axios";
 import viewedStops from "../states/viewedStops";
+import instructionsToLocation from "../states/instructionsToLocation";
+
 
 export default function place() {
   const places = useRecoilValue(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [vStop, setVStop] = useRecoilState(viewedStops);
+  const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation)
 
   async function handleOnClick() {
-    
-    //get the users location from the front end and pass the coordinates to the backend
-    //the server will use the coordinates to make a request to the google directions api
-    //then, server will send the front end an object with the returned google directions api data
-    await navigator.geolocation.getCurrentPosition((position) => {
-      setUserLocation({
-        coordinates: {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        }
-      }) 
-    })
 
-    console.log(userLocation);
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
-    const response = await axios.get<any>(`https://cc24-seniorprojectbackend.herokuapp.com/directions/json`, {
-      params : { origin: coordinateString, destination: places.coord.toString() }, 
-    });
-  
-    console.log(response, "response");
-   
+    const response = await axios.get<any>(
+      `https://cc24-seniorprojectbackend.herokuapp.com/directions/json`,
+      {
+        params: {
+          origin: coordinateString,
+          destination: places.coord.toString(),
+        },
+      }
+    );
+
+    const instructionsList = []
+    for await (let step of response.data.routes[0].legs[0].steps) {
+    instructionsList.push(step.html_instructions)
+  }
+    await setCurrInstructions(instructionsList);
   };
+ 
   
   function addToViewedStops() { 
     setVStop({

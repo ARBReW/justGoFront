@@ -6,11 +6,13 @@ import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import place from "./place";
 import currentStop from "../states/viewedStops";
+import userGeoLocation from "../states/userGeoLocation";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
   const currRoute = useRecoilValue(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 
   const [traveledRoute, setTraveledRoute] =
     useRecoilState<userRouteInterface>(userRoute);
@@ -25,6 +27,14 @@ export default function navigation() {
   };
 
   const updateUserRoute = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setUserLocation({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+      });
+    });
     if (!traveledRoute.completedRoute.includes(places)) {
       setTraveledRoute({
         ...traveledRoute,
