@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 interface instructions {
-  instructions: string []; 
+  instructions: []; 
 }
 
 const instructionsToLocation = atom<instructions>({

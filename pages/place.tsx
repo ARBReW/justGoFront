@@ -1,22 +1,24 @@
 import Link from "next/link";
-import { Center, Stack, Button, Box, Divider, Text } from '@chakra-ui/react';
+import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
 import { useState } from "react";
-import userGeoLocation from "../states/userGeoLocation"
+import userGeoLocation from "../states/userGeoLocation";
 import axios from "axios";
 import viewedStops from "../states/viewedStops";
 import instructionsToLocation from "../states/instructionsToLocation";
-
 
 export default function place() {
   const places = useRecoilValue(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [vStop, setVStop] = useRecoilState(viewedStops);
-  const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation)
+  const [currInstructions, setCurrInstructions] = useRecoilState<any>(
+    instructionsToLocation
+  );
 
   async function handleOnClick() {
+    console.log(userLocation);
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
@@ -30,15 +32,15 @@ export default function place() {
       }
     );
 
-    const instructionsList = []
+    const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
-    instructionsList.push(step.html_instructions)
+      instructionsList.push(step.html_instructions);
+    }
+    await setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    console.log("currIntructions", currInstructions);
   }
-    await setCurrInstructions(instructionsList);
-  };
- 
-  
-  function addToViewedStops() { 
+
+  function addToViewedStops() {
     setVStop({
       ...vStop,
       viewedStops: [...vStop.viewedStops, placeInfo],
@@ -92,7 +94,11 @@ export default function place() {
           </Stack>
           <Divider orientation="horizontal" pt="47vh" marginBottom="5vh" />
           <Link href="/navigation">
-            <Button bg="blackAlpha.600" textColor="white" onClick={handleOnClick}>
+            <Button
+              bg="blackAlpha.600"
+              textColor="white"
+              onClick={handleOnClick}
+            >
               Go to {places.name}
             </Button>
           </Link>
