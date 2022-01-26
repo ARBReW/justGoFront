@@ -61,7 +61,7 @@ const Home: NextPage = () => {
             width="10wh"
             height="auto"
           />
-          <Heading as="h1" fontSize={["2vh", "2vh", "3vh", "4vh"]}>
+          {true ? (<Text textAlign="center" fontWeight="bold">"You only make the fun when you just GO"</Text>):(<div><Heading as="h1" fontSize={["2vh", "2vh", "3vh", "4vh"]}>
             Log in and Just GO.{" "}
           </Heading>
           <Text fontSize={["1.9vh", "1.9vh", "1.9vh", "2vh"]} color="gray.600">
@@ -101,7 +101,7 @@ const Home: NextPage = () => {
                 Log in
               </Button>
             </Center>
-          </FormControl>
+          </FormControl></div>)}
 
           <Divider orientation="horizontal" paddingTop="15px" />
 
@@ -113,7 +113,7 @@ const Home: NextPage = () => {
                 fontSize={["2vh", "2vh", "2vh", "2vh"]}
                 onClick={handleOnClick}
               >
-                Guest Login
+                I'm ready to GO
               </Button>
             </Link>
           </Center>
