@@ -34,11 +34,11 @@ export default function selection() {
     setCurrRoute(routesList[selectRoute]);
     checkIfVisited();
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
-    setBg(checkedPlaceInfo(placeInfo));
+    setBg(checkPlaceInfo(placeInfo));
     console.log("change to bg to " + placeInfo.name);
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
 
-  function checkedPlaceInfo(place: any): any { 
+  function checkPlaceInfo(place: any): any { 
     if (
         traveledRoute.completedRoute.includes(place)
     ) {
@@ -62,9 +62,8 @@ export default function selection() {
       }
     }
     recurse(indexNumber);
-    // setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
-    // setBg(placeInfo.img);
   }
+
   function changeToRightRoute() {
     if (selectRoute === routesList.length - 1) {
       setSelectRoute(0);
@@ -74,26 +73,6 @@ export default function selection() {
       setSelectPlace(0);
     }
     console.log("I was on route: " + currRoute.routeId);
-
-    // when route changes,
-    // selectPlace(start from 0, check if that place exists in Visited, add 1, loop again)
-    // setPlaceInto to that place
-    // function recurse(index: number) {
-    //   //break case
-    //   if (
-    //     !traveledRoute.completedRoute.includes(
-    //       routesList[selectRoute].stops[selectPlace]
-    //     )
-    //   ) {
-
-    //     return;
-    //   } else setSelectPlace(selectPlace + 1);
-    // }
-    // recurse(selectPlace);
-
-    // setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
-    // setBg(placeInfo.img)
-    // setSelectPlace(0)
   }
 
   function changeToLeftRoute() {
