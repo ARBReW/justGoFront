@@ -14,36 +14,78 @@ import placeDetail from "../states/placeDetail";
 import { ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import viewedStops from "../states/viewedStops";
-
+import place from "./place";
+import userGeoLocation from "../states/userGeoLocation";
 
 export default function selection() {
   const routesList = useRecoilValue(routes);
   const { places } = useRecoilValue(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
   const [selectPlace, setSelectPlace] = useState(0);
-  const [bg, setBg] = useState(routesList[selectRoute].stops[selectPlace]?.img);
+  const [bg, setBg] = useState(routesList[0].stops[0].img);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
   const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
   const [vStop, setVStop] = useRecoilState(viewedStops);
-
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 
   useEffect(() => {
+    checkSelectPlace();
+    console.log(placeInfo, "placeInfo");
+    console.log(currRoute, "currRoute");
     setCurrRoute(routesList[selectRoute]);
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
-    setCurrRoute(routesList[selectRoute]);
-    if (vStop.viewedStops.length > 1) {
-      setBg(vStop.viewedStops[vStop.viewedStops.length-1].img)
-    } else
-    setBg(placeInfo.img);
-  }, [selectRoute, placeInfo]);
 
+    setCurrRoute(routesList[selectRoute]);
+
+    setBg(placeInfo.img);
+    console.log(placeInfo, "placeInfo");
+    console.log(currRoute, "currRoute");
+  }, [selectRoute, placeInfo, userLocation]);
+
+
+  function checkSelectPlace() {
+    function recurse(index: number) {
+      //break case
+      if (
+        !traveledRoute.completedRoute.includes(
+          routesList[selectRoute].stops[selectPlace]
+        )
+      ) {
+        console.log("selectPlaceChecked")
+        return;
+      } else setSelectPlace(selectPlace + 1);
+    }
+    recurse(selectPlace);
+    ;
+  }
   function changeToRightRoute() {
     if (selectRoute === routesList.length - 1) {
       setSelectRoute(0);
+      setSelectPlace(0)
     } else {
       setSelectRoute(selectRoute + 1);
+      setSelectPlace(0);
     }
+    // when route changes,
+    // selectPlace(start from 0, check if that place exists in Visited, add 1, loop again)
+    // setPlaceInto to that place
+    // function recurse(index: number) {
+    //   //break case
+    //   if (
+    //     !traveledRoute.completedRoute.includes(
+    //       routesList[selectRoute].stops[selectPlace]
+    //     )
+    //   ) {
+     
+    //     return;
+    //   } else setSelectPlace(selectPlace + 1);
+    // }
+    // recurse(selectPlace);
+
+    // setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
+    // setBg(placeInfo.img)
+    // setSelectPlace(0)
   }
 
   function changeToLeftRoute() {
@@ -52,6 +94,7 @@ export default function selection() {
     } else {
       setSelectRoute(selectRoute - 1);
     }
+    console.log(placeInfo)
   }
 
   function handleRouteSelect() {
@@ -145,7 +188,14 @@ export default function selection() {
                 );
               })}
             <ArrowUpIcon w="20" h="20" color="black" />
-            <Link href="/place" passHref>
+            { (userLocation.coordinates.lat === 0) ? (<Button
+                borderRadius="50%"
+                w="5rem"
+                h="5rem"
+                colorScheme="gray"
+              >
+                Loading...
+              </Button>):(<Link href="/place" passHref>
               <Button
                 borderRadius="50%"
                 w="5rem"
@@ -155,7 +205,7 @@ export default function selection() {
               >
                 JUST GO
               </Button>
-            </Link>
+            </Link>)}
             <Link href="/otsukare" passHref>
               <Button
                 onClick={handleEnd}
