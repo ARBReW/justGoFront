@@ -34,9 +34,18 @@ export default function selection() {
     setCurrRoute(routesList[selectRoute]);
     checkIfVisited();
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
-    setBg(placeInfo.img);
+    setBg(checkedPlaceInfo(placeInfo));
     console.log("change to bg to " + placeInfo.name);
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
+
+  function checkedPlaceInfo(place: any): any { 
+    if (
+        traveledRoute.completedRoute.includes(place)
+    ) {
+      return;
+    }
+    else return placeInfo.img
+  }
 
   function checkIfVisited() {
     let indexNumber = 0;
@@ -59,8 +68,10 @@ export default function selection() {
   function changeToRightRoute() {
     if (selectRoute === routesList.length - 1) {
       setSelectRoute(0);
+      setSelectPlace(0);
     } else {
       setSelectRoute(selectRoute + 1);
+      setSelectPlace(0);
     }
     console.log("I was on route: " + currRoute.routeId);
 
@@ -88,8 +99,10 @@ export default function selection() {
   function changeToLeftRoute() {
     if (selectRoute === 0) {
       setSelectRoute(routesList.length - 1);
+      setSelectPlace(0);
     } else {
       setSelectRoute(selectRoute - 1);
+      setSelectPlace(0);
     }
     console.log("I was on route: " + currRoute.routeId);
   }
@@ -129,7 +142,7 @@ export default function selection() {
           h="90vh"
           minW="90vw"
           maxW={["60vw", "90vw", "90vw", "70vw"]}
-          backgroundImage={bg}
+          backgroundImage={bg ? bg : ""}
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
           backgroundSize="cover"
