@@ -22,51 +22,48 @@ export default function selection() {
   const { places } = useRecoilValue(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
   const [selectPlace, setSelectPlace] = useState(0);
-  const [bg, setBg] = useState(routesList[0].stops[0].img);
+  const [bg, setBg] = useState();
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
-  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
+  const [traveledRoute, setTraveledRoute] =
+    useRecoilState<userRouteInterface>(userRoute);
   const [vStop, setVStop] = useRecoilState(viewedStops);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 
   useEffect(() => {
-    checkSelectPlace();
-    console.log(placeInfo, "placeInfo");
-    console.log(currRoute, "currRoute");
     setCurrRoute(routesList[selectRoute]);
+    checkIfVisited();
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
-
-    setCurrRoute(routesList[selectRoute]);
-
     setBg(placeInfo.img);
-    console.log(placeInfo, "placeInfo");
-    console.log(currRoute, "currRoute");
-  }, [selectRoute, placeInfo, userLocation]);
+    console.log("change to bg to " + placeInfo.name);
+  }, [selectRoute, selectPlace, placeInfo, userLocation]);
 
-
-  function checkSelectPlace() {
+  function checkIfVisited() {
+    let indexNumber = 0;
     function recurse(index: number) {
       //break case
       if (
-        !traveledRoute.completedRoute.includes(
-          routesList[selectRoute].stops[selectPlace]
-        )
+        !traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])
       ) {
-        console.log("selectPlaceChecked")
+        setSelectPlace(indexNumber);
+        console.log("placeIndex finish check at: ", indexNumber);
         return;
-      } else setSelectPlace(selectPlace + 1);
+      } else {
+        recurse((indexNumber += 1));
+      }
     }
-    recurse(selectPlace);
-    ;
+    recurse(indexNumber);
+    // setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
+    // setBg(placeInfo.img);
   }
   function changeToRightRoute() {
     if (selectRoute === routesList.length - 1) {
       setSelectRoute(0);
-      setSelectPlace(0)
     } else {
       setSelectRoute(selectRoute + 1);
-      setSelectPlace(0);
     }
+    console.log("I was on route: " + currRoute.routeId);
+
     // when route changes,
     // selectPlace(start from 0, check if that place exists in Visited, add 1, loop again)
     // setPlaceInto to that place
@@ -77,7 +74,7 @@ export default function selection() {
     //       routesList[selectRoute].stops[selectPlace]
     //     )
     //   ) {
-     
+
     //     return;
     //   } else setSelectPlace(selectPlace + 1);
     // }
@@ -94,7 +91,7 @@ export default function selection() {
     } else {
       setSelectRoute(selectRoute - 1);
     }
-    console.log(placeInfo)
+    console.log("I was on route: " + currRoute.routeId);
   }
 
   function handleRouteSelect() {
@@ -105,20 +102,19 @@ export default function selection() {
     });
   }
 
-  function handleEnd() {
-  }
-
   function handlePlaceClick(event: any) {
     const placeId = Number.parseInt(event.target.attributes.placeid.value);
     const place = places.find((place) => place.placeId === placeId);
-    setSelectPlace(
-      routesList[selectRoute].stops
-        .map((place) => place?.placeId)
-        .indexOf(placeId)
-    );
     setBg(place!.img);
-    //setPlaceInfo(place);
   }
+
+  // We can use the below chunk of code for skipping places (changing selectPlace)
+  // setSelectPlace(
+  //   routesList[selectRoute].stops
+  //     .map((place) => place?.placeId)
+  //     .indexOf(placeId)
+  // );
+  //setPlaceInfo(place);
 
   return (
     <>
@@ -188,27 +184,25 @@ export default function selection() {
                 );
               })}
             <ArrowUpIcon w="20" h="20" color="black" />
-            { (userLocation.coordinates.lat === 0) ? (<Button
-                borderRadius="50%"
-                w="5rem"
-                h="5rem"
-                colorScheme="gray"
-              >
+            {userLocation.coordinates.lat === 0 ? (
+              <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="gray">
                 Loading...
-              </Button>):(<Link href="/place" passHref>
-              <Button
-                borderRadius="50%"
-                w="5rem"
-                h="5rem"
-                colorScheme="orange"
-                onClick={handleRouteSelect}
-              >
-                JUST GO
               </Button>
-            </Link>)}
+            ) : (
+              <Link href="/place" passHref>
+                <Button
+                  borderRadius="50%"
+                  w="5rem"
+                  h="5rem"
+                  colorScheme="orange"
+                  onClick={handleRouteSelect}
+                >
+                  JUST GO
+                </Button>
+              </Link>
+            )}
             <Link href="/otsukare" passHref>
               <Button
-                onClick={handleEnd}
                 colorScheme="telegram"
                 variant="solid"
               >
