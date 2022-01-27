@@ -7,6 +7,7 @@ import axios from "axios";
 import viewedStops from "../states/viewedStops";
 import instructionsToLocation from "../states/instructionsToLocation";
 
+
 export default function place() {
   const places = useRecoilValue(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
@@ -35,11 +36,16 @@ export default function place() {
 
     const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
-      instructionsList.push(step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " "));
       //cleanup HTML for direction instruction text
+      const strippedStrings = step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ");
+      // add distance for each step
+      const distance = step.distance.text;
+      
+      const text = `${strippedStrings}` + `\n 🚶 walk ` + `${distance}`;
+      instructionsList.push(text);
     }
-    await setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-    console.log("currIntructions", currInstructions);
+
+    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
   }
 
   function addToViewedStops() {
