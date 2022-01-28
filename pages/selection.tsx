@@ -25,8 +25,7 @@ export default function selection() {
   const [bg, setBg] = useState(routesList[0].stops[0].img);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
-  const [traveledRoute, setTraveledRoute] =
-    useRecoilState<userRouteInterface>(userRoute);
+  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
   const [vStop, setVStop] = useRecoilState(viewedStops);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 

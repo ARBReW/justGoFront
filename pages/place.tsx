@@ -14,21 +14,23 @@ export default function place() {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [vStop, setVStop] = useRecoilState(viewedStops);
-  const [currInstructions, setCurrInstructions] = useRecoilState<any>(
-    instructionsToLocation
-  );
+  const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
+  
   useEffect(() => {
     handleOnClick()
   },
     [currInstructions.instructions.length]
   );
-
+  
   async function handleOnClick() {
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
+    // Heroku link
+    //`https://cc24-seniorprojectbackend.herokuapp.com/directions/json`,
+
     const response = await axios.get<any>(
-      `https://cc24-seniorprojectbackend.herokuapp.com/directions/json`,
+      `https://k76g4ometf.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
       {
         params: {
           origin: coordinateString,
@@ -36,9 +38,10 @@ export default function place() {
         },
       }
     );
+
     const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
-      //cleanup HTML for direction instruction text
+      //clean up HTML, add arrows
       const strippedStr = step.html_instructions
         .replace(/<[^>]+>/g, " ")
         .replace(/&nbsp;/g, " ")
@@ -57,7 +60,6 @@ export default function place() {
     }
 
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-    console.log(instructionsList);
   }
 
   function addToViewedStops() {
