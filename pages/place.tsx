@@ -37,7 +37,6 @@ export default function place() {
       }
     );
     const instructionsList = [];
-<<<<<<< HEAD
     for await (let step of response.data.routes[0].legs[0].steps) {
       //cleanup HTML for direction instruction text
       const strippedStrings = step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ");
@@ -50,16 +49,6 @@ export default function place() {
     }
 
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-=======
-    if (userLocation.coordinates.lat !== 0) {
-      for await (let step of response.data.routes[0].legs[0].steps) {
-        instructionsList.push(step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " "));
-        //cleanup HTML for direction instruction text
-      }
-    }
-    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-    ;
->>>>>>> 738ecd5cbfec336293649e277d8daf0ddf6535f9
   }
 
   function addToViewedStops() {
