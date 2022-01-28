@@ -21,7 +21,8 @@ import { useRecoilState } from "recoil";
 const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   
-  function handleOnClick() {
+  // get user location on login (to be updated on selection page)
+  function handleUserLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
       setUserLocation({
         coordinates: {
@@ -111,7 +112,7 @@ const Home: NextPage = () => {
                 colorScheme="orange"
                 variant="solid"
                 fontSize={["2vh", "2vh", "2vh", "2vh"]}
-                onClick={handleOnClick}
+                onClick={handleUserLocation}
               >
                 I'm ready to GO
               </Button>
