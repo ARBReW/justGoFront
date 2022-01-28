@@ -17,15 +17,13 @@ export default function place() {
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
   
   useEffect(() => {
-    handleOnClick()
+    getUserLocation();
     if (places.name === "") {
       Router.push("/");
     }
-  },
-    [currInstructions.instructions.length]
-  );
+  },[currInstructions.instructions.length, userLocation]);
   
-  async function handleOnClick() {
+  async function getUserLocation() {
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
@@ -128,7 +126,6 @@ export default function place() {
             <Button
               bg="blackAlpha.600"
               textColor="white"
-              onClick={handleOnClick}
             >
               Go to {places.name}
             </Button>
