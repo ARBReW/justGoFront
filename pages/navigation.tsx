@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
@@ -13,11 +14,11 @@ export default function navigation() {
   const currRoute = useRecoilValue(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-  const [currInstructions, setCurrInstructions] = useRecoilState(
-    instructionsToLocation
-  );
-  const [traveledRoute, setTraveledRoute] =
-    useRecoilState<userRouteInterface>(userRoute);
+  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
+  const [currInstructions, setCurrInstructions] = useRecoilState(instructionsToLocation);
+  const [loadDirections, setLoadDirections] = useState(1);
+  const [visible, setVisible] = useState(false);
+  
 
   const nextPlace = () => {
     let placeIndex = currRoute.stops.indexOf(places) + 1;
@@ -41,10 +42,20 @@ export default function navigation() {
       setTraveledRoute({
         ...traveledRoute,
         completedRoute: [...traveledRoute.completedRoute, placeInfo],
-      })};
+      })
+    };
     nextPlace();
   };
-  
+
+  const handleBackBtn = () => {
+    if(loadDirections > 1) setLoadDirections(loadDirections - 1);
+  }
+
+  const handleNextBtn = () => {
+    setLoadDirections(loadDirections + 1);
+    //setCurrInstructions(currInstructions.instructions.slice(0, indexOf()))
+  }
+
   return (
     <>
       <Center h="100vh" bg="teal.500" w="100vw">
@@ -78,18 +89,21 @@ export default function navigation() {
             >
               {places.name} <br></br>
             </Box>
-            {currInstructions.instructions.slice().map((step:string, index: number) => {
-              return (<Text
+            {currInstructions.instructions.slice(loadDirections - 1, loadDirections).map((step:string, index: number) => {
+              return (
+                <Text
                 key={index * 5.1245}
                 bg="whiteAlpha.900"
                 w="auto"
                 h="auto"
                 color="grey.700"
                 align="center">
-                   {step}
+                 {step}
               </Text>
               )
             })}
+          <Button onClick={handleBackBtn}>Back</Button>
+          <Button onClick={handleNextBtn}>Next</Button>
           </Stack>
           <Divider orientation="horizontal" pt="5vh" marginBottom="5vh" />
 

@@ -38,6 +38,7 @@ export default function place() {
     for await (let step of response.data.routes[0].legs[0].steps) {
       //cleanup HTML for direction instruction text
       const strippedStrings = step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ");
+      
       // add distance for each step
       const distance = step.distance.text;
       
