@@ -18,11 +18,9 @@ export default function place() {
   );
   useEffect(() => {
     handleOnClick()
-    console.log("useEffect " + "currInstructions", currInstructions)
   },
     [currInstructions.instructions.length]
   );
-  console.log(currInstructions, "currentInstructions")
 
   async function handleOnClick() {
 

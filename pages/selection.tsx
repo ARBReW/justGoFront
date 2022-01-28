@@ -35,9 +35,8 @@ export default function selection() {
     checkIfVisited();
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
     setBg(checkPlaceInfo(placeInfo));
-    console.log("change to bg to " + placeInfo.name);
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
-
+  
   function checkPlaceInfo(place: any): any { 
     if (
         traveledRoute.completedRoute.includes(place)
@@ -55,7 +54,6 @@ export default function selection() {
         !traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])
       ) {
         setSelectPlace(indexNumber);
-        console.log("placeIndex finish check at: ", indexNumber);
         return;
       } else {
         recurse((indexNumber += 1));
@@ -72,7 +70,6 @@ export default function selection() {
       setSelectRoute(selectRoute + 1);
       setSelectPlace(0);
     }
-    console.log("I was on route: " + currRoute.routeId);
   }
 
   function changeToLeftRoute() {
@@ -83,7 +80,6 @@ export default function selection() {
       setSelectRoute(selectRoute - 1);
       setSelectPlace(0);
     }
-    console.log("I was on route: " + currRoute.routeId);
   }
 
   function handleRouteSelect() {
