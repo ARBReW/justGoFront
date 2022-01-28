@@ -7,7 +7,7 @@ import axios from "axios";
 import viewedStops from "../states/viewedStops";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { useEffect } from "react";
-
+import Router from "next/router";
 
 export default function place() {
   const places = useRecoilValue(placeDetail);
@@ -18,6 +18,9 @@ export default function place() {
   
   useEffect(() => {
     handleOnClick()
+    if (places.name === "") {
+      Router.push("/");
+    }
   },
     [currInstructions.instructions.length]
   );
@@ -30,7 +33,7 @@ export default function place() {
     //`https://cc24-seniorprojectbackend.herokuapp.com/directions/json`,
 
     const response = await axios.get<any>(
-      `https://k76g4ometf.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
+      `https://k76g4ometf.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data `,
       {
         params: {
           origin: coordinateString,
