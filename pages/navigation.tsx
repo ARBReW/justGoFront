@@ -17,15 +17,44 @@ export default function navigation() {
   const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
   const [currInstructions, setCurrInstructions] = useRecoilState(instructionsToLocation);
   const [loadDirections, setLoadDirections] = useState(1);
-  const [visible, setVisible] = useState(false);
+  const [selectPlace, setSelectPlace] = useState(0);
   
+  // to handle the next place btn
+  function checkIfVisited() {
+    let indexNumber = currRoute.stops.indexOf(places) + 1;
+    function recurse(index: number) {
+      //break case
+      if (
+        !traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])
+      ) {
+        return;
+      } else {
+        recurse((indexNumber += 1));
+      }
+    }
+    recurse(indexNumber);
+    return currRoute.stops[indexNumber] //return next unvisited place on currRoute
+  }
 
   const nextPlace = () => {
-    let placeIndex = currRoute.stops.indexOf(places) + 1;
-    if (placeIndex > currRoute.stops.length - 1) {
-      setPlaceInfo(currRoute.stops[placeIndex - 1]);
+    let nextPlaceIndex = currRoute.stops.indexOf(places) + 1;
+
+    // recurse to skip places already visited
+     function recurse(index: number) {
+        if (
+          !traveledRoute.completedRoute.includes(currRoute.stops[nextPlaceIndex])
+        ) {
+          setPlaceInfo(currRoute.stops[nextPlaceIndex]);
+          setSelectPlace(nextPlaceIndex)
+          return;
+        } else {
+          recurse((nextPlaceIndex += 1));
+        }
+      }
+    if (nextPlaceIndex > currRoute.stops.length - 1) {
+      setPlaceInfo(currRoute.stops[nextPlaceIndex - 1]);
     } else {
-      setPlaceInfo(currRoute.stops[placeIndex]);
+      recurse(nextPlaceIndex)
     }
   };
 
@@ -47,13 +76,12 @@ export default function navigation() {
     nextPlace();
   };
 
+  // instructions btns 
   const handleBackBtn = () => {
     if(loadDirections > 1) setLoadDirections(loadDirections - 1);
   }
-
   const handleNextBtn = () => {
     setLoadDirections(loadDirections + 1);
-    //setCurrInstructions(currInstructions.instructions.slice(0, indexOf()))
   }
 
   return (
@@ -125,7 +153,7 @@ export default function navigation() {
                 onClick={updateUserRoute}
               >
                 I'm done here. <br></br> Take me to{" "}
-                {currRoute.stops[currRoute.stops.indexOf(places) + 1].name}
+                {checkIfVisited().name}
               </Button>
             </Link>
           )}
