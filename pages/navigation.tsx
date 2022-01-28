@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
@@ -13,18 +14,47 @@ export default function navigation() {
   const currRoute = useRecoilValue(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-  const [currInstructions, setCurrInstructions] = useRecoilState(
-    instructionsToLocation
-  );
-  const [traveledRoute, setTraveledRoute] =
-    useRecoilState<userRouteInterface>(userRoute);
+  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
+  const [currInstructions, setCurrInstructions] = useRecoilState(instructionsToLocation);
+  const [loadDirections, setLoadDirections] = useState(1);
+  const [selectPlace, setSelectPlace] = useState(0);
+  
+  // to handle the next place btn
+  function checkIfVisited() {
+    let indexNumber = currRoute.stops.indexOf(places) + 1;
+    function recurse(index: number) {
+      //break case
+      if (
+        !traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])
+      ) {
+        return;
+      } else {
+        recurse((indexNumber += 1));
+      }
+    }
+    recurse(indexNumber);
+    return currRoute.stops[indexNumber] //return next unvisited place on currRoute
+  }
 
   const nextPlace = () => {
-    let placeIndex = currRoute.stops.indexOf(places) + 1;
-    if (placeIndex > currRoute.stops.length - 1) {
-      setPlaceInfo(currRoute.stops[placeIndex - 1]);
+    let nextPlaceIndex = currRoute.stops.indexOf(places) + 1;
+
+    // recurse to skip places already visited
+     function recurse(index: number) {
+        if (
+          !traveledRoute.completedRoute.includes(currRoute.stops[nextPlaceIndex])
+        ) {
+          setPlaceInfo(currRoute.stops[nextPlaceIndex]);
+          setSelectPlace(nextPlaceIndex)
+          return;
+        } else {
+          recurse((nextPlaceIndex += 1));
+        }
+      }
+    if (nextPlaceIndex > currRoute.stops.length - 1) {
+      setPlaceInfo(currRoute.stops[nextPlaceIndex - 1]);
     } else {
-      setPlaceInfo(currRoute.stops[placeIndex]);
+      recurse(nextPlaceIndex)
     }
   };
 
@@ -41,15 +71,25 @@ export default function navigation() {
       setTraveledRoute({
         ...traveledRoute,
         completedRoute: [...traveledRoute.completedRoute, placeInfo],
-      })};
+      })
+    };
     nextPlace();
   };
-  
+
+  // instructions btns 
+  const handleBackBtn = () => {
+    if(loadDirections > 1) setLoadDirections(loadDirections - 1);
+  }
+  const handleNextBtn = () => {
+    setLoadDirections(loadDirections + 1);
+  }
+
   return (
     <>
       <Center h="100vh" bg="teal.500" w="100vw">
         <Stack
           boxShadow="md"
+
           pt="5"
           pb="5"
           pr="5"
@@ -78,18 +118,24 @@ export default function navigation() {
             >
               {places.name} <br></br>
             </Box>
-            {currInstructions.instructions.slice().map((step:string, index: number) => {
-              return (<Text
+            {currInstructions.instructions.slice(loadDirections - 1, loadDirections).map((step: any, index: number) => {
+              return (
+                <Text
                 key={index * 5.1245}
                 bg="whiteAlpha.900"
                 w="auto"
                 h="auto"
                 color="grey.700"
                 align="center">
-                   {step}
+                  {step.directions}
+                  <br></br>
+                  {step.distance}
+                  
               </Text>
               )
             })}
+          <Button onClick={handleBackBtn}>Back</Button>
+          <Button onClick={handleNextBtn}>Next</Button>
           </Stack>
           <Divider orientation="horizontal" pt="5vh" marginBottom="5vh" />
 
@@ -111,7 +157,7 @@ export default function navigation() {
                 onClick={updateUserRoute}
               >
                 I'm done here. <br></br> Take me to{" "}
-                {currRoute.stops[currRoute.stops.indexOf(places) + 1].name}
+                {checkIfVisited().name}
               </Button>
             </Link>
           )}

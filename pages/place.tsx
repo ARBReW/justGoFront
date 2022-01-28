@@ -8,6 +8,7 @@ import viewedStops from "../states/viewedStops";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { useEffect } from "react";
 
+
 export default function place() {
   const places = useRecoilValue(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
@@ -36,14 +37,27 @@ export default function place() {
       }
     );
     const instructionsList = [];
-    if (userLocation.coordinates.lat !== 0) {
-      for await (let step of response.data.routes[0].legs[0].steps) {
-        instructionsList.push(step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " "));
-        //cleanup HTML for direction instruction text
-      }
+    for await (let step of response.data.routes[0].legs[0].steps) {
+      //cleanup HTML for direction instruction text
+      const strippedStr = step.html_instructions
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace("right", "right    ➡️ ")
+        .replace("left", "left   ⬅️ ")
+
+      // add distance for each step
+      const distance = step.distance.text;
+      const distanceStr = `🚶 walk ` + `${distance}`;
+
+      const stepObj = {directions: "", distance: ""};
+      stepObj.directions = strippedStr;
+      stepObj.distance = distanceStr;
+
+      instructionsList.push(stepObj);
     }
+
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-    ;
+    console.log(instructionsList);
   }
 
   function addToViewedStops() {
