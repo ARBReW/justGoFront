@@ -6,6 +6,7 @@ import userGeoLocation from "../states/userGeoLocation";
 import axios from "axios";
 import viewedStops from "../states/viewedStops";
 import instructionsToLocation from "../states/instructionsToLocation";
+import { useEffect } from "react";
 
 export default function place() {
   const places = useRecoilValue(placeDetail);
@@ -15,9 +16,13 @@ export default function place() {
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(
     instructionsToLocation
   );
+  useEffect(() => {
+    handleOnClick()
+  },
+    [currInstructions.instructions.length]
+  );
 
   async function handleOnClick() {
-    console.log(userLocation);
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
@@ -30,16 +35,15 @@ export default function place() {
         },
       }
     );
-
-    console.log("response", response);
-
     const instructionsList = [];
-    for await (let step of response.data.routes[0].legs[0].steps) {
-      instructionsList.push(step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " "));
-      //cleanup HTML for direction instruction text
+    if (userLocation.coordinates.lat !== 0) {
+      for await (let step of response.data.routes[0].legs[0].steps) {
+        instructionsList.push(step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " "));
+        //cleanup HTML for direction instruction text
+      }
     }
-    await setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-    console.log("currIntructions", currInstructions);
+    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    ;
   }
 
   function addToViewedStops() {
@@ -95,7 +99,13 @@ export default function place() {
             </Box>
           </Stack>
           <Divider orientation="horizontal" pt="47vh" marginBottom="5vh" />
-          <Link href="/navigation">
+          {(currInstructions.instructions.length === 0) ?
+            (<Button
+              bg="blackAlpha.600"
+              textColor="white"
+            >
+              Loading instructions...
+            </Button> ): ( <Link href="/navigation">
             <Button
               bg="blackAlpha.600"
               textColor="white"
@@ -103,7 +113,7 @@ export default function place() {
             >
               Go to {places.name}
             </Button>
-          </Link>
+          </Link>)}
           <Link href="/selection">
             <Button bg="gray.400" textColor="white" onClick={addToViewedStops}>
               Back to route selection
