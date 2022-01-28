@@ -39,16 +39,25 @@ export default function place() {
     const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
       //cleanup HTML for direction instruction text
-      const strippedStrings = step.html_instructions.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ");
-      
+      const strippedStr = step.html_instructions
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace("right", "right    ➡️ ")
+        .replace("left", "left   ⬅️ ")
+
       // add distance for each step
       const distance = step.distance.text;
-      
-      const text = `${strippedStrings}` + `\n 🚶 walk ` + `${distance}`;
-      instructionsList.push(text);
+      const distanceStr = `🚶 walk ` + `${distance}`;
+
+      const stepObj = {directions: "", distance: ""};
+      stepObj.directions = strippedStr;
+      stepObj.distance = distanceStr;
+
+      instructionsList.push(stepObj);
     }
 
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    console.log(instructionsList);
   }
 
   function addToViewedStops() {

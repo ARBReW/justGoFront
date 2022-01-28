@@ -89,6 +89,7 @@ export default function navigation() {
       <Center h="100vh" bg="teal.500" w="100vw">
         <Stack
           boxShadow="md"
+
           pt="5"
           pb="5"
           pr="5"
@@ -117,7 +118,7 @@ export default function navigation() {
             >
               {places.name} <br></br>
             </Box>
-            {currInstructions.instructions.slice(loadDirections - 1, loadDirections).map((step:string, index: number) => {
+            {currInstructions.instructions.slice(loadDirections - 1, loadDirections).map((step: any, index: number) => {
               return (
                 <Text
                 key={index * 5.1245}
@@ -126,7 +127,10 @@ export default function navigation() {
                 h="auto"
                 color="grey.700"
                 align="center">
-                 {step}
+                  {step.directions}
+                  <br></br>
+                  {step.distance}
+                  
               </Text>
               )
             })}
