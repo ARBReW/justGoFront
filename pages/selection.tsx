@@ -22,7 +22,7 @@ export default function selection() {
   const { places } = useRecoilValue(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
   const [selectPlace, setSelectPlace] = useState(0);
-  const [bg, setBg] = useState();
+  const [bg, setBg] = useState(routesList[0].stops[0].img);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
   const [traveledRoute, setTraveledRoute] =
