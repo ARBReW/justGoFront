@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
-
+import Router from "next/router";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
@@ -18,6 +18,12 @@ export default function navigation() {
   const [currInstructions, setCurrInstructions] = useRecoilState(instructionsToLocation);
   const [loadDirections, setLoadDirections] = useState(1);
   const [selectPlace, setSelectPlace] = useState(0);
+  
+   useEffect(() => {
+     if (places.name === "") {
+       Router.push("/");
+     }
+   });
   
   // to handle the next place btn
   function checkIfVisited() {
