@@ -16,10 +16,12 @@ import Head from "next/head";
 import Link from "next/link";
 import userGeoLocation from "../states/userGeoLocation";
 import { useRecoilState } from "recoil";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 
+  useEffect(() => {handleUserLocation()}, [])
   // get user location on login (to be updated on selection page)
   function handleUserLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -39,7 +41,7 @@ const Home: NextPage = () => {
       </Head>
       <Stack
         justify="center"
-        h="95vh"
+        h="100vh"
         boxShadow="md"
         bg="whiteAlpha.900"
         rounded="md"
@@ -112,18 +114,30 @@ const Home: NextPage = () => {
 
         <Divider orientation="horizontal" paddingTop="15px" />
 
-        <Center paddingTop="15px">
-          <Link href="/selection" passHref>
+        {userLocation.coordinates.lat === 0 ? (
+          <Center paddingTop="15px">
             <Button
               colorScheme="orange"
               variant="solid"
               fontSize={["2vh", "2vh", "2vh", "2vh"]}
-              onClick={handleUserLocation}
             >
-              I'm ready to GO
+              Loading locations...
             </Button>
-          </Link>
-        </Center>
+          </Center>
+        ) : (
+          <Center paddingTop="15px">
+            <Link href="/selection" passHref>
+              <Button
+                colorScheme="orange"
+                variant="solid"
+                fontSize={["2vh", "2vh", "2vh", "2vh"]}
+                // onClick={handleUserLocation}
+              >
+                I'm ready to GO
+              </Button>
+            </Link>
+          </Center>
+        )}
       </Stack>
     </>
   );

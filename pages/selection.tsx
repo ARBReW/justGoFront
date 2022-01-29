@@ -9,6 +9,7 @@ import { ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import viewedStops from "../states/viewedStops";
 import userGeoLocation from "../states/userGeoLocation";
+import Router from "next/router";
 
 export default function selection() {
   const routesList = useRecoilValue(routes);
@@ -18,32 +19,22 @@ export default function selection() {
   const [bg, setBg] = useState(routesList[0].stops[0].img);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
-  const [traveledRoute, setTraveledRoute] =
-    useRecoilState<userRouteInterface>(userRoute);
+  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
   const [vStop, setVStop] = useRecoilState(viewedStops);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 
   
   useEffect(() => {
-    // if (userLocation.coordinates.lat === 0) {
-    //   handleUserLocation()
-    // }
+    if (userLocation.coordinates.lat === 0) {
+      Router.push("/");
+    }; 
     setCurrRoute(routesList[selectRoute]);
-    checkIfVisited();
+    if (traveledRoute.completedRoute.length > 0) {
+      checkIfVisited()
+    };
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
     setBg(checkPlaceInfo(placeInfo));
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
-  
-  //  function handleUserLocation() {
-  //    navigator.geolocation.getCurrentPosition((position) => {
-  //      setUserLocation({
-  //        coordinates: {
-  //          lat: position.coords.latitude,
-  //          lng: position.coords.longitude,
-  //        },
-  //      });
-  //    });
-  //  }
   
   function checkPlaceInfo(place: any): any {
     if (traveledRoute.completedRoute.includes(place)) {

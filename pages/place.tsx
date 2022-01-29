@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
 import userGeoLocation from "../states/userGeoLocation";
@@ -17,7 +17,7 @@ export default function place() {
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
   
   useEffect(() => {
-    if (places.name === "") {
+    if (placeInfo.name === "") {
       Router.push("/");
     } else {
       getUserLocation()
@@ -73,7 +73,7 @@ export default function place() {
           backgroundPosition="center"
           backgroundSize="cover"
         >
-          <Stack direction="column" spacing={4} align="center">
+          <Stack direction="column" spacing={4} pt={5} align="center">
             <Box
               bg="green.100"
               borderWidth="1px"

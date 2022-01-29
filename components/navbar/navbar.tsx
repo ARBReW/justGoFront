@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconButton, Button } from "@chakra-ui/react";
-import { Box, HStack } from "@chakra-ui/react";
+import { HStack } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import userGeoLocation from "../../states/userGeoLocation";
@@ -72,7 +72,7 @@ const [vStop, setVStop] = useRecoilState(viewedStops);
         bgColor="gray.700"
         w="100%"
         h="100%"
-      >
+      > 
         <IconButton
           aria-label="refresh location"
           icon={<RepeatIcon />}

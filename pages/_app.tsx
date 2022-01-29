@@ -23,8 +23,16 @@ const colors = {
 
 const theme = extendTheme({ colors, breakpoints });
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
+function MyApp({ Component, pageProps, ...AppProps }: AppProps) {
+
+  if ([`/`].includes(AppProps.router.pathname))
+    return (
+      <ChakraProvider theme={theme}>
+        <RecoilRoot>
+          <Component {...pageProps} />
+        </RecoilRoot>
+      </ChakraProvider>)
+  else return (
     <ChakraProvider theme={theme}>
       <RecoilRoot>
         <Layout>
