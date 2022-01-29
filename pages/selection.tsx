@@ -1,10 +1,4 @@
-import {
-  Button,
-  Center,
-  Stack,
-  Text,
-  IconButton,
-} from "@chakra-ui/react";
+import { Button, Center, Stack, Text, IconButton } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -14,8 +8,8 @@ import placeDetail from "../states/placeDetail";
 import { ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import viewedStops from "../states/viewedStops";
-import place from "./place";
 import userGeoLocation from "../states/userGeoLocation";
+import Router from "next/router";
 
 export default function selection() {
   const routesList = useRecoilValue(routes);
@@ -29,20 +23,23 @@ export default function selection() {
   const [vStop, setVStop] = useRecoilState(viewedStops);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 
+  
   useEffect(() => {
+    if (userLocation.coordinates.lat === 0) {
+      Router.push("/");
+    }; 
     setCurrRoute(routesList[selectRoute]);
-    checkIfVisited();
+    if (traveledRoute.completedRoute.length > 0) {
+      checkIfVisited()
+    };
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
     setBg(checkPlaceInfo(placeInfo));
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
   
-  function checkPlaceInfo(place: any): any { 
-    if (
-        traveledRoute.completedRoute.includes(place)
-    ) {
+  function checkPlaceInfo(place: any): any {
+    if (traveledRoute.completedRoute.includes(place)) {
       return;
-    }
-    else return placeInfo.img
+    } else return placeInfo.img;
   }
 
   function checkIfVisited() {
@@ -105,108 +102,90 @@ export default function selection() {
 
   return (
     <>
-      <Center h="100vh" bg="teal.500" w="100vw">
-        <Stack
-          boxShadow="md"
-          pt="5"
-          pb="5"
+      <Center
+        h="95vh"
+        backgroundImage={bg ? bg : ""}
+        backgroundRepeat="no-repeat"
+        backgroundPosition="center"
+        backgroundSize="cover"
+        direction="row"
+      >
+        <IconButton
+          aria-label="right button"
+          icon={<ArrowLeftIcon />}
           pr="5"
-          pl="5"
-          rounded="md"
-          h="90vh"
-          minW="90vw"
-          maxW={["60vw", "90vw", "90vw", "70vw"]}
-          backgroundImage={bg ? bg : ""}
-          backgroundRepeat="no-repeat"
-          backgroundPosition="center"
-          backgroundSize="cover"
-          direction="row"
+          variant="link"
+          direction="right"
+          onClick={changeToLeftRoute}
+          fontSize="40"
+        ></IconButton>
+
+        <Stack
+          p="3px"
+          spacing={30}
+          direction="column"
+          align="center"
+          marginTop="2px"
+          maxH="80vh"
         >
-          <IconButton
-            aria-label="right button"
-            icon={<ArrowLeftIcon />}
-            pr="5"
-            variant="link"
-            direction="right"
-            onClick={changeToLeftRoute}
-            fontSize="40"
-          ></IconButton>
-
-          <Stack
-            p="3px"
-            spacing={30}
-            direction="column"
-            align="center"
-            marginTop="2px"
-            maxH="80vh"
+          <Text
+            colorScheme={"whiteAlpha"}
+            bgColor="gray.500"
+            fontSize={20}
+            textColor="whitesmoke"
+            textTransform={"uppercase"}
+            p="2"
+            marginBottom={20}
+            fontWeight="bold"
           >
-            <Text
-              colorScheme={"whiteAlpha"}
-              bgColor="gray.500"
-              fontSize={20}
-              textColor="whitesmoke"
-              textTransform={"uppercase"}
-              p="2"
-              marginBottom={20}
-              fontWeight="bold"
-            >
-              Select a route
-            </Text>
+            Select a route
+          </Text>
 
-            {routesList[selectRoute].stops
-              .slice()
-              .reverse()
-              .map((place) => {
-                return (
-                  <Button
-                    key={place?.placeId * 3.1425}
-                    placeid={place?.placeId}
-                    onClick={handlePlaceClick}
-                    {...(traveledRoute.completedRoute.includes(place)
-                      ? { bg: "gray", color: "gray.400" }
-                      : { bg: "white", color: "black" })}
-                  >
-                    {`${place?.type} ${place?.name} `}
-                  </Button>
-                );
-              })}
-            <ArrowUpIcon w="20" h="20" color="black" />
-            {userLocation.coordinates.lat === 0 ? (
-              <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="gray">
-                Loading...
-              </Button>
-            ) : (
-              <Link href="/place" passHref>
+          {routesList[selectRoute].stops
+            .slice()
+            .reverse()
+            .map((place) => {
+              return (
                 <Button
-                  borderRadius="50%"
-                  w="5rem"
-                  h="5rem"
-                  colorScheme="orange"
-                  onClick={handleRouteSelect}
+                  key={place?.placeId * 3.1425}
+                  placeid={place?.placeId}
+                  onClick={handlePlaceClick}
+                  {...(traveledRoute.completedRoute.includes(place)
+                    ? { bg: "gray", color: "gray.400" }
+                    : { bg: "white", color: "black" })}
                 >
-                  JUST GO
+                  {`${place?.type} ${place?.name} `}
                 </Button>
-              </Link>
-            )}
-            <Link href="/otsukare" passHref>
+              );
+            })}
+          <ArrowUpIcon w="20" h="20" color="black" />
+          {userLocation.coordinates.lat === 0 ? (
+            <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="gray">
+              Loading...
+            </Button>
+          ) : (
+            <Link href="/place" passHref>
               <Button
-                colorScheme="telegram"
-                variant="solid"
+                borderRadius="50%"
+                w="5rem"
+                h="5rem"
+                colorScheme="orange"
+                onClick={handleRouteSelect}
               >
-                Done for the day
+                JUST GO
               </Button>
             </Link>
-          </Stack>
-          <IconButton
-            aria-label="right button"
-            icon={<ArrowRightIcon />}
-            pl="5"
-            variant="link"
-            direction="right"
-            onClick={changeToRightRoute}
-            fontSize="40"
-          ></IconButton>
+          )}
         </Stack>
+        <IconButton
+          aria-label="right button"
+          icon={<ArrowRightIcon />}
+          pl="5"
+          variant="link"
+          direction="right"
+          onClick={changeToRightRoute}
+          fontSize="40"
+        ></IconButton>
       </Center>
     </>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
 import userGeoLocation from "../states/userGeoLocation";
@@ -17,10 +17,11 @@ export default function place() {
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
   
   useEffect(() => {
-    getUserLocation();
-    if (places.name === "") {
+    if (placeInfo.name === "") {
       Router.push("/");
-    }
+    } else {
+      getUserLocation()
+    };
   },[currInstructions.instructions.length, userLocation]);
   
   async function getUserLocation() {
@@ -35,7 +36,7 @@ export default function place() {
       {
         params: {
           origin: coordinateString,
-          destination: places.coord.toString(),
+          destination: placeInfo.coord.toString(),
         },
       }
     );
@@ -63,32 +64,16 @@ export default function place() {
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
   }
 
-  function addToViewedStops() {
-    setVStop({
-      ...vStop,
-      viewedStops: [...vStop.viewedStops, placeInfo],
-    });
-  }
-
   return (
     <>
-      <Center h="100vh" bg="teal.500" w="100vw">
         <Stack
-          boxShadow="md"
-          pt="5"
-          pb="5"
-          pr="5"
-          pl="5"
-          rounded="md"
-          h="90vh"
-          minW="90vw"
-          maxW={["90vw", "90vw", "90vw", "70vw"]}
+          h="95vh"
           backgroundImage={`url(${places.img})`}
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
           backgroundSize="cover"
         >
-          <Stack direction="column" spacing={4} align="center">
+          <Stack direction="column" spacing={4} pt={5} align="center">
             <Box
               bg="green.100"
               borderWidth="1px"
@@ -130,13 +115,7 @@ export default function place() {
               Go to {places.name}
             </Button>
           </Link>)}
-          <Link href="/selection">
-            <Button bg="gray.400" textColor="white" onClick={addToViewedStops}>
-              Back to route selection
-            </Button>
-          </Link>
         </Stack>
-      </Center>
     </>
   );
 }

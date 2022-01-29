@@ -29,32 +29,20 @@ export default function showRoute() {
   };
 
   return (
-    <Center h="100vh" bg="teal.500" w="100vw">
-      <Stack
-        boxShadow="md"
-        pt="5"
-        pb="5"
-        pr="5"
-        pl="5"
-        rounded="md"
-        h="90vh"
-        minW="90vw"
-        maxW={["90vw", "90vw", "90vw", "70vw"]}
-        bg="whiteAlpha.900"
-      >
-        <Stack pt={10} align={"center"}>
-          <Heading
-            align={"centre"}
-            fontSize={["5vh", "5vh", "5vh", "5vh"]}
-            fontFamily={"body"}
-            fontWeight="bold"
-            color="tomato"
-          >
-            🎊Otsukare 🎊
-          </Heading>
-        </Stack>
+    <>
+      <Stack h="95vh" align="center"> 
+        <Heading
+          pt="20"
+          justifyContent="center"
+          fontSize={["5vh", "5vh", "5vh", "5vh"]}
+          fontFamily={"body"}
+          fontWeight="bold"
+          color="tomato"
+        >
+          🎊Otsukare 🎊
+        </Heading>
 
-        <AspectRatio minW="100px" ratio={4 / 3}>
+        <AspectRatio pt="5" minW="300px" maxW="70%" maxH="50vh" ratio={4 / 3}>
           <Image
             src={endImg}
             rounded="lg"
@@ -96,6 +84,6 @@ export default function showRoute() {
           </Link>
         </Stack>
       </Stack>
-    </Center>
+    </>
   );
 }
