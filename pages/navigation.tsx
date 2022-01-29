@@ -1,14 +1,13 @@
 import Link from "next/link";
 import Router from "next/router";
 import { useState, useEffect } from "react";
-import { Center, Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
-import axios from "axios";
 
 
 export default function navigation() {
@@ -95,64 +94,16 @@ export default function navigation() {
     setLoadDirections(loadDirections + 1);
   }
 
-  // in case user is lost, refresh location and provide directions to destination
-  const handleRefreshLocation = async () => {
-    const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
-
-    const response = await axios.get<any>(
-      `https://k76g4ometf.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data `,
-      {
-        params: {
-          origin: coordinateString,
-          destination: places.coord.toString(),
-        },
-      }
-    );
-
-    const instructionsList = [];
-    for await (let step of response.data.routes[0].legs[0].steps) {
-      //clean up HTML, add arrows
-      const strippedStr = step.html_instructions
-        .replace(/<[^>]+>/g, " ")
-        .replace(/&nbsp;/g, " ")
-        .replace("right", "right    ➡️ ")
-        .replace("left", "left   ⬅️ ")
-
-      // add distance for each step
-      const distance = step.distance.text;
-      const distanceStr = `🚶 walk ` + `${distance}`;
-
-      const stepObj = {directions: "", distance: ""};
-      stepObj.directions = strippedStr;
-      stepObj.distance = distanceStr;
-
-      instructionsList.push(stepObj);
-    }
-
-    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-
-    console.log('user location in refresh location', userLocation);
-  }
 
   return (
     <>
-      <Center h="100vh" bg="teal.500" w="100vw">
         <Stack
-          boxShadow="md"
-
-          pt="5"
-          pb="5"
-          pr="5"
-          pl="5"
-          rounded="md"
-          h="90vh"
-          minW="90vw"
-          maxW={["90vw", "90vw", "90vw", "70vw"]}
+           h="95vh"
           backgroundImage={`url(${places.img})`}
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
           backgroundSize="cover"
-          overflow="scroll"
+          // overflow="scroll"
         >
           <Stack direction="column" spacing={4} align="center">
             <Box
@@ -186,7 +137,6 @@ export default function navigation() {
             })}
           <Button onClick={handleBackBtn}>Back</Button>
           <Button onClick={handleNextBtn}>Next</Button>
-          <Button onClick={handleRefreshLocation}>Refresh location</Button>
           </Stack>
           <Divider orientation="horizontal" pt="5vh" marginBottom="5vh" />
 
@@ -218,7 +168,6 @@ export default function navigation() {
             </Button>
           </Link>
         </Stack>
-      </Center>
     </>
   );
 }

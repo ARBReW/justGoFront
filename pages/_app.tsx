@@ -3,6 +3,7 @@ import {RecoilRoot} from 'recoil'
 import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
+import Layout from '../components/layout/layout';
 
 const breakpoints = createBreakpoints({
   sm: "320px",
@@ -26,7 +27,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <RecoilRoot>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </RecoilRoot>
     </ChakraProvider>
   );
