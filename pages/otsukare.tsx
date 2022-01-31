@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Center,
   Heading,
   Text,
   Stack,
@@ -30,7 +29,11 @@ export default function showRoute() {
 
   return (
     <>
-      <Stack h="95vh" align="center"> 
+      <Stack 
+      h="95vh" 
+      align="center"
+      bg="whiteAlpha.900"
+      > 
         <Heading
           pt="20"
           justifyContent="center"
