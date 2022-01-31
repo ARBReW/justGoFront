@@ -30,7 +30,7 @@ export default function navigation() {
 
   // handle the next place btn
   function checkIfVisited() {
-    let indexNumber = currRoute.stops.indexOf(places) + 1;
+    let indexNumber = currRoute.stops.map((e)=> e.name).indexOf(places.name) + 1;
     function recurse(index: number) {
       //break case
       if (
@@ -46,7 +46,7 @@ export default function navigation() {
   }
 
   const nextPlace = () => {
-    let nextPlaceIndex = currRoute.stops.indexOf(places) + 1;
+    let nextPlaceIndex = currRoute.stops.map((e) => e.name).indexOf(places.name) + 1;
 
     // recurse to skip places already visited
     function recurse(index: number) {
@@ -77,9 +77,7 @@ export default function navigation() {
       });
     });
 
-    console.log("user location in update route", userLocation);
-
-    if (!traveledRoute.completedRoute.includes(places)) {
+    if (!traveledRoute.completedRoute.includes(placeInfo)) {
       setTraveledRoute({
         ...traveledRoute,
         completedRoute: [...traveledRoute.completedRoute, placeInfo],
@@ -100,17 +98,16 @@ export default function navigation() {
     <>
       <Stack
         h="95vh"
-        backgroundImage={`url(${places.img})`}
+        backgroundImage={`data:image/jpeg;base64,${places.img}`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
-        // overflow="scroll"
       >
         <Stack direction="column" spacing={4} pt={5} align="center">
           <Box
             bg="green.100"
             borderWidth="1px"
-            w="50%"
+            w="70%"
             p={4}
             align="center"
             bgColor="gray.500"
@@ -153,6 +150,8 @@ export default function navigation() {
         ) : (
           <Link href="/place">
             <Button
+              whiteSpace="normal"
+              wordwrap="break-word"
               bg="blackAlpha.600"
               textColor="white"
               onClick={updateUserRoute}
@@ -162,7 +161,12 @@ export default function navigation() {
           </Link>
         )}
         <Link href="/place">
-          <Button bg="gray.400" textColor="white">
+          <Button
+            whiteSpace="normal"
+            wordwrap="break-word"
+            bg="gray.400"
+            textColor="white"
+          >
             Go back to {places.name}
           </Button>
         </Link>

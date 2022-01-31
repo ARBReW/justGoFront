@@ -1,4 +1,3 @@
-import locations from "../data/locationsData";
 import { useRecoilValue } from "recoil";
 import locationStates from "../states/locationStates";
 import { Box } from "@chakra-ui/react";
@@ -10,9 +9,9 @@ export default function showAllPlaces() {
 
     return (
         <div>
-            {places.map((place) => (                
+            {places.map((place: any) => (                
                     <Box key={place.name}>
-                        ID: {place.placeId} Name: {place.name} Type: {place.type}
+                        ID: {place._id} Name: {place.name} Type: {place.type}
                     </Box>                
             ))}
         </div>

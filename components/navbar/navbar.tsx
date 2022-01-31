@@ -21,7 +21,6 @@ const [vStop, setVStop] = useRecoilState(viewedStops);
   const handleRefreshLocation = async () => {
   const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
   
-  console.log(placeInfo, "placeInfo")
     const response = await axios.get<any>(
       `https://k76g4ometf.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data `,
       {
@@ -52,8 +51,6 @@ const [vStop, setVStop] = useRecoilState(viewedStops);
     }
 
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-
-    console.log('user location in refresh location', userLocation);
     
   };
 

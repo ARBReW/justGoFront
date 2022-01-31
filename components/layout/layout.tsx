@@ -1,8 +1,6 @@
 import Navbar from "../navbar/navbar";
 import React from "react";
-import { Center, Container, Stack } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-
+import {Stack } from "@chakra-ui/react";
 
 export default function Layout(props: any) {
   return (
