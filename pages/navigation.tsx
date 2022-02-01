@@ -8,6 +8,7 @@ import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
+import axios from "axios";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
@@ -23,7 +24,46 @@ export default function navigation() {
     if (placeInfo.name === "") {
       Router.push("/");
     }
+    handleRefreshButton();
   },[userLocation]);
+
+
+  const handleRefreshButton = async () => {
+  const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
+  
+    const response = await axios.get<any>(
+      `https://9fmfffvvm0.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
+      {
+        params: {
+          origin: coordinateString,
+          destination: placeInfo.coord.toString(),
+        },
+      })
+
+    const instructionsList = [];
+    for await (let step of response.data.routes[0].legs[0].steps) {
+      //clean up HTML, add arrows
+      const strippedStr = step.html_instructions
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace("right", "right    ➡️ ")
+        .replace("left", "left   ⬅️ ")
+
+      // add distance for each step
+      const distance = step.distance.text;
+      const distanceStr = `🚶 walk ` + `${distance}`;
+
+      const stepObj = {directions: "", distance: ""};
+      stepObj.directions = strippedStr;
+      stepObj.distance = distanceStr;
+
+      instructionsList.push(stepObj);
+    }
+
+    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    
+   };
+  
 
   // handle the next place btn
   function checkIfVisited() {
@@ -63,6 +103,7 @@ export default function navigation() {
       recurse(nextPlaceIndex);
     }
   };
+
 
   const updateUserRoute = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -139,7 +180,12 @@ export default function navigation() {
             <Button onClick={handleNextBtn}>Next</Button>
           </HStack>
         </Stack>
+
       <Box bg="white">{lat} {lng}</Box>
+      {currInstructions.instructions.map((el: any, index: number) => {
+        return ( <Text  key={index * 5.1245} bg="white">{el.directions}</Text>)
+      })}
+     
         <Divider orientation="horizontal" marginBottom="5vh" />
 
         <Stack>
