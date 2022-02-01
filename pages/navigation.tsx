@@ -124,9 +124,6 @@ export default function navigation() {
     nextPlace();
   };
 
-  const lat = userLocation.coordinates.lat;
-  const lng = userLocation.coordinates.lng;
-
   // instructions btns
   const handleBackBtn = () => {
     if (loadDirections > 1) setLoadDirections(loadDirections - 1);
@@ -180,12 +177,6 @@ export default function navigation() {
             <Button onClick={handleNextBtn}>Next</Button>
           </HStack>
         </Stack>
-
-      <Box bg="white">{lat} {lng}</Box>
-      {currInstructions.instructions.map((el: any, index: number) => {
-        return ( <Text  key={index * 5.1245} bg="white">{el.directions}</Text>)
-      })}
-     
         <Divider orientation="horizontal" marginBottom="5vh" />
 
         <Stack>

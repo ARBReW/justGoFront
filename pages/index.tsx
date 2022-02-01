@@ -37,9 +37,6 @@ const Home: NextPage = () => {
     });
   }
 
-  const lat = userLocation.coordinates.lat;
-  const lng = userLocation.coordinates.lng;
-
   async function getData() {
     const routeResponse = await axios.get(
       "https://cc24-seniorprojectbackend.herokuapp.com/routes"
@@ -64,7 +61,6 @@ const Home: NextPage = () => {
         bg="whiteAlpha.900"
         rounded="md"
       >
-        <div>{lat} {lng}</div>
         <Image
           src="https://kanji-symbol.net/common/images/txt/num0008-gyo.gif"
           mb="6"
