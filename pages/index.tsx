@@ -24,7 +24,12 @@ const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [ places, setPlaces ] = useRecoilState(locationStates);
 
-  useEffect(() => {handleUserLocation(), getData()}, [places])
+  useEffect(() => {
+    handleUserLocation(); 
+    getData();
+  }, [places]);
+
+
   // get user location on login (to be updated on selection page)
   function handleUserLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -38,15 +43,17 @@ const Home: NextPage = () => {
   }
 
   async function getData() {
-    const routeResponse = await axios.get(
-      "https://cc24-seniorprojectbackend.herokuapp.com/routes"
-    );
-    const placeResponse = await axios.get(
-      "https://cc24-seniorprojectbackend.herokuapp.com/places"
-    );
-    const routeData = await routeResponse.data.slice();
-    const placeData = await placeResponse.data.slice();
-    setPlaces({routes: routeData, places: placeData});
+    try {
+      const routeResponse = await axios.get(
+        'https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/routes');
+      const placeResponse = await axios.get<any>(
+        'https://cc24-seniorprojectbackend.herokuapp.com/places');
+      const routeData = await routeResponse.data.slice();
+      const placeData = await placeResponse.data.slice();
+      setPlaces({routes: routeData, places: placeData});
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (

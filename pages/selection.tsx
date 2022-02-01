@@ -36,6 +36,7 @@ export default function selection() {
     setBg(checkPlaceInfo(placeInfo));
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
   
+
   function checkPlaceInfo(place: any) :any {
     if (traveledRoute.completedRoute.includes(place)) {
       return;

@@ -28,11 +28,8 @@ export default function place() {
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
-    // Heroku link
-    //`https://cc24-seniorprojectbackend.herokuapp.com/directions/json`,
-
     const response = await axios.get<any>(
-      `https://9fmfffvvm0.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
+      `https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
       {
         params: {
           origin: coordinateString,
