@@ -79,7 +79,6 @@ export default function place() {
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
-        overflow="scroll"
       >
         <Stack direction="column" spacing={4} pt={5} align="center">
           <Box
