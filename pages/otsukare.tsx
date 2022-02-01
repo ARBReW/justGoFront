@@ -1,15 +1,13 @@
 import {
   Box,
   Button,
-  Center,
-  useColorModeValue,
   Heading,
   Text,
   Stack,
   Image,
   AspectRatio,
+  HStack,
 } from "@chakra-ui/react";
-import locationStates from "../states/locationStates";
 import currentRoute from "../states/currentRoute";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import Link from "next/link";
@@ -19,7 +17,7 @@ import placeDetail from "../states/placeDetail";
 export default function showRoute() {
   const { completedRoute } = useRecoilValue(userRoute);
   const route = useRecoilValue(currentRoute);
-  const endImg = completedRoute[completedRoute.length - 1]?.img;
+  const endImg = `data:image/jpeg;base64, ${completedRoute[completedRoute.length - 1]?.img}`;
   const clearPlace = useResetRecoilState(placeDetail);
   const clearCurrentRoute = useResetRecoilState(currentRoute);
   const clearUserRoute = useResetRecoilState(userRoute);
@@ -31,32 +29,20 @@ export default function showRoute() {
   };
 
   return (
-    <Center h="100vh" bg="teal.500" w="100vw">
-      <Stack
-        boxShadow="md"
-        pt="5"
-        pb="5"
-        pr="5"
-        pl="5"
-        rounded="md"
-        h="90vh"
-        minW="90vw"
-        maxW={["90vw", "90vw", "90vw", "70vw"]}
-        bg="whiteAlpha.900"
-      >
-        <Stack pt={10} align={"center"}>
-          <Heading
-            align={"centre"}
-            fontSize={["5vh", "5vh", "5vh", "5vh"]}
-            fontFamily={"body"}
-            fontWeight="bold"
-            color="tomato"
-          >
-            🎊Otsukare 🎊
-          </Heading>
-        </Stack>
+    <>
+      <Stack h="95vh" align="center">
+        <Heading
+          pt="20"
+          justifyContent="center"
+          fontSize={["5vh", "5vh", "5vh", "5vh"]}
+          fontFamily={"body"}
+          fontWeight="bold"
+          color="tomato"
+        >
+          🎊Otsukare 🎊
+        </Heading>
 
-        <AspectRatio minW="100px" ratio={4 / 3}>
+        <AspectRatio pt="5" minW="300px" maxW="70%" maxH="50vh" ratio={4 / 3}>
           <Image
             src={endImg}
             rounded="lg"
@@ -79,9 +65,9 @@ export default function showRoute() {
             .slice()
             .reverse()
             .map((stop) => (
-              <Box key={stop.placeId * 8.4216}>
-                {"✅"} {stop.name} {stop.type}
-              </Box>
+              <HStack bg="whiteAlpha.900" key={stop._id + "CC24 rocks"} w="100%" spacing="0">
+               <Text> {"✅ "} </Text>  <Image h="2vh" src={stop?.type} pr="3px"></Image> <Text>{stop?.name}</Text>
+              </HStack>
             ))}
         </div>
 
@@ -98,6 +84,6 @@ export default function showRoute() {
           </Link>
         </Stack>
       </Stack>
-    </Center>
+    </>
   );
 }
