@@ -15,15 +15,15 @@ export default function place() {
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [vStop, setVStop] = useRecoilState(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
-  
+
   useEffect(() => {
     if (placeInfo.name === "") {
       Router.push("/");
     } else {
       getUserLocation()
     };
-  },[currInstructions.instructions.length, userLocation]);
-  
+  }, [currInstructions.instructions.length, userLocation]);
+
   async function getUserLocation() {
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
@@ -32,7 +32,7 @@ export default function place() {
     //`https://cc24-seniorprojectbackend.herokuapp.com/directions/json`,
 
     const response = await axios.get<any>(
-      `https://9fmfffvvm0.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
+      `https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
       {
         params: {
           origin: coordinateString,
@@ -40,7 +40,33 @@ export default function place() {
         },
       }
     );
-      console.log(response.data.routes)
+
+    function getBearing(start: number[], end: number[]) {
+
+      function radianToDegree(radian: number) {
+        return radian * 180 / Math.PI
+      }
+
+      function degreeToRadian(degree: number) {
+        return degree * Math.PI / 180
+      }
+
+      const difference = degreeToRadian(Math.abs(end[1] - start[1]));
+
+      start.forEach((degree, i) => start[i] = degreeToRadian(degree));
+      end.forEach((degree, i) => end[i] = degreeToRadian(degree));
+
+      function x() {
+        return Math.cos(end[0]) * Math.sin(difference);
+      }
+
+      function y() {
+        return Math.cos(start[0]) * Math.sin(end[0]) - Math.sin(start[0]) * Math.cos(end[0]) * Math.cos(difference)
+      }
+
+      return radianToDegree(Math.atan2(x(), y()));
+    }
+
     const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
       //clean up HTML, add arrows
@@ -54,10 +80,33 @@ export default function place() {
       const distance = step.distance.text;
       const distanceStr = `🚶 walk ` + `${distance}`;
 
-      const stepObj = {directions: "", distance: ""};
+      const startCoord = [
+        step.start_location.lat,
+        step.start_location.lng
+      ];
+
+      const endCoord = [
+        step.end_location.lat,
+        step.end_location.lng
+      ];
+
+      // getBearing function needs to be implemented
+      const heading = getBearing(startCoord, endCoord);
+
+      const stepObj = {
+        directions: "",
+        distance: "",
+        startCoord: [0, 0],
+        endCoord: [0, 0],
+        heading: 0
+      };
       stepObj.directions = strippedStr;
       stepObj.distance = distanceStr;
+      stepObj.startCoord = startCoord;
+      stepObj.endCoord = endCoord;
+      stepObj.heading = heading;
 
+      console.log(stepObj);
       instructionsList.push(stepObj);
     }
 
