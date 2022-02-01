@@ -8,17 +8,15 @@ import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
+import axios from "axios";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
   const currRoute = useRecoilValue(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-  const [traveledRoute, setTraveledRoute] =
-    useRecoilState<userRouteInterface>(userRoute);
-  const [currInstructions, setCurrInstructions] = useRecoilState<any>(
-    instructionsToLocation
-  );
+  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
+  const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
   const [loadDirections, setLoadDirections] = useState(1);
   const [selectPlace, setSelectPlace] = useState(0);
 
@@ -26,13 +24,52 @@ export default function navigation() {
     if (placeInfo.name === "") {
       Router.push("/");
     }
-  });
+    handleRefreshButton();
+  },[userLocation]);
+
+
+  const handleRefreshButton = async () => {
+  const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
+  
+    const response = await axios.get<any>(
+      `https://9fmfffvvm0.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
+      {
+        params: {
+          origin: coordinateString,
+          destination: placeInfo.coord.toString(),
+        },
+      })
+
+    const instructionsList = [];
+    for await (let step of response.data.routes[0].legs[0].steps) {
+      //clean up HTML, add arrows
+      const strippedStr = step.html_instructions
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace("right", "right    ➡️ ")
+        .replace("left", "left   ⬅️ ")
+
+      // add distance for each step
+      const distance = step.distance.text;
+      const distanceStr = `🚶 walk ` + `${distance}`;
+
+      const stepObj = {directions: "", distance: ""};
+      stepObj.directions = strippedStr;
+      stepObj.distance = distanceStr;
+
+      instructionsList.push(stepObj);
+    }
+
+    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    
+   };
+  
 
   // handle the next place btn
   function checkIfVisited() {
     let indexNumber = currRoute.stops.map((e)=> e.name).indexOf(places.name) + 1;
     function recurse(index: number) {
-      //break case
+      //break case if place is already included in travelledRoute
       if (
         !traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])
       ) {
@@ -66,6 +103,7 @@ export default function navigation() {
       recurse(nextPlaceIndex);
     }
   };
+
 
   const updateUserRoute = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -117,12 +155,15 @@ export default function navigation() {
           >
             {places.name} <br></br>
           </Box>
-          <Box bg="whiteAlpha.900" w="auto" h="auto" align="center">
+          <Box bg="whiteAlpha.900" w="50%" h="200px" align="center">
             {currInstructions.instructions
               .slice(loadDirections - 1, loadDirections)
               .map((step: any, index: number) => {
                 return (
-                  <Text key={index * 5.1245} color="grey.700">
+                  <Text 
+                  key={index * 5.1245} 
+                  color="grey.700"
+                  textAlign="center">
                     {step.directions}
                     <br></br>
                     {step.distance}
@@ -130,46 +171,41 @@ export default function navigation() {
                 );
               })}
           </Box>
-          <HStack align="center">
+          <HStack align="center" spacing={5}>
             <Button onClick={handleBackBtn}>Back</Button>
             <Button onClick={handleNextBtn}>Next</Button>
           </HStack>
         </Stack>
-        <Divider orientation="horizontal" pt="5vh" marginBottom="5vh" />
+        <Divider orientation="horizontal" marginBottom="5vh" />
 
-        {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
-          <Link href="/otsukare">
-            <Button
-              bg="blackAlpha.600"
-              textColor="white"
-              onClick={updateUserRoute}
-            >
-              Done for the day
-            </Button>
-          </Link>
-        ) : (
+        <Stack>
+          {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
+            <Link href="/otsukare">
+              <Button
+                bg="blackAlpha.600"
+                textColor="white"
+                onClick={updateUserRoute}
+              >
+                Done for the day
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/place">
+              <Button
+                bg="blackAlpha.600"
+                textColor="white"
+                onClick={updateUserRoute}
+              >
+                I'm done here. <br></br> Take me to {checkIfVisited().name}
+              </Button>
+            </Link>
+          )}
           <Link href="/place">
-            <Button
-              whiteSpace="normal"
-              wordwrap="break-word"
-              bg="blackAlpha.600"
-              textColor="white"
-              onClick={updateUserRoute}
-            >
-              I'm done here. <br></br> Take me to {checkIfVisited().name}
+            <Button bg="gray.400" textColor="white">
+              Go back to {places.name}
             </Button>
           </Link>
-        )}
-        <Link href="/place">
-          <Button
-            whiteSpace="normal"
-            wordwrap="break-word"
-            bg="gray.400"
-            textColor="white"
-          >
-            Go back to {places.name}
-          </Button>
-        </Link>
+        </Stack>
       </Stack>
     </>
   );

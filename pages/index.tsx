@@ -143,7 +143,7 @@ const Home: NextPage = () => {
           <Center paddingTop="15px">
             <Link href="/selection" passHref>
               <Button
-                colorScheme="orange"
+                colorScheme="green"
                 variant="solid"
                 fontSize={["2vh", "2vh", "2vh", "2vh"]}
                 // onClick={handleUserLocation}
