@@ -27,7 +27,7 @@ export default function navigation() {
 
   // handle the next place btn
   function checkIfVisited() {
-    let indexNumber = currRoute.stops.indexOf(places) + 1;
+    let indexNumber = currRoute.stops.map((e)=> e.name).indexOf(places.name) + 1;
     function recurse(index: number) {
       //break case if place is already included in travelledRoute
       if (
@@ -43,7 +43,7 @@ export default function navigation() {
   }
 
   const nextPlace = () => {
-    let nextPlaceIndex = currRoute.stops.indexOf(places) + 1;
+    let nextPlaceIndex = currRoute.stops.map((e) => e.name).indexOf(places.name) + 1;
 
     // recurse to skip places already visited
     function recurse(index: number) {
@@ -74,9 +74,7 @@ export default function navigation() {
       });
     });
 
-    console.log("user location in update route", userLocation);
-
-    if (!traveledRoute.completedRoute.includes(places)) {
+    if (!traveledRoute.completedRoute.includes(placeInfo)) {
       setTraveledRoute({
         ...traveledRoute,
         completedRoute: [...traveledRoute.completedRoute, placeInfo],
@@ -97,7 +95,7 @@ export default function navigation() {
     <>
       <Stack
         h="95vh"
-        backgroundImage={`url(${places.img})`}
+        backgroundImage={`data:image/jpeg;base64,${places.img}`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
@@ -106,7 +104,7 @@ export default function navigation() {
           <Box
             bg="green.100"
             borderWidth="1px"
-            w="50%"
+            w="70%"
             p={4}
             align="center"
             bgColor="gray.500"

@@ -6,6 +6,7 @@ import {
   Stack,
   Image,
   AspectRatio,
+  HStack,
 } from "@chakra-ui/react";
 import currentRoute from "../states/currentRoute";
 import { useRecoilValue, useResetRecoilState } from "recoil";
@@ -16,7 +17,7 @@ import placeDetail from "../states/placeDetail";
 export default function showRoute() {
   const { completedRoute } = useRecoilValue(userRoute);
   const route = useRecoilValue(currentRoute);
-  const endImg = completedRoute[completedRoute.length - 1]?.img;
+  const endImg = `data:image/jpeg;base64, ${completedRoute[completedRoute.length - 1]?.img}`;
   const clearPlace = useResetRecoilState(placeDetail);
   const clearCurrentRoute = useResetRecoilState(currentRoute);
   const clearUserRoute = useResetRecoilState(userRoute);
@@ -29,11 +30,7 @@ export default function showRoute() {
 
   return (
     <>
-      <Stack 
-      h="95vh" 
-      align="center"
-      bg="whiteAlpha.900"
-      > 
+      <Stack h="95vh" align="center">
         <Heading
           pt="20"
           justifyContent="center"
@@ -68,9 +65,9 @@ export default function showRoute() {
             .slice()
             .reverse()
             .map((stop) => (
-              <Box key={stop.placeId * 8.4216}>
-                {"✅"} {stop.name} {stop.type}
-              </Box>
+              <HStack bg="whiteAlpha.900" key={stop._id + "CC24 rocks"} w="100%" spacing="0">
+               <Text> {"✅ "} </Text>  <Image h="2vh" src={stop?.type} pr="3px"></Image> <Text>{stop?.name}</Text>
+              </HStack>
             ))}
         </div>
 
