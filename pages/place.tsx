@@ -40,7 +40,7 @@ export default function place() {
         },
       }
     );
-
+      console.log(response.data.routes)
     const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
       //clean up HTML, add arrows
