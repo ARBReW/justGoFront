@@ -1,4 +1,4 @@
-import { Button, Center, Stack, Text, IconButton } from "@chakra-ui/react";
+import { Button, Center, Stack, Text, IconButton, Image } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -16,7 +16,7 @@ export default function selection() {
   const { places } = useRecoilValue(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
   const [selectPlace, setSelectPlace] = useState(0);
-  const [bg, setBg] = useState(routesList[0].stops[0].img);
+  const [bg, setBg] = useState("");
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [currRoute, setCurrRoute] = useRecoilState<any>(currentRoute);
   const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
@@ -36,18 +36,17 @@ export default function selection() {
     setBg(checkPlaceInfo(placeInfo));
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
   
-  function checkPlaceInfo(place: any): any {
+  function checkPlaceInfo(place: any) :any {
     if (traveledRoute.completedRoute.includes(place)) {
       return;
-    } else return placeInfo.img;
+    } else return `data:image/jpeg;base64,${placeInfo?.img}`;
   }
 
   function checkIfVisited() {
     let indexNumber = 0;
     function recurse(index: number) {
       //break case
-      if (
-        !traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])
+      if (!traveledRoute.completedRoute.map((e)=>(e.name)).includes(currRoute.stops[indexNumber].name)
       ) {
         setSelectPlace(indexNumber);
         return;
@@ -87,9 +86,9 @@ export default function selection() {
   }
 
   function handlePlaceClick(event: any) {
-    const placeId = Number.parseInt(event.target.attributes.placeid.value);
-    const place = places.find((place) => place.placeId === placeId);
-    setBg(place!.img);
+    const placeId = event.target.attributes._id.value;
+    const place = places.find((place: any) => place._id === placeId);
+    setBg(`data:image/jpeg;base64,${place!.img}`);
   }
 
   // We can use the below chunk of code for skipping places (changing selectPlace)
@@ -99,6 +98,12 @@ export default function selection() {
   //     .indexOf(placeId)
   // );
   //setPlaceInfo(place);
+
+  function truncateName(name: string) {
+    if (name.length >= 15) {
+      return name.slice(0, 15) + "...";
+    } else return name;
+  }
 
   return (
     <>
@@ -147,14 +152,16 @@ export default function selection() {
             .map((place) => {
               return (
                 <Button
-                  key={place?.placeId * 3.1425}
-                  placeid={place?.placeId}
+                  // maxWidth="45vw"
+                  key={place?._id + "3.1425"}
+                  _id={place?._id}
                   onClick={handlePlaceClick}
-                  {...(traveledRoute.completedRoute.includes(place)
+                  {...(traveledRoute.completedRoute.map((e)=>(e.name)).includes(place.name)
                     ? { bg: "gray", color: "gray.400" }
                     : { bg: "white", color: "black" })}
                 >
-                  {`${place?.type} ${place?.name} `}
+                  <Image h="2vh" src={place?.type} pr="3px"></Image>
+                  {truncateName(place?.name)}
                 </Button>
               );
             })}

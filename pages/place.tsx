@@ -32,7 +32,7 @@ export default function place() {
     //`https://cc24-seniorprojectbackend.herokuapp.com/directions/json`,
 
     const response = await axios.get<any>(
-      `https://k76g4ometf.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data `,
+      `https://9fmfffvvm0.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
       {
         params: {
           origin: coordinateString,
@@ -64,58 +64,67 @@ export default function place() {
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
   }
 
+  function checkDay() {
+    const dayOfTheWeek = new Date().getDay() - 1 //0-6 
+    if (dayOfTheWeek === - 1) {
+      return 6;
+    } else return dayOfTheWeek;
+  }
+
   return (
     <>
-        <Stack
-          h="95vh"
-          backgroundImage={`url(${places.img})`}
-          backgroundRepeat="no-repeat"
-          backgroundPosition="center"
-          backgroundSize="cover"
-        >
-          <Stack direction="column" spacing={4} pt={5} align="center">
-            <Box
-              bg="green.100"
-              borderWidth="1px"
-              w="50%"
-              p={4}
-              align="center"
-              bgColor="gray.500"
-              fontSize={20}
-              textColor="whitesmoke"
-              fontWeight="bold"
+      <Stack
+        h="95vh"
+        backgroundImage={`data:image/jpeg;base64,${places.img}`}
+        backgroundRepeat="no-repeat"
+        backgroundPosition="center"
+        backgroundSize="cover"
+      >
+        <Stack direction="column" spacing={4} pt={5} align="center">
+          <Box
+            bg="green.100"
+            borderWidth="1px"
+            w="70%"
+            p={4}
+            align="center"
+            bgColor="gray.500"
+            fontSize={20}
+            textColor="whitesmoke"
+            fontWeight="bold"
+          >
+            {places.name}{" "}
+            <Divider orientation="horizontal" pt="0.8rem"></Divider>
+            <Text
+              fontStyle="italic"
+              fontWeight="normal"
+              fontSize={15}
+              pt="0.8rem"
             >
-              {places.name}{" "}
-              <Divider orientation="horizontal" pt="0.8rem"></Divider>
-              <Text
-                fontStyle="italic"
-                fontWeight="normal"
-                fontSize={15}
-                pt="0.8rem"
-              >
-                Business Hours:
-              </Text>
-              <Text fontWeight="bold" fontSize={15}>
-                Open {places.hours.open} to {places.hours.close}
-              </Text>
-            </Box>
-          </Stack>
-          <Divider orientation="horizontal" pt="47vh" marginBottom="5vh" />
-          {(currInstructions.instructions.length === 0) ?
-            (<Button
-              bg="blackAlpha.600"
-              textColor="white"
-            >
-              Loading instructions...
-            </Button> ): ( <Link href="/navigation">
+              Business Hours:
+            </Text>
+            <Text fontWeight="bold" fontSize={15}>
+              {places.hours[checkDay()]}
+            </Text>
+          </Box>
+        </Stack>
+        <Divider orientation="horizontal" pt="15vh" marginBottom="5vh" />
+        {currInstructions.instructions.length === 0 ? (
+          <Button bg="blackAlpha.600" textColor="white">
+            Loading instructions...
+          </Button>
+        ) : (
+          <Link href="/navigation">
             <Button
+              whiteSpace="normal"
+              wordwrap="break-word"
               bg="blackAlpha.600"
               textColor="white"
             >
               Go to {places.name}
             </Button>
-          </Link>)}
-        </Stack>
+          </Link>
+        )}
+      </Stack>
     </>
   );
 }

@@ -17,11 +17,14 @@ import Link from "next/link";
 import userGeoLocation from "../states/userGeoLocation";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
+import locationStates from "../states/locationStates";
+import axios  from "axios";
 
 const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+  const [ places, setPlaces ] = useRecoilState(locationStates);
 
-  useEffect(() => {handleUserLocation()}, [])
+  useEffect(() => {handleUserLocation(), getData()}, [places])
   // get user location on login (to be updated on selection page)
   function handleUserLocation() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -32,6 +35,18 @@ const Home: NextPage = () => {
         },
       });
     });
+  }
+
+  async function getData() {
+    const routeResponse = await axios.get(
+      "https://cc24-seniorprojectbackend.herokuapp.com/routes"
+    );
+    const placeResponse = await axios.get(
+      "https://cc24-seniorprojectbackend.herokuapp.com/places"
+    );
+    const routeData = await routeResponse.data.slice();
+    const placeData = await placeResponse.data.slice();
+    setPlaces({routes: routeData, places: placeData});
   }
 
   return (
@@ -114,7 +129,7 @@ const Home: NextPage = () => {
 
         <Divider orientation="horizontal" paddingTop="15px" />
 
-        {userLocation.coordinates.lat === 0 ? (
+        {userLocation.coordinates.lat === 0 || places.routes[0]._id === "" ? (
           <Center paddingTop="15px">
             <Button
               colorScheme="orange"
