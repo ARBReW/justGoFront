@@ -1,16 +1,15 @@
 import { atom } from "recoil";
 
 interface place {
-  placeId: number;
-  name: string;
-  coord: number[];
-  img: string;
-  hours: {
-    open: number;
-    close: number;
-  };
-  type: string;
+  _id: string,
+  name: string,
+  coord: number[],
+  img: string,
+  hours: string[],
+  type: string,
+  __v: number
 }
+
 
 export interface viewedStopsInterface {
   viewedStops: place[];
