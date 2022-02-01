@@ -23,7 +23,7 @@ export default function navigation() {
     if (placeInfo.name === "") {
       Router.push("/");
     }
-  });
+  },[userLocation]);
 
   // handle the next place btn
   function checkIfVisited() {
@@ -83,6 +83,9 @@ export default function navigation() {
     nextPlace();
   };
 
+  const lat = userLocation.coordinates.lat;
+  const lng = userLocation.coordinates.lng;
+
   // instructions btns
   const handleBackBtn = () => {
     if (loadDirections > 1) setLoadDirections(loadDirections - 1);
@@ -99,6 +102,7 @@ export default function navigation() {
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
+        overflow="scroll"
       >
         <Stack direction="column" spacing={4} pt={5} align="center">
           <Box
@@ -135,6 +139,7 @@ export default function navigation() {
             <Button onClick={handleNextBtn}>Next</Button>
           </HStack>
         </Stack>
+      <Box bg="white">{lat} {lng}</Box>
         <Divider orientation="horizontal" marginBottom="5vh" />
 
         <Stack>

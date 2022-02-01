@@ -22,7 +22,7 @@ const [vStop, setVStop] = useRecoilState(viewedStops);
   const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
   
     const response = await axios.get<any>(
-      `https://k76g4ometf.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data `,
+      `https://9fmfffvvm0.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
       {
         params: {
           origin: coordinateString,

@@ -30,7 +30,7 @@ export default function showRoute() {
 
   return (
     <>
-      <Stack h="95vh" align="center">
+      <Stack h="95vh" align="center" overflow="scroll">
         <Heading
           pt="20"
           justifyContent="center"

@@ -114,6 +114,7 @@ export default function selection() {
         backgroundPosition="center"
         backgroundSize="cover"
         direction="row"
+        overflow="scroll"
       >
         <IconButton
           aria-label="right button"
