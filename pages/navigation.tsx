@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Router from "next/router";
 import { useState, useEffect, Component } from "react";
-import { Stack, HStack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { Stack, HStack, Button, Box, Divider, Text, IconButton } from "@chakra-ui/react";
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
@@ -9,17 +10,15 @@ import userRoute, { userRouteInterface } from "../states/userRoute";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { GoogleMap, LoadScript, StreetViewPanorama } from '@react-google-maps/api';
+import axios from "axios";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
   const currRoute = useRecoilValue(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-  const [traveledRoute, setTraveledRoute] =
-    useRecoilState<userRouteInterface>(userRoute);
-  const [currInstructions, setCurrInstructions] = useRecoilState<any>(
-    instructionsToLocation
-  );
+  const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
+  const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
   const [loadDirections, setLoadDirections] = useState(1);
   const [selectPlace, setSelectPlace] = useState(0);
 
@@ -27,13 +26,52 @@ export default function navigation() {
     if (placeInfo.name === "") {
       Router.push("/");
     }
-  });
+    handleRefreshButton();
+  }, [userLocation]);
+
+
+  const handleRefreshButton = async () => {
+    const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
+
+    const response = await axios.get<any>(
+      `https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
+      {
+        params: {
+          origin: coordinateString,
+          destination: placeInfo.coord.toString(),
+        },
+      })
+
+    const instructionsList = [];
+    for await (let step of response.data.routes[0].legs[0].steps) {
+      //clean up HTML, add arrows
+      const strippedStr = step.html_instructions
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace("right", "right    ➡️ ")
+        .replace("left", "left   ⬅️ ")
+
+      // add distance for each step
+      const distance = step.distance.text;
+      const distanceStr = `🚶 walk ` + `${distance}`;
+
+      const stepObj = { directions: "", distance: "" };
+      stepObj.directions = strippedStr;
+      stepObj.distance = distanceStr;
+
+      instructionsList.push(stepObj);
+    }
+
+    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+
+  };
+
 
   // handle the next place btn
   function checkIfVisited() {
     let indexNumber = currRoute.stops.map((e) => e.name).indexOf(places.name) + 1;
     function recurse(index: number) {
-      //break case
+      //break case if place is already included in travelledRoute
       if (
         !traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])
       ) {
@@ -67,6 +105,7 @@ export default function navigation() {
       recurse(nextPlaceIndex);
     }
   };
+
 
   const updateUserRoute = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -130,7 +169,6 @@ export default function navigation() {
       >
         <Stack direction="column" spacing={4} pt={5} align="center">
           <Box
-            bg="green.100"
             borderWidth="1px"
             w="70%"
             p={4}
@@ -142,12 +180,23 @@ export default function navigation() {
           >
             {places.name} <br></br>
           </Box>
-          <Box bg="whiteAlpha.900" w="auto" h="auto" align="center">
+          <Box
+            bg="gray.100"
+            w="70%"
+            p="5"
+            maxH="15vh"
+            alignItems="center"
+            justifyContent="center"
+            overflow="scroll">
             {currInstructions.instructions
               .slice(loadDirections - 1, loadDirections)
               .map((step: any, index: number) => {
                 return (
-                  <Text key={index * 5.1245} color="grey.700">
+                  <Text
+                    key={index * 5.1245}
+                    fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
+                    color="grey.700"
+                    textAlign="center">
                     {step.directions}
                     <br></br>
                     {step.distance}
@@ -160,46 +209,49 @@ export default function navigation() {
               <StreetViewPanorama options={details} />
             </GoogleMap>
           </LoadScript>
-          <HStack align="center">
-            <Button onClick={handleBackBtn}>Back</Button>
-            <Button onClick={handleNextBtn}>Next</Button>
+          <HStack align="center" spacing={5}>
+            <IconButton bg="gray.400" aria-label="back-btn" onClick={handleBackBtn} icon={<ArrowLeftIcon />}></IconButton>
+            <IconButton bg="gray.400" aria-label="next-btn" onClick={handleNextBtn} icon={<ArrowRightIcon />} ></IconButton>
           </HStack>
         </Stack>
-        <Divider orientation="horizontal" pt="5vh" marginBottom="5vh" />
+        <Divider orientation="horizontal" marginBottom="5vh" pt="25vh" pb="10vh" />
 
-        {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
-          <Link href="/otsukare">
-            <Button
-              bg="blackAlpha.600"
+        <Stack>
+          {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
+            <Link href="/otsukare">
+              <Button
+                bg="blackAlpha.600"
+                textColor="white"
+                fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
+                onClick={updateUserRoute}
+              >
+                Done for the day
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/place" passHref>
+              <Button
+                bg="blackAlpha.600"
+                fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
+                textColor="white"
+                pt="5"
+                pb="5"
+                onClick={updateUserRoute}
+              >
+                I'm done here. <br></br> Take me to {checkIfVisited().name}
+              </Button>
+            </Link>
+          )}
+          <Link href="/place" passHref>
+            <Button bg="gray.400"
               textColor="white"
-              onClick={updateUserRoute}
-            >
-              Done for the day
+              pt="5"
+              pb="5"
+              fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}>
+              Go back to <br></br> {places.name}
             </Button>
           </Link>
-        ) : (
-          <Link href="/place">
-            <Button
-              whiteSpace="normal"
-              wordwrap="break-word"
-              bg="blackAlpha.600"
-              textColor="white"
-              onClick={updateUserRoute}
-            >
-              I'm done here. <br></br> Take me to {checkIfVisited().name}
-            </Button>
-          </Link>
-        )}
-        <Link href="/place">
-          <Button
-            whiteSpace="normal"
-            wordwrap="break-word"
-            bg="gray.400"
-            textColor="white"
-          >
-            Go back to {places.name}
-          </Button>
-        </Link>
+        </Stack>
       </Stack>
     </>
   );
