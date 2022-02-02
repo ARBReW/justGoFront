@@ -92,7 +92,12 @@ export default function navigation() {
     if (loadDirections > 1) setLoadDirections(loadDirections - 1);
   };
   const handleNextBtn = () => {
-    setLoadDirections(loadDirections + 1);
+    if ((currInstructions.instructions.length - 1) > loadDirections) {
+      setLoadDirections(loadDirections + 1);
+    } else {
+      setLoadDirections(1);
+    }
+    
   };
 
   // street view settings
@@ -104,11 +109,11 @@ export default function navigation() {
 
   const details = {
     position: {
-      lat: currInstructions.instructions[loadDirections].startCoord[0],
-      lng: currInstructions.instructions[loadDirections].startCoord[1]
+      lat: currInstructions.instructions[loadDirections - 1].startCoord[0],
+      lng: currInstructions.instructions[loadDirections - 1].startCoord[1]
     },
     visible: true,
-    pov: { heading: currInstructions.instructions[loadDirections].heading, pitch: 0 },
+    pov: { heading: currInstructions.instructions[loadDirections - 1].heading, pitch: 0 },
     fullscreenControl: false,
     addressControl: false,
     enableCloseButton: false
@@ -150,7 +155,7 @@ export default function navigation() {
                 );
               })}
           </Box>
-          <LoadScript googleMapsApiKey={"AIzaSyA4bN_JLbgMsrsaspEm1ebHDiTNNvE7DTA" || ""}>
+          <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_STREET_VIEW_KEY || ""}>
             <GoogleMap mapContainerStyle={containerStyle}>
               <StreetViewPanorama options={details} />
             </GoogleMap>
