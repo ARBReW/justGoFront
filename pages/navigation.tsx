@@ -137,7 +137,7 @@ export default function navigation() {
     <>
       <Stack
         h="95vh"
-        backgroundImage={`data:image/jpeg;base64,${places.img}`}
+        backgroundImage={`linear-gradient(rgba(192,192,192, 0.8), rgba(192,192,192, 0.8)), url(data:image/jpeg;base64,${places.img})`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
@@ -181,6 +181,7 @@ export default function navigation() {
           </Box>
           <HStack align="center" spacing={5}>
             <IconButton bg="gray.400" aria-label="back-btn" onClick={handleBackBtn} icon={<ArrowLeftIcon />}></IconButton>
+            {currInstructions.instructions.length }
             <IconButton bg="gray.400" aria-label="next-btn" onClick={handleNextBtn} icon={<ArrowRightIcon />} ></IconButton>
           </HStack>
         </Stack>
