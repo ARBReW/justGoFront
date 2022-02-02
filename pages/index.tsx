@@ -141,7 +141,7 @@ const Home: NextPage = () => {
             <Button
               colorScheme="orange"
               variant="solid"
-              fontSize={["2vh", "2vh", "2vh", "2vh"]}
+              fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
             >
               Loading locations...
             </Button>
@@ -152,8 +152,7 @@ const Home: NextPage = () => {
               <Button
                 colorScheme="green"
                 variant="solid"
-                fontSize={["2vh", "2vh", "2vh", "2vh"]}
-                // onClick={handleUserLocation}
+                fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
               >
                 I'm ready to GO
               </Button>

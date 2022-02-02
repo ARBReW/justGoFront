@@ -27,6 +27,7 @@ export default function selection() {
   useEffect(() => {
     if (userLocation.coordinates.lat === 0) {
       Router.push("/");
+      //window.alert("Thank you for traveling with us. Your journey is starting over. Redirecting you to welcome page...")
     }; 
     setCurrRoute(routesList[selectRoute]);
     if (traveledRoute.completedRoute.length > 0) {
@@ -128,7 +129,7 @@ export default function selection() {
 
         <Stack
           p="3px"
-          spacing={30}
+          spacing="5"
           direction="column"
           align="center"
           marginTop="2px"
@@ -153,7 +154,8 @@ export default function selection() {
             .map((place) => {
               return (
                 <Button
-                  // maxWidth="45vw"
+                  p="1vh"
+                  fontSize={["2.2vh", "2.2vh", "2.2vh", "2.2vh"]}
                   key={place?._id + "3.1425"}
                   _id={place?._id}
                   onClick={handlePlaceClick}

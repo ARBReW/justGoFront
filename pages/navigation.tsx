@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Router from "next/router";
 import { useState, useEffect } from "react";
-import { Stack, HStack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { Stack, HStack, Button, Box, Divider, Text, IconButton } from "@chakra-ui/react";
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
@@ -25,12 +26,12 @@ export default function navigation() {
       Router.push("/");
     }
     handleRefreshButton();
-  },[userLocation]);
+  }, [userLocation]);
 
 
   const handleRefreshButton = async () => {
-  const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
-  
+    const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
+
     const response = await axios.get<any>(
       `https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
       {
@@ -53,7 +54,7 @@ export default function navigation() {
       const distance = step.distance.text;
       const distanceStr = `🚶 walk ` + `${distance}`;
 
-      const stepObj = {directions: "", distance: ""};
+      const stepObj = { directions: "", distance: "" };
       stepObj.directions = strippedStr;
       stepObj.distance = distanceStr;
 
@@ -61,13 +62,13 @@ export default function navigation() {
     }
 
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-    
-   };
-  
+
+  };
+
 
   // handle the next place btn
   function checkIfVisited() {
-    let indexNumber = currRoute.stops.map((e)=> e.name).indexOf(places.name) + 1;
+    let indexNumber = currRoute.stops.map((e) => e.name).indexOf(places.name) + 1;
     function recurse(index: number) {
       //break case if place is already included in travelledRoute
       if (
@@ -143,7 +144,6 @@ export default function navigation() {
       >
         <Stack direction="column" spacing={4} pt={5} align="center">
           <Box
-            bg="green.100"
             borderWidth="1px"
             w="70%"
             p={4}
@@ -155,15 +155,23 @@ export default function navigation() {
           >
             {places.name} <br></br>
           </Box>
-          <Box bg="whiteAlpha.900" w="50%" h="200px" align="center">
+          <Box
+            bg="gray.100"
+            w="70%"
+            p="5"
+            maxH="15vh"
+            alignItems="center"
+            justifyContent="center"
+            overflow="scroll">
             {currInstructions.instructions
               .slice(loadDirections - 1, loadDirections)
               .map((step: any, index: number) => {
                 return (
-                  <Text 
-                  key={index * 5.1245} 
-                  color="grey.700"
-                  textAlign="center">
+                  <Text
+                    key={index * 5.1245}
+                    fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
+                    color="grey.700"
+                    textAlign="center">
                     {step.directions}
                     <br></br>
                     {step.distance}
@@ -172,11 +180,11 @@ export default function navigation() {
               })}
           </Box>
           <HStack align="center" spacing={5}>
-            <Button onClick={handleBackBtn}>Back</Button>
-            <Button onClick={handleNextBtn}>Next</Button>
+            <IconButton bg="gray.400" aria-label="back-btn" onClick={handleBackBtn} icon={<ArrowLeftIcon />}></IconButton>
+            <IconButton bg="gray.400" aria-label="next-btn" onClick={handleNextBtn} icon={<ArrowRightIcon />} ></IconButton>
           </HStack>
         </Stack>
-        <Divider orientation="horizontal" marginBottom="5vh" />
+        <Divider orientation="horizontal" marginBottom="5vh" pt="25vh" pb="10vh" />
 
         <Stack>
           {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
@@ -184,25 +192,33 @@ export default function navigation() {
               <Button
                 bg="blackAlpha.600"
                 textColor="white"
+                fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
                 onClick={updateUserRoute}
               >
                 Done for the day
               </Button>
             </Link>
           ) : (
-            <Link href="/place">
+            <Link href="/place" passHref>
               <Button
                 bg="blackAlpha.600"
+                fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
                 textColor="white"
+                pt="5"
+                pb="5"
                 onClick={updateUserRoute}
               >
                 I'm done here. <br></br> Take me to {checkIfVisited().name}
               </Button>
             </Link>
           )}
-          <Link href="/place">
-            <Button bg="gray.400" textColor="white">
-              Go back to {places.name}
+          <Link href="/place" passHref>
+            <Button bg="gray.400"
+              textColor="white"
+              pt="5"
+              pb="5"
+              fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}>
+              Go back to <br></br> {places.name}
             </Button>
           </Link>
         </Stack>

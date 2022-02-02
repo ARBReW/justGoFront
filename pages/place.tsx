@@ -104,18 +104,26 @@ export default function place() {
             </Text>
           </Box>
         </Stack>
-        <Divider orientation="horizontal" pt="15vh" marginBottom="5vh" />
+        <Divider 
+        orientation="horizontal" 
+        pt="35vh" 
+        pb="10vh" 
+        marginBottom="5vh" />
         {currInstructions.instructions.length === 0 ? (
-          <Button bg="blackAlpha.600" textColor="white">
+          <Button 
+          bg="blackAlpha.600" 
+          textColor="white" 
+          fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
             Loading instructions...
           </Button>
         ) : (
-          <Link href="/navigation">
+          <Link href="/navigation" passHref>
             <Button
               whiteSpace="normal"
               wordwrap="break-word"
               bg="blackAlpha.600"
               textColor="white"
+              fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
             >
               Go to {places.name}
             </Button>
