@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Router from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component } from "react";
 import { Stack, HStack, Button, Box, Divider, Text, IconButton } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -9,6 +9,7 @@ import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
+import { GoogleMap, LoadScript, StreetViewPanorama } from '@react-google-maps/api';
 import axios from "axios";
 
 export default function navigation() {
@@ -53,15 +54,15 @@ export default function navigation() {
       // add distance for each step
       const distance = step.distance.text;
       const distanceStr = `🚶 walk ` + `${distance}`;
-
-      const stepObj = { directions: "", distance: "" };
+      const stepObj: any = { directions: "", distance: ""};
       stepObj.directions = strippedStr;
       stepObj.distance = distanceStr;
-
+      stepObj.startCoord = [step.start_location.lat, step.start_location.lng]; 
+      stepObj.endCoord = [step.end_location.lat, step.end_location.lng];
       instructionsList.push(stepObj);
     }
 
-    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    setCurrInstructions({instructions: instructionsList });
 
   };
 
@@ -125,13 +126,36 @@ export default function navigation() {
     nextPlace();
   };
 
+  
   // instructions btns
   const handleBackBtn = () => {
     if (loadDirections > 1) setLoadDirections(loadDirections - 1);
   };
   const handleNextBtn = () => {
-    setLoadDirections(loadDirections + 1);
+    if ((currInstructions.instructions.length - 1) > loadDirections) {
+      setLoadDirections(loadDirections + 1);
+    }
   };
+
+  // street view settings
+  const containerStyle = {
+    width: '40vh',
+    height: '35vh'
+  };
+
+
+  const details = {
+    position: {
+      lat: currInstructions.instructions[loadDirections - 1].startCoord[0],
+      lng: currInstructions.instructions[loadDirections - 1].startCoord[1]
+    },
+    visible: true,
+    pov: { heading: currInstructions.instructions[loadDirections - 1].heading, pitch: 0, zoom: 0},
+    fullscreenControl: false,
+    addressControl: false,
+    enableCloseButton: false,
+    zoomControl: false
+  }
 
   return (
     <>
@@ -179,13 +203,18 @@ export default function navigation() {
                 );
               })}
           </Box>
+          <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_STREET_VIEW_KEY || ""}>
+            <GoogleMap mapContainerStyle={containerStyle}>
+              <StreetViewPanorama options={details} />
+            </GoogleMap>
+          </LoadScript>
           <HStack align="center" spacing={5}>
             <IconButton bg="gray.400" aria-label="back-btn" onClick={handleBackBtn} icon={<ArrowLeftIcon />}></IconButton>
             {currInstructions.instructions.length }
             <IconButton bg="gray.400" aria-label="next-btn" onClick={handleNextBtn} icon={<ArrowRightIcon />} ></IconButton>
           </HStack>
         </Stack>
-        <Divider orientation="horizontal" marginBottom="5vh" pt="25vh" pb="10vh" />
+        <Divider orientation="horizontal" marginBottom="5vh" pt="1vh" pb="1vh" />
 
         <Stack>
           {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
