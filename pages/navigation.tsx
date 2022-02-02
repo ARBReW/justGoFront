@@ -62,7 +62,7 @@ export default function navigation() {
       instructionsList.push(stepObj);
     }
 
-    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    setCurrInstructions({instructions: instructionsList });
 
   };
 
@@ -134,10 +134,7 @@ export default function navigation() {
   const handleNextBtn = () => {
     if ((currInstructions.instructions.length - 1) > loadDirections) {
       setLoadDirections(loadDirections + 1);
-    } else {
-      setLoadDirections(1);
     }
-    
   };
 
   // street view settings
@@ -153,7 +150,7 @@ export default function navigation() {
       lng: currInstructions.instructions[loadDirections - 1].startCoord[1]
     },
     visible: true,
-    pov: { heading: currInstructions.instructions[loadDirections - 1].heading , pitch: 0 },
+    pov: { heading: currInstructions.instructions[loadDirections - 1].heading, pitch: 0, zoom: 0},
     fullscreenControl: false,
     addressControl: false,
     enableCloseButton: false,

@@ -22,7 +22,7 @@ export default function place() {
     } else {
       getUserLocation()
     };
-  }, [currInstructions.instructions.length, userLocation]);
+  }, [userLocation]);
 
   async function getUserLocation() {
 
@@ -56,7 +56,7 @@ export default function place() {
       endCopy.forEach((degree, i) => endCopy[i] = degreeToRadian(degree));
 
       function x() {
-        return Math.cos(end[0]) * Math.sin(difference);
+        return Math.cos(endCopy[0]) * Math.sin(difference);
       }
 
       function y() {
@@ -107,7 +107,7 @@ export default function place() {
       instructionsList.push(stepObj);
     }
     
-    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    setCurrInstructions({instructions: instructionsList });
   }
 
   function checkDay() {

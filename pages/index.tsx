@@ -16,18 +16,22 @@ import Head from "next/head";
 import Link from "next/link";
 import userGeoLocation from "../states/userGeoLocation";
 import { useRecoilState } from "recoil";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import locationStates from "../states/locationStates";
-import axios  from "axios";
+import axios from "axios";
 
 const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-  const [ places, setPlaces ] = useRecoilState(locationStates);
+  const [places, setPlaces] = useRecoilState(locationStates);
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
-    handleUserLocation(); 
-    getData();
-  }, [places]);
+    (async () => {
+      handleUserLocation();
+      await getData();
+      setLoad(true);
+    })()
+  }, []);
 
 
   // get user location on login (to be updated on selection page)
@@ -44,13 +48,18 @@ const Home: NextPage = () => {
 
   async function getData() {
     try {
-      const routeResponse = await axios.get(
-        'https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/routes');
-      const placeResponse = await axios.get<any>(
-        'https://cc24-seniorprojectbackend.herokuapp.com/places');
-      const routeData = await routeResponse.data.slice();
-      const placeData = await placeResponse.data.slice();
-      setPlaces({routes: routeData, places: placeData});
+      if (sessionStorage.getItem("routes") === null) {
+        const routeResponse = await axios.get(
+          'https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/routes');
+        const placeResponse = await axios.get<any>(
+          'https://cc24-seniorprojectbackend.herokuapp.com/places');
+        const routeData = await routeResponse.data.slice();
+        const placeData = await placeResponse.data.slice();
+        sessionStorage.setItem("routes", JSON.stringify(routeData));
+        sessionStorage.setItem("places", JSON.stringify(placeData));
+        setPlaces({ routes: routeData, places: placeData });
+      }
+      else setPlaces({ routes: JSON.parse(sessionStorage.getItem("routes")), places: JSON.parse(sessionStorage.getItem("places"))})
     } catch (error) {
       console.error(error);
     }
@@ -135,8 +144,13 @@ const Home: NextPage = () => {
         )}
 
         <Divider orientation="horizontal" paddingTop="15px" />
-
-        {userLocation.coordinates.lat === 0 || places.routes[0]._id === "" ? (
+        {/* If coordinates are 0 OR axios is not done  
+            IF TRUE
+                show loading
+            IF FALSE
+                show go
+        */}
+        {userLocation.coordinates.lat === 0 || !load ? (
           <Center paddingTop="15px">
             <Button
               colorScheme="orange"
