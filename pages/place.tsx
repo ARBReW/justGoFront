@@ -42,6 +42,8 @@ export default function place() {
     );
 
     function getBearing(start: number[], end: number[]) {
+      const startCopy: number[] = start.slice();
+      const endCopy: number[] = end.slice();
 
       function radianToDegree(radian: number) {
         return radian * 180 / Math.PI
@@ -51,17 +53,17 @@ export default function place() {
         return degree * Math.PI / 180
       }
 
-      const difference = degreeToRadian(Math.abs(end[1] - start[1]));
+      const difference = degreeToRadian(Math.abs(endCopy[1] - startCopy[1]));
 
-      start.forEach((degree, i) => start[i] = degreeToRadian(degree));
-      end.forEach((degree, i) => end[i] = degreeToRadian(degree));
+      startCopy.forEach((degree, i) => startCopy[i] = degreeToRadian(degree));
+      endCopy.forEach((degree, i) => endCopy[i] = degreeToRadian(degree));
 
       function x() {
         return Math.cos(end[0]) * Math.sin(difference);
       }
 
       function y() {
-        return Math.cos(start[0]) * Math.sin(end[0]) - Math.sin(start[0]) * Math.cos(end[0]) * Math.cos(difference)
+        return Math.cos(startCopy[0]) * Math.sin(endCopy[0]) - Math.sin(startCopy[0]) * Math.cos(endCopy[0]) * Math.cos(difference)
       }
 
       return radianToDegree(Math.atan2(x(), y()));
@@ -105,8 +107,7 @@ export default function place() {
       stepObj.startCoord = startCoord;
       stepObj.endCoord = endCoord;
       stepObj.heading = heading;
-
-      console.log(stepObj);
+      
       instructionsList.push(stepObj);
     }
 

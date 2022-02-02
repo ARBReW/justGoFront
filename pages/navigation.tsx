@@ -8,6 +8,7 @@ import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
+import { GoogleMap, LoadScript, StreetViewPanorama } from '@react-google-maps/api';
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
@@ -30,7 +31,7 @@ export default function navigation() {
 
   // handle the next place btn
   function checkIfVisited() {
-    let indexNumber = currRoute.stops.map((e)=> e.name).indexOf(places.name) + 1;
+    let indexNumber = currRoute.stops.map((e) => e.name).indexOf(places.name) + 1;
     function recurse(index: number) {
       //break case
       if (
@@ -94,6 +95,25 @@ export default function navigation() {
     setLoadDirections(loadDirections + 1);
   };
 
+  // street view settings
+  const containerStyle = {
+    width: '400px',
+    height: '400px'
+  };
+  console.log(currInstructions.instructions[loadDirections]);
+
+  const details = {
+    position: {
+      lat: currInstructions.instructions[loadDirections].startCoord[0],
+      lng: currInstructions.instructions[loadDirections].startCoord[1]
+    },
+    visible: true,
+    pov: { heading: currInstructions.instructions[loadDirections].heading, pitch: 0 },
+    fullscreenControl: false,
+    addressControl: false,
+    enableCloseButton: false
+  }
+
   return (
     <>
       <Stack
@@ -130,6 +150,11 @@ export default function navigation() {
                 );
               })}
           </Box>
+          <LoadScript googleMapsApiKey={"AIzaSyA4bN_JLbgMsrsaspEm1ebHDiTNNvE7DTA" || ""}>
+            <GoogleMap mapContainerStyle={containerStyle}>
+              <StreetViewPanorama options={details} />
+            </GoogleMap>
+          </LoadScript>
           <HStack align="center">
             <Button onClick={handleBackBtn}>Back</Button>
             <Button onClick={handleNextBtn}>Next</Button>

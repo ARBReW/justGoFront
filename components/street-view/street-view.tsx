@@ -1,16 +1,9 @@
 import React from 'react';
 import { GoogleMap, LoadScript, StreetViewPanorama } from '@react-google-maps/api';
-//const ScriptLoaded = require("../../docs/ScriptLoaded").default;
-
 
 const containerStyle = {
     width: '400px',
     height: '400px'
-};
-
-const center: { lat: number, lng: number } = {
-    lat: 35.65797020000001,
-    lng: 139.7276486,
 };
 
 const details = {
@@ -19,7 +12,10 @@ const details = {
         lng: 139.7276486
     },
     visible: true,
-    pov: { heading: 450, pitch: 0 }
+    pov: { heading: 450, pitch: 0 },
+    fullscreenControl: false,
+    addressControl: false,
+    enableCloseButton: false
 }
 
 function MyComponent(props: any) {
@@ -27,17 +23,9 @@ function MyComponent(props: any) {
 
 
     return (
-        <LoadScript
-            googleMapsApiKey={ || ""}
-        >
-            <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={center}
-                zoom={10}
-            >
-                <StreetViewPanorama
-                    options={details}
-                />
+        <LoadScript googleMapsApiKey={"AIzaSyA4bN_JLbgMsrsaspEm1ebHDiTNNvE7DTA" || ""}>
+            <GoogleMap mapContainerStyle={containerStyle}>
+                <StreetViewPanorama options={details} />
             </GoogleMap>
         </LoadScript>
     )
