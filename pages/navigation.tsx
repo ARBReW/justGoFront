@@ -54,11 +54,11 @@ export default function navigation() {
       // add distance for each step
       const distance = step.distance.text;
       const distanceStr = `🚶 walk ` + `${distance}`;
-
-      const stepObj = { directions: "", distance: "" };
+      const stepObj: any = { directions: "", distance: ""};
       stepObj.directions = strippedStr;
       stepObj.distance = distanceStr;
-
+      stepObj.startCoord = [step.start_location.lat, step.start_location.lng]; 
+      stepObj.endCoord = [step.end_location.lat, step.end_location.lng];
       instructionsList.push(stepObj);
     }
 
@@ -126,6 +126,7 @@ export default function navigation() {
     nextPlace();
   };
 
+  
   // instructions btns
   const handleBackBtn = () => {
     if (loadDirections > 1) setLoadDirections(loadDirections - 1);
@@ -141,10 +142,10 @@ export default function navigation() {
 
   // street view settings
   const containerStyle = {
-    width: '400px',
-    height: '400px'
+    width: '40vh',
+    height: '35vh'
   };
-  console.log(currInstructions.instructions[loadDirections]);
+
 
   const details = {
     position: {
@@ -152,10 +153,11 @@ export default function navigation() {
       lng: currInstructions.instructions[loadDirections - 1].startCoord[1]
     },
     visible: true,
-    pov: { heading: currInstructions.instructions[loadDirections - 1].heading, pitch: 0 },
+    pov: { heading: currInstructions.instructions[loadDirections - 1].heading , pitch: 0 },
     fullscreenControl: false,
     addressControl: false,
-    enableCloseButton: false
+    enableCloseButton: false,
+    zoomControl: false
   }
 
   return (
@@ -214,7 +216,7 @@ export default function navigation() {
             <IconButton bg="gray.400" aria-label="next-btn" onClick={handleNextBtn} icon={<ArrowRightIcon />} ></IconButton>
           </HStack>
         </Stack>
-        <Divider orientation="horizontal" marginBottom="5vh" pt="25vh" pb="10vh" />
+        <Divider orientation="horizontal" marginBottom="5vh" pt="1vh" pb="1vh" />
 
         <Stack>
           {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (

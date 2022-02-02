@@ -88,7 +88,7 @@ export default function place() {
         step.end_location.lat,
         step.end_location.lng
       ];
-
+      
       // getBearing function needs to be implemented
       const heading = getBearing(startCoord, endCoord);
 
@@ -104,10 +104,9 @@ export default function place() {
       stepObj.startCoord = startCoord;
       stepObj.endCoord = endCoord;
       stepObj.heading = heading;
-      
       instructionsList.push(stepObj);
     }
-
+    
     setCurrInstructions({ ...currInstructions, instructions: instructionsList });
   }
 
