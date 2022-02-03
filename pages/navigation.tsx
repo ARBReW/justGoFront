@@ -115,6 +115,12 @@ export default function navigation() {
           lng: position.coords.longitude,
         },
       });
+
+      sessionStorage.setItem('userGeoLocation', JSON.stringify({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        }}));
     });
 
     if (!traveledRoute.completedRoute.includes(placeInfo)) {

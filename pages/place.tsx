@@ -20,11 +20,11 @@ export default function place() {
     if (placeInfo.name === "") {
       Router.push("/");
     } else {
-      getUserLocation()
+      getDirections()
     };
   }, [userLocation]);
 
-  async function getUserLocation() {
+  async function getDirections() {
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
