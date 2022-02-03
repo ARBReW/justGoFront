@@ -15,15 +15,15 @@ export default function place() {
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [vStop, setVStop] = useRecoilState(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
-  
+
   useEffect(() => {
     if (placeInfo.name === "") {
       Router.push("/");
     } else {
       getUserLocation()
     };
-  },[currInstructions.instructions.length, userLocation]);
-  
+  }, [userLocation]);
+
   async function getUserLocation() {
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
@@ -38,6 +38,34 @@ export default function place() {
       }
     );
 
+    function getBearing(start: number[], end: number[]) {
+      const startCopy: number[] = start.slice();
+      const endCopy: number[] = end.slice();
+
+      function radianToDegree(radian: number) {
+        return radian * 180 / Math.PI
+      }
+
+      function degreeToRadian(degree: number) {
+        return degree * Math.PI / 180
+      }
+
+      const difference = degreeToRadian(Math.abs(endCopy[1] - startCopy[1]));
+
+      startCopy.forEach((degree, i) => startCopy[i] = degreeToRadian(degree));
+      endCopy.forEach((degree, i) => endCopy[i] = degreeToRadian(degree));
+
+      function x() {
+        return Math.cos(endCopy[0]) * Math.sin(difference);
+      }
+
+      function y() {
+        return Math.cos(startCopy[0]) * Math.sin(endCopy[0]) - Math.sin(startCopy[0]) * Math.cos(endCopy[0]) * Math.cos(difference)
+      }
+
+      return radianToDegree(Math.atan2(x(), y()));
+    }
+
     const instructionsList = [];
     for await (let step of response.data.routes[0].legs[0].steps) {
       //clean up HTML, add arrows
@@ -51,14 +79,35 @@ export default function place() {
       const distance = step.distance.text;
       const distanceStr = `🚶 walk ` + `${distance}`;
 
-      const stepObj = {directions: "", distance: ""};
+      const startCoord = [
+        step.start_location.lat,
+        step.start_location.lng
+      ];
+
+      const endCoord = [
+        step.end_location.lat,
+        step.end_location.lng
+      ];
+      
+      // getBearing function needs to be implemented
+      const heading = getBearing(startCoord, endCoord);
+
+      const stepObj = {
+        directions: "",
+        distance: "",
+        startCoord: [0, 0],
+        endCoord: [0, 0],
+        heading: 0
+      };
       stepObj.directions = strippedStr;
       stepObj.distance = distanceStr;
-
+      stepObj.startCoord = startCoord;
+      stepObj.endCoord = endCoord;
+      stepObj.heading = heading;
       instructionsList.push(stepObj);
     }
-
-    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
+    
+    setCurrInstructions({instructions: instructionsList });
   }
 
   function checkDay() {
