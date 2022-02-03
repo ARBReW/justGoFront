@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Heading,
   Text,
@@ -51,9 +50,9 @@ export default function showRoute() {
           />
         </AspectRatio>
 
-        <Stack pt={10} align={"center"}>
+        <Stack pt={10} spacing={2} align={"center"}>
           <Text
-            fontSize={["2.2vh", "2.2vh", "2.2vh", "2.2vh"]}
+            fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
             textTransform={"uppercase"}
           >
             Your route:
@@ -77,7 +76,7 @@ export default function showRoute() {
               colorScheme="blackAlpha"
               variant="solid"
               onClick={clearUser}
-              fontSize={["2vh", "2vh", "2vh", "2vh"]}
+              fontSize={["2.2vh", "2.2vh", "2.2vh", "2.2vh"]}
             >
               Return to login
             </Button>

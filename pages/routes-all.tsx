@@ -1,6 +1,7 @@
 import { useRecoilValue } from "recoil";
 import locationStates from "../states/locationStates"
 import { Box } from "@chakra-ui/react";
+import Streetview from '../components/street-view/street-view'
 
 const allData = locationStates;
 
@@ -9,11 +10,8 @@ export default function showAllRoutes() {
 
     return (
         <div>
-            {routes.map((route) => (                
-                    <div key={JSON.stringify(route.stops)}>
-                        ID: {route._id} Stops: {JSON.stringify(route.stops)}   
-                    </div>                
-            ))}
+            <Streetview API_KEY={process.env.STREET_VIEW_KEY} />
+                               
         </div>
     )
 }

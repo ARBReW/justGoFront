@@ -1,13 +1,15 @@
 import Link from "next/link";
 import Router from "next/router";
-import { useState, useEffect } from "react";
-import { Stack, HStack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { useState, useEffect, Component } from "react";
+import { Stack, HStack, Button, Box, Divider, Text, IconButton } from "@chakra-ui/react";
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import userGeoLocation from "../states/userGeoLocation";
 import instructionsToLocation from "../states/instructionsToLocation";
+import { GoogleMap, LoadScript, StreetViewPanorama } from '@react-google-maps/api';
 import axios from "axios";
 
 export default function navigation() {
@@ -25,14 +27,14 @@ export default function navigation() {
       Router.push("/");
     }
     handleRefreshButton();
-  },[userLocation]);
+  }, [userLocation]);
 
 
   const handleRefreshButton = async () => {
-  const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
-  
+    const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
+
     const response = await axios.get<any>(
-      `https://9fmfffvvm0.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
+      `https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
       {
         params: {
           origin: coordinateString,
@@ -52,22 +54,22 @@ export default function navigation() {
       // add distance for each step
       const distance = step.distance.text;
       const distanceStr = `🚶 walk ` + `${distance}`;
-
-      const stepObj = {directions: "", distance: ""};
+      const stepObj: any = { directions: "", distance: ""};
       stepObj.directions = strippedStr;
       stepObj.distance = distanceStr;
-
+      stepObj.startCoord = [step.start_location.lat, step.start_location.lng]; 
+      stepObj.endCoord = [step.end_location.lat, step.end_location.lng];
       instructionsList.push(stepObj);
     }
 
-    setCurrInstructions({ ...currInstructions, instructions: instructionsList });
-    
-   };
-  
+    setCurrInstructions({instructions: instructionsList });
+
+  };
+
 
   // handle the next place btn
   function checkIfVisited() {
-    let indexNumber = currRoute.stops.map((e)=> e.name).indexOf(places.name) + 1;
+    let indexNumber = currRoute.stops.map((e) => e.name).indexOf(places.name) + 1;
     function recurse(index: number) {
       //break case if place is already included in travelledRoute
       if (
@@ -124,13 +126,36 @@ export default function navigation() {
     nextPlace();
   };
 
+  
   // instructions btns
   const handleBackBtn = () => {
     if (loadDirections > 1) setLoadDirections(loadDirections - 1);
   };
   const handleNextBtn = () => {
-    setLoadDirections(loadDirections + 1);
+    if ((currInstructions.instructions.length - 1) > loadDirections) {
+      setLoadDirections(loadDirections + 1);
+    }
   };
+
+  // street view settings
+  const containerStyle = {
+    width: '40vh',
+    height: '35vh'
+  };
+
+
+  const details = {
+    position: {
+      lat: currInstructions.instructions[loadDirections - 1].startCoord[0],
+      lng: currInstructions.instructions[loadDirections - 1].startCoord[1]
+    },
+    visible: true,
+    pov: { heading: currInstructions.instructions[loadDirections - 1].heading, pitch: 0, zoom: 0},
+    fullscreenControl: false,
+    addressControl: false,
+    enableCloseButton: false,
+    zoomControl: false
+  }
 
   return (
     <>
@@ -143,7 +168,6 @@ export default function navigation() {
       >
         <Stack direction="column" spacing={4} pt={5} align="center">
           <Box
-            bg="green.100"
             borderWidth="1px"
             w="70%"
             p={4}
@@ -155,15 +179,23 @@ export default function navigation() {
           >
             {places.name} <br></br>
           </Box>
-          <Box bg="whiteAlpha.900" w="50%" h="200px" align="center">
+          <Box
+            bg="gray.100"
+            w="70%"
+            p="5"
+            maxH="15vh"
+            alignItems="center"
+            justifyContent="center"
+            overflow="scroll">
             {currInstructions.instructions
               .slice(loadDirections - 1, loadDirections)
               .map((step: any, index: number) => {
                 return (
-                  <Text 
-                  key={index * 5.1245} 
-                  color="grey.700"
-                  textAlign="center">
+                  <Text
+                    key={index * 5.1245}
+                    fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
+                    color="grey.700"
+                    textAlign="center">
                     {step.directions}
                     <br></br>
                     {step.distance}
@@ -171,12 +203,17 @@ export default function navigation() {
                 );
               })}
           </Box>
+          <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_STREET_VIEW_KEY || ""}>
+            <GoogleMap mapContainerStyle={containerStyle}>
+              <StreetViewPanorama options={details} />
+            </GoogleMap>
+          </LoadScript>
           <HStack align="center" spacing={5}>
-            <Button onClick={handleBackBtn}>Back</Button>
-            <Button onClick={handleNextBtn}>Next</Button>
+            <IconButton bg="gray.400" aria-label="back-btn" onClick={handleBackBtn} icon={<ArrowLeftIcon />}></IconButton>
+            <IconButton bg="gray.400" aria-label="next-btn" onClick={handleNextBtn} icon={<ArrowRightIcon />} ></IconButton>
           </HStack>
         </Stack>
-        <Divider orientation="horizontal" marginBottom="5vh" />
+        <Divider orientation="horizontal" marginBottom="5vh" pt="1vh" pb="1vh" />
 
         <Stack>
           {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
@@ -184,25 +221,33 @@ export default function navigation() {
               <Button
                 bg="blackAlpha.600"
                 textColor="white"
+                fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
                 onClick={updateUserRoute}
               >
                 Done for the day
               </Button>
             </Link>
           ) : (
-            <Link href="/place">
+            <Link href="/place" passHref>
               <Button
                 bg="blackAlpha.600"
+                fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
                 textColor="white"
+                pt="5"
+                pb="5"
                 onClick={updateUserRoute}
               >
                 I'm done here. <br></br> Take me to {checkIfVisited().name}
               </Button>
             </Link>
           )}
-          <Link href="/place">
-            <Button bg="gray.400" textColor="white">
-              Go back to {places.name}
+          <Link href="/place" passHref>
+            <Button bg="gray.400"
+              textColor="white"
+              pt="5"
+              pb="5"
+              fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}>
+              Go back to <br></br> {places.name}
             </Button>
           </Link>
         </Stack>
