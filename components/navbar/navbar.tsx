@@ -10,11 +10,12 @@ import viewedStops from "../../states/viewedStops";
   
 const Navbar = () => {
 const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-const [placeInfo, setPlaceInfo] = useRecoilState(placeDetail)
+const [placeInfo, setPlaceInfo] = useRecoilState(placeDetail);
 const [vStop, setVStop] = useRecoilState(viewedStops);
 
-
+  
   function handleUserLocation() {
+    //Save current geolocation to recoil state
     navigator.geolocation.getCurrentPosition((position) => {
       setUserLocation({
         coordinates: {
@@ -22,6 +23,13 @@ const [vStop, setVStop] = useRecoilState(viewedStops);
           lng: position.coords.longitude,
         },
       });
+      //Save current geolocation to sessionStorage
+      sessionStorage.setItem('userGeoLocation', JSON.stringify({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+      }));
     });
   }
 

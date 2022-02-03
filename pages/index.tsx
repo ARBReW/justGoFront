@@ -36,6 +36,7 @@ const Home: NextPage = () => {
 
   // get user location on login (to be updated on selection page)
   function handleUserLocation() {
+    //Save current geolocation to recoil state
     navigator.geolocation.getCurrentPosition((position) => {
       setUserLocation({
         coordinates: {
@@ -43,8 +44,17 @@ const Home: NextPage = () => {
           lng: position.coords.longitude,
         },
       });
+      
+      //Save current geolocation to sessionStorage
+      sessionStorage.setItem('userGeoLocation', JSON.stringify({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+      }));
     });
   }
+
   async function getData() {
     try {
       if (sessionStorage.getItem("routes") === null) {
