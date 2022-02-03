@@ -22,6 +22,7 @@ export default function showRoute() {
   const clearUserRoute = useResetRecoilState(userRoute);
 
   const clearUser = () => {
+    sessionStorage.removeItem('userRoute');
     clearPlace();
     clearCurrentRoute();
     clearUserRoute();

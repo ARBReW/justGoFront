@@ -118,10 +118,18 @@ export default function navigation() {
     });
 
     if (!traveledRoute.completedRoute.includes(placeInfo)) {
-      setTraveledRoute({
-        ...traveledRoute,
-        completedRoute: [...traveledRoute.completedRoute, placeInfo],
-      });
+      if (sessionStorage.getItem('userRoute') !== null) {
+        const sessionUserRoute = sessionStorage.getItem('userRoute') || "";
+        setTraveledRoute(JSON.parse(sessionUserRoute));
+      } else {
+        setTraveledRoute({
+          ...traveledRoute,
+          completedRoute: [...traveledRoute.completedRoute, placeInfo],
+        });
+
+        sessionStorage.setItem('userRoute', JSON.stringify(traveledRoute));
+      }
+      
     }
     nextPlace();
   };
