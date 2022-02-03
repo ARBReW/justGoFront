@@ -45,7 +45,6 @@ const Home: NextPage = () => {
       });
     });
   }
-
   async function getData() {
     try {
       if (sessionStorage.getItem("routes") === null) {
@@ -59,7 +58,14 @@ const Home: NextPage = () => {
         sessionStorage.setItem("places", JSON.stringify(placeData));
         setPlaces({ routes: routeData, places: placeData });
       }
-      else setPlaces({ routes: JSON.parse(sessionStorage.getItem("routes")), places: JSON.parse(sessionStorage.getItem("places"))})
+      else {
+        const routes = sessionStorage.getItem("routes") || "";
+        const places = sessionStorage.getItem("places") || "";
+        setPlaces({
+          routes: JSON.parse(routes),
+          places: JSON.parse(places)
+        });
+      }
     } catch (error) {
       console.error(error);
     }
