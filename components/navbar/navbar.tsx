@@ -3,14 +3,14 @@ import { IconButton, Button } from "@chakra-ui/react";
 import { HStack } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import userGeoLocation from "../../states/userGeoLocation";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import placeDetail from "../../states/placeDetail";
 import viewedStops from "../../states/viewedStops";
 
   
 const Navbar = () => {
 const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-const [placeInfo, setPlaceInfo] = useRecoilState(placeDetail);
+const placeInfo = useRecoilValue(placeDetail);
 const [vStop, setVStop] = useRecoilState(viewedStops);
 
   

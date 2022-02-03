@@ -34,6 +34,7 @@ export default function selection() {
       checkIfVisited()
     };
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
+    sessionStorage.setItem('placeDetail', JSON.stringify(placeInfo));
     setBg(checkPlaceInfo(placeInfo));
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
   
@@ -80,7 +81,13 @@ export default function selection() {
   }
 
   function handleRouteSelect() {
+
+    //Save the current route to recoil state
     setCurrRoute(routesList[selectRoute]);
+
+    //Save the current route to sessionStorage
+    sessionStorage.setItem('currentRoute', JSON.stringify(currRoute));
+
     setVStop({
       ...vStop,
       viewedStops: [...vStop.viewedStops, placeInfo],

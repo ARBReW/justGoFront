@@ -10,9 +10,8 @@ import { useEffect } from "react";
 import Router from "next/router";
 
 export default function place() {
-  const places = useRecoilValue(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-  const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
+  const placeInfo = useRecoilValue<any>(placeDetail);
   const [vStop, setVStop] = useRecoilState(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
 
@@ -108,6 +107,7 @@ export default function place() {
     }
     
     setCurrInstructions({instructions: instructionsList });
+    sessionStorage.setItem('instructionsToLocation', JSON.stringify(currInstructions));
   }
 
   function checkDay() {
@@ -121,7 +121,7 @@ export default function place() {
     <>
       <Stack
         h="95vh"
-        backgroundImage={`data:image/jpeg;base64,${places.img}`}
+        backgroundImage={`data:image/jpeg;base64,${placeInfo.img}`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
@@ -138,7 +138,7 @@ export default function place() {
             textColor="whitesmoke"
             fontWeight="bold"
           >
-            {places.name}{" "}
+            {placeInfo.name}{" "}
             <Divider orientation="horizontal" pt="0.8rem"></Divider>
             <Text
               fontStyle="italic"
@@ -149,7 +149,7 @@ export default function place() {
               Business Hours:
             </Text>
             <Text fontWeight="bold" fontSize={15}>
-              {places.hours[checkDay()]}
+              {placeInfo.hours[checkDay()]}
             </Text>
           </Box>
         </Stack>
@@ -174,7 +174,7 @@ export default function place() {
               textColor="white"
               fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
             >
-              Go to {places.name}
+              Go to {placeInfo.name}
             </Button>
           </Link>
         )}

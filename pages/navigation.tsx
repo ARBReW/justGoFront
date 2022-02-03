@@ -40,7 +40,7 @@ export default function navigation() {
           origin: coordinateString,
           destination: placeInfo.coord.toString(),
         },
-      })
+      });
 
     const instructionsList = [];
     for await (let step of response.data.routes[0]?.legs[0]?.steps) {
@@ -63,6 +63,7 @@ export default function navigation() {
     }
 
     setCurrInstructions({instructions: instructionsList });
+    sessionStorage.setItem('instructionsToLocation', JSON.stringify(currInstructions));
 
   };
 
@@ -93,6 +94,7 @@ export default function navigation() {
         !traveledRoute.completedRoute.includes(currRoute.stops[nextPlaceIndex])
       ) {
         setPlaceInfo(currRoute.stops[nextPlaceIndex]);
+        sessionStorage.setItem('placeDetail', JSON.stringify(placeInfo));
         setSelectPlace(nextPlaceIndex);
         return;
       } else {
@@ -101,6 +103,7 @@ export default function navigation() {
     }
     if (nextPlaceIndex > currRoute.stops.length - 1) {
       setPlaceInfo(currRoute.stops[nextPlaceIndex - 1]);
+      sessionStorage.setItem('placeDetail', JSON.stringify(placeInfo));
     } else {
       recurse(nextPlaceIndex);
     }
