@@ -43,7 +43,7 @@ export default function navigation() {
       })
 
     const instructionsList = [];
-    for await (let step of response.data.routes[0].legs[0].steps) {
+    for await (let step of response.data.routes[0]?.legs[0]?.steps) {
       //clean up HTML, add arrows
       const strippedStr = step.html_instructions
         .replace(/<[^>]+>/g, " ")
