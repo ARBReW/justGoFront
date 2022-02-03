@@ -13,7 +13,7 @@ import Router from "next/router";
 
 export default function selection() {
   const routesList = useRecoilValue(routes);
-  const { places } = useRecoilValue(locationStates);
+  const [ places, setPlaces ] = useRecoilState<any>(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
   const [selectPlace, setSelectPlace] = useState(0);
   const [bg, setBg] = useState("");
@@ -29,13 +29,27 @@ export default function selection() {
       Router.push("/");
       //window.alert("Thank you for traveling with us. Your journey is starting over. Redirecting you to welcome page...")
     }; 
+
+    //Setting the state called places with locationStates in sessionStorage when default
+    if (routesList[0]._id === "") {
+      if (sessionStorage.getItem('locationStates') !== null ) {
+        const sessionLocationStates = JSON.parse(sessionStorage.getItem('locationStates') || "");
+        setPlaces(sessionLocationStates);
+      } else {
+        console.log("No locationStates in sessionStorage");
+      }
+    }
+    // Save the current route to recoil state
     setCurrRoute(routesList[selectRoute]);
+    
     if (traveledRoute.completedRoute.length > 0) {
-      checkIfVisited()
+      checkIfVisited();
     };
+
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
     sessionStorage.setItem('placeDetail', JSON.stringify(placeInfo));
     setBg(checkPlaceInfo(placeInfo));
+    
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
   
 
@@ -47,6 +61,7 @@ export default function selection() {
 
   function checkIfVisited() {
     let indexNumber = 0;
+
     function recurse(index: number) {
       //break case
       if (!traveledRoute.completedRoute.map((e)=>(e.name)).includes(currRoute.stops[indexNumber].name)
@@ -87,11 +102,15 @@ export default function selection() {
 
     //Save the current route to sessionStorage
     sessionStorage.setItem('currentRoute', JSON.stringify(currRoute));
-
+    
+    //Save the current place to recoil state  
     setVStop({
       ...vStop,
-      viewedStops: [...vStop.viewedStops, placeInfo],
+      viewedStops: [...vStop.viewedStops, placeInfo], 
     });
+
+    //Save the current place to sessionStorage
+    sessionStorage.setItem('viewedStops', JSON.stringify(vStop));
   }
 
   function handlePlaceClick(event: any) {

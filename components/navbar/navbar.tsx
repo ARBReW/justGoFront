@@ -34,10 +34,15 @@ const [vStop, setVStop] = useRecoilState(viewedStops);
   }
 
   function addToViewedStops() {
-     setVStop({
-       ...vStop,
+    
+    // Save the current place to the viewedStops 
+    setVStop({
+       ...vStop, //default value
        viewedStops: [...vStop.viewedStops, placeInfo],
      });
+
+     // Save the current place to sessionStorage
+     sessionStorage.setItem('viewedStops', JSON.stringify(vStop));
   }
   
   return (

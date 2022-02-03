@@ -14,7 +14,7 @@ import axios from "axios";
 
 export default function navigation() {
   const places = useRecoilValue(placeDetail);
-  const currRoute = useRecoilValue(currentRoute);
+  const [currRoute, setCurrRoute] = useRecoilState(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
@@ -26,6 +26,13 @@ export default function navigation() {
     if (placeInfo.name === "") {
       Router.push("/");
     }
+
+    //check session storage
+    if (sessionStorage.getItem('currentRoute') !== null) {
+      const sessionRoute = sessionStorage.getItem('currentRoute') || "";
+      setCurrRoute(JSON.parse(sessionRoute));
+    }
+
     handleRefreshButton();
   }, [userLocation]);
 

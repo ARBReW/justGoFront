@@ -10,9 +10,9 @@ import { useEffect } from "react";
 import Router from "next/router";
 
 export default function place() {
-  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+  const userLocation = useRecoilValue(userGeoLocation);
   const placeInfo = useRecoilValue<any>(placeDetail);
-  const [vStop, setVStop] = useRecoilState(viewedStops);
+  const vStop = useRecoilValue(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
 
   useEffect(() => {
