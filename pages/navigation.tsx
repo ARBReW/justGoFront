@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Router from "next/router";
-import { useState, useEffect, Component } from "react";
+import { useState, useEffect } from "react";
 import { Stack, HStack, Button, Box, Divider, Text, IconButton } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { useRecoilState, useRecoilValue } from "recoil";
