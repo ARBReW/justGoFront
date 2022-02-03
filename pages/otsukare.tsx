@@ -14,27 +14,13 @@ import userRoute from "../states/userRoute";
 import placeDetail from "../states/placeDetail";
 import { useEffect } from "react";
 
-const [route, setRoute] = useRecoilState(currentRoute);
-
-useEffect(() => {
-  // Use sessionStorage for currentRoute on mount
-  if (route.routeId === "") {
-    if (sessionStorage.getItem('currentRoute') !== null) {
-      const sessionRoute = JSON.parse( sessionStorage.getItem('currentRoute') || "");
-      setRoute(sessionRoute);
-    } else {
-      console.log('No currentRoute in sessionStorage');
-    }
-  }
-}, [])
-
 export default function showRoute() {
   const { completedRoute } = useRecoilValue(userRoute);
-  
   const endImg = `data:image/jpeg;base64, ${completedRoute[completedRoute.length - 1]?.img}`;
   const clearPlace = useResetRecoilState(placeDetail);
   const clearCurrentRoute = useResetRecoilState(currentRoute);
   const clearUserRoute = useResetRecoilState(userRoute);
+  const [route, setRoute] = useRecoilState(currentRoute);
 
   const clearUser = () => {
     sessionStorage.removeItem('userRoute');
@@ -43,6 +29,17 @@ export default function showRoute() {
     clearUserRoute();
   };
 
+  useEffect(() => {
+    if (route.routeId === "") {
+      if (sessionStorage.getItem('currentRoute') !== null) {
+        const sessionRoute = JSON.parse( sessionStorage.getItem('currentRoute') || "");
+        setRoute(sessionRoute);
+      } else {
+        console.log('No currentRoute in sessionStorage');
+      }
+    }
+  }, []);
+  
   return (
     <>
       <Stack h="95vh" align="center">
