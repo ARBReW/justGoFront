@@ -1,4 +1,4 @@
-import { Button, Center, Stack, Text, IconButton, Image } from "@chakra-ui/react";
+import { Button, Center, Stack, Text, IconButton, Image, Box } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -11,7 +11,7 @@ import viewedStops from "../states/viewedStops";
 import userGeoLocation from "../states/userGeoLocation";
 import Router from "next/router";
 
-export default function selection() {
+const selection = () => {
   const routesList = useRecoilValue(routes);
   const { places } = useRecoilValue(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
@@ -23,12 +23,11 @@ export default function selection() {
   const [vStop, setVStop] = useRecoilState(viewedStops);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 
-  
+
   useEffect(() => {
     if (userLocation.coordinates.lat === 0) {
-      Router.push("/");
-      //window.alert("Thank you for traveling with us. Your journey is starting over. Redirecting you to welcome page...")
-    }; 
+      Router.push("/")
+    };
     setCurrRoute(routesList[selectRoute]);
     if (traveledRoute.completedRoute.length > 0) {
       checkIfVisited()
@@ -36,19 +35,19 @@ export default function selection() {
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
     setBg(checkPlaceInfo(placeInfo));
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
-  
 
-  function checkPlaceInfo(place: any) :any {
+
+  const checkPlaceInfo = (place: any): any => {
     if (traveledRoute.completedRoute.includes(place)) {
       return;
     } else return `data:image/jpeg;base64,${placeInfo?.img}`;
   }
 
-  function checkIfVisited() {
+  const checkIfVisited = () => {
     let indexNumber = 0;
     function recurse(index: number) {
       //break case
-      if (!traveledRoute.completedRoute.map((e)=>(e.name)).includes(currRoute.stops[indexNumber].name)
+      if (!traveledRoute.completedRoute.map((e) => (e.name)).includes(currRoute.stops[indexNumber].name)
       ) {
         setSelectPlace(indexNumber);
         return;
@@ -59,7 +58,7 @@ export default function selection() {
     recurse(indexNumber);
   }
 
-  function changeToRightRoute() {
+  const changeToRightRoute = () => {
     if (selectRoute === routesList.length - 1) {
       setSelectRoute(0);
       setSelectPlace(0);
@@ -69,7 +68,7 @@ export default function selection() {
     }
   }
 
-  function changeToLeftRoute() {
+  const changeToLeftRoute = () => {
     if (selectRoute === 0) {
       setSelectRoute(routesList.length - 1);
       setSelectPlace(0);
@@ -79,7 +78,7 @@ export default function selection() {
     }
   }
 
-  function handleRouteSelect() {
+  const handleRouteSelect = () => {
     setCurrRoute(routesList[selectRoute]);
     setVStop({
       ...vStop,
@@ -87,30 +86,22 @@ export default function selection() {
     });
   }
 
-  function handlePlaceClick(event: any) {
+  const handlePlaceClick = (event: any) => {
     const placeId = event.target.attributes._id.value;
     const place = places.find((place: any) => place._id === placeId);
     setBg(`data:image/jpeg;base64,${place!.img}`);
   }
 
-  // We can use the below chunk of code for skipping places (changing selectPlace)
-  // setSelectPlace(
-  //   routesList[selectRoute].stops
-  //     .map((place) => place?.placeId)
-  //     .indexOf(placeId)
-  // );
-  //setPlaceInfo(place);
-
-  function truncateName(name: string) {
-    if (name.length >= 15) {
-      return name.slice(0, 15) + "...";
+  const truncateName = (name: string) => {
+    if (name.length >= 12) {
+      return name.slice(0, 12) + "...";
     } else return name;
   }
 
   return (
     <>
       <Center
-        h="95vh"
+        h="100vh"
         backgroundImage={bg ? bg : ""}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
@@ -119,7 +110,13 @@ export default function selection() {
       >
         <IconButton
           aria-label="right button"
-          icon={<ArrowLeftIcon />}
+          icon={<ArrowLeftIcon color="brand.lbrn"
+            borderColor="brand.brn"
+            boxShadow="outline"
+            outlineColor="brand.lgrn"
+            borderWidth="2px"
+            bg="brand.dbrn"
+            borderRadius="5%" size="lg" />}
           pr="5"
           variant="link"
           direction="right"
@@ -133,42 +130,51 @@ export default function selection() {
           direction="column"
           align="center"
           marginTop="2px"
-          maxH="80vh"
+          maxH="85vh"
         >
           <Text
             colorScheme={"whiteAlpha"}
-            bgColor="gray.500"
-            fontSize={20}
+            fontSize={25}
             textColor="whitesmoke"
-            textTransform={"uppercase"}
-            p="2"
-            marginBottom={20}
             fontWeight="bold"
+            textShadow='-1.1px -1.1px #52796F, -1.1px 1.1px #52796F, 1.1px -1.1px #52796F, 1.1px 1.1px #52796F'
           >
             Select a route
           </Text>
-
-          {routesList[selectRoute].stops
-            .slice()
-            .reverse()
-            .map((place) => {
-              return (
-                <Button
-                  p="1vh"
-                  fontSize={["2.2vh", "2.2vh", "2.2vh", "2.2vh"]}
-                  key={place?._id + "3.1425"}
-                  _id={place?._id}
-                  onClick={handlePlaceClick}
-                  {...(traveledRoute.completedRoute.map((e)=>(e.name)).includes(place.name)
-                    ? { bg: "gray", color: "gray.400" }
-                    : { bg: "white", color: "black" })}
-                >
-                  <Image h="2vh" src={place?.type} pr="3px"></Image>
-                  {truncateName(place?.name)}
-                </Button>
-              );
-            })}
-          <ArrowUpIcon w="20" h="20" color="black" />
+          <Stack
+            border="2px solid"
+            borderRadius="md"
+            align="center"
+            spacing="8"
+            p="2vh"
+            bg="brand.dbrn"
+            opacity="0.8"
+          >
+            {routesList[selectRoute].stops
+              .slice()
+              .reverse()
+              .map((place) => {
+                return (
+                  <Button
+                    p="2vh"
+                    w="50vw"
+                    fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
+                    boxShadow="outline"
+                    outlineColor="brand.lgrn"
+                    borderWidth="2px"
+                    key={place?._id + "3.1425"}
+                    _id={place?._id}
+                    onClick={handlePlaceClick}
+                    {...(traveledRoute.completedRoute.map((e) => (e.name)).includes(place.name)
+                      ? { bg: "gray", color: "gray.400" }
+                      : { bg: "white", color: "black" })}
+                  >
+                    <Image h="2vh" src={place?.type} pr="3px"></Image>
+                    {truncateName(place?.name)}
+                  </Button>
+                );
+              })}
+          </Stack>
           {userLocation.coordinates.lat === 0 ? (
             <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="gray">
               Loading...
@@ -179,8 +185,12 @@ export default function selection() {
                 borderRadius="50%"
                 w="5rem"
                 h="5rem"
-                colorScheme="orange"
+                color="whiteAlpha.900"
+                bg="brand.dgrn"
                 onClick={handleRouteSelect}
+                boxShadow="outline"
+                outlineColor="brand.lgrn"
+                borderWidth="2px"
               >
                 JUST GO
               </Button>
@@ -189,7 +199,13 @@ export default function selection() {
         </Stack>
         <IconButton
           aria-label="right button"
-          icon={<ArrowRightIcon />}
+          icon={<ArrowRightIcon color="brand.lbrn"
+            borderColor="brand.brn"
+            boxShadow="outline"
+            outlineColor="brand.lgrn"
+            borderWidth="2px"
+            bg="brand.dbrn"
+            borderRadius="5%" size="lg"> </ArrowRightIcon>}
           pl="5"
           variant="link"
           direction="right"
@@ -199,4 +215,6 @@ export default function selection() {
       </Center>
     </>
   );
-}
+};
+
+export default selection;
