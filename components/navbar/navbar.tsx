@@ -55,8 +55,8 @@ const addToViewedStops = () => {
         <Link href="/selection">
           <Button
             //boxShadow="outline"
-            outlineColor="brand.lgrn"
-            //borderWidth="2px"
+            borderColor="brand.lgrn"
+            borderWidth="2px"
             rounded="full"
             w="15"
             h="12"
