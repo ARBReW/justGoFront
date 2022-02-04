@@ -28,9 +28,11 @@ export default function navigation() {
     }
 
     //check session storage
-    if (sessionStorage.getItem('currentRoute') !== null) {
-      const sessionRoute = sessionStorage.getItem('currentRoute') || "";
-      setCurrRoute(JSON.parse(sessionRoute));
+    if (currRoute.routeId === "" ) {
+      if (sessionStorage.getItem('currentRoute') !== null) {
+        const sessionRoute = sessionStorage.getItem('currentRoute') || "";
+        setCurrRoute(JSON.parse(sessionRoute));
+      }
     }
 
     handleRefreshButton();
@@ -133,8 +135,9 @@ export default function navigation() {
         }}));
     });
 
+    // Update route on click
     if (!traveledRoute.completedRoute.includes(placeInfo)) {
-      if (sessionStorage.getItem('userRoute') !== null) {
+      if (sessionStorage.getItem('userRoute') !== null && traveledRoute.completedRoute.length === 0) {
         const sessionUserRoute = sessionStorage.getItem('userRoute') || "";
         setTraveledRoute(JSON.parse(sessionUserRoute));
       } else {
@@ -142,8 +145,10 @@ export default function navigation() {
           ...traveledRoute,
           completedRoute: [...traveledRoute.completedRoute, placeInfo],
         });
-
-        sessionStorage.setItem('userRoute', JSON.stringify(traveledRoute));
+        sessionStorage.setItem('userRoute', JSON.stringify({
+          ...traveledRoute,
+          completedRoute: [...traveledRoute.completedRoute, placeInfo],
+        }));
       }
       
     }

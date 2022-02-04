@@ -15,12 +15,11 @@ import placeDetail from "../states/placeDetail";
 import { useEffect } from "react";
 
 export default function showRoute() {
-  const { completedRoute } = useRecoilValue(userRoute);
+  const [{completedRoute}, setCompletedRoute ] = useRecoilState<any>(userRoute);
   const endImg = `data:image/jpeg;base64, ${completedRoute[completedRoute.length - 1]?.img}`;
   const clearPlace = useResetRecoilState(placeDetail);
   const clearCurrentRoute = useResetRecoilState(currentRoute);
   const clearUserRoute = useResetRecoilState(userRoute);
-  const [route, setRoute] = useRecoilState(currentRoute);
 
   const clearUser = () => {
     sessionStorage.removeItem('userRoute');
@@ -30,12 +29,13 @@ export default function showRoute() {
   };
 
   useEffect(() => {
-    if (route.routeId === "") {
-      if (sessionStorage.getItem('currentRoute') !== null) {
-        const sessionRoute = JSON.parse( sessionStorage.getItem('currentRoute') || "");
-        setRoute(sessionRoute);
+  
+    if (completedRoute.length === 0) {
+      if (sessionStorage.getItem('userRoute') !== null) {
+        const sessionRoute = JSON.parse( sessionStorage.getItem('userRoute') || "");
+        setCompletedRoute(sessionRoute);
       } else {
-        console.log('No currentRoute in sessionStorage');
+        console.error('No userRoute in sessionStorage');
       }
     }
   }, []);
@@ -76,7 +76,7 @@ export default function showRoute() {
           {completedRoute
             .slice()
             .reverse()
-            .map((stop) => (
+            .map((stop: any) => (
               <HStack bg="whiteAlpha.900" key={stop._id + "CC24 rocks"} w="100%" spacing="0">
                 <Text> {"✅ "} </Text>  <Image h="2vh" src={stop?.type} pr="3px"></Image> <Text>{stop?.name}</Text>
               </HStack>

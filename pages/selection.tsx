@@ -36,7 +36,7 @@ export default function selection() {
         const sessionLocationStates = JSON.parse(sessionStorage.getItem('locationStates') || "");
         setPlaces(sessionLocationStates);
       } else {
-        console.log("No locationStates in sessionStorage");
+        console.error("No locationStates in sessionStorage");
       }
     }
     // Save the current route to recoil state
