@@ -20,7 +20,7 @@ const viewedStops = atom<viewedStopsInterface>({
   key: "viewedStops",
   default: {
     viewedStops: [],
-    isViewed: false,
+    isViewed: false,    
   },
 });
 

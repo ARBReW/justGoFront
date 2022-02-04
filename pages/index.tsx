@@ -36,6 +36,7 @@ const Home: NextPage = () => {
 
   // get user location on login (to be updated on selection page)
   function handleUserLocation() {
+    //Save current geolocation to recoil state
     navigator.geolocation.getCurrentPosition((position) => {
       setUserLocation({
         coordinates: {
@@ -43,24 +44,31 @@ const Home: NextPage = () => {
           lng: position.coords.longitude,
         },
       });
+
+      //Save current geolocation to sessionStorage
+      sessionStorage.setItem('userGeoLocation', JSON.stringify({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+      }));
     });
   }
+
   async function getData() {
     try {
-      if (sessionStorage.getItem("routes") === null) {
+      if (sessionStorage.getItem("locationStates") === null) {
         const routeResponse = await axios.get(
           'https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/routes');
         const placeResponse = await axios.get<any>(
           'https://cc24-seniorprojectbackend.herokuapp.com/places');
         const routeData = await routeResponse.data.slice();
         const placeData = await placeResponse.data.slice();
-        sessionStorage.setItem("routes", JSON.stringify(routeData));
-        sessionStorage.setItem("places", JSON.stringify(placeData));
+        sessionStorage.setItem("locationStates", JSON.stringify({ routes: routeData, places: placeData }));
         setPlaces({ routes: routeData, places: placeData });
       }
       else {
-        const routes = sessionStorage.getItem("routes") || "";
-        const places = sessionStorage.getItem("places") || "";
+        const { routes, places } = JSON.parse(sessionStorage.getItem("locationStates") || "");
         setPlaces({
           routes: JSON.parse(routes),
           places: JSON.parse(places)

@@ -7,24 +7,39 @@ import axios from "axios";
 import viewedStops from "../states/viewedStops";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { useEffect } from "react";
-import Router from "next/router";
 
 export default function place() {
-  const places = useRecoilValue(placeDetail);
-  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
-  const [vStop, setVStop] = useRecoilState(viewedStops);
+  const vStop = useRecoilValue(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+
 
   useEffect(() => {
-    if (placeInfo.name === "") {
-      Router.push("/");
-    } else {
-      getUserLocation()
+    if (placeInfo.name !== "") {
+      getDirections();
     };
+
+    // Get the users location from sessionStorage
+    if (userLocation.coordinates.lat === 0) {
+      if (sessionStorage.getItem('userGeoLocation') !== null) {
+        setUserLocation(JSON.parse(sessionStorage.getItem('userGeoLocation') || ""));
+      } else {
+        console.error('No userLocation in sessionStorage');
+      }
+    }
+    // Set the place details to sessionStorage
+    if (placeInfo._id === "") {
+      if (sessionStorage.getItem('placeDetail') !== null) {       
+        setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
+      } else {
+        console.error("No placeDetail in sessionStorage");
+      }
+    }
+
   }, [userLocation]);
 
-  async function getUserLocation() {
+  async function getDirections() {
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
@@ -88,7 +103,7 @@ export default function place() {
         step.end_location.lat,
         step.end_location.lng
       ];
-      
+
       // getBearing function needs to be implemented
       const heading = getBearing(startCoord, endCoord);
 
@@ -106,8 +121,17 @@ export default function place() {
       stepObj.heading = heading;
       instructionsList.push(stepObj);
     }
-    
-    setCurrInstructions({instructions: instructionsList });
+
+    const lastStop = {
+      directions: `You've arrived at ${placeInfo?.name}!`,
+      distance: "",
+      startCoord: instructionsList[instructionsList.length - 1].endCoord,
+      endCoord: instructionsList[instructionsList.length - 1].endCoord,
+      heading: instructionsList[instructionsList.length - 1].heading
+    }
+
+    setCurrInstructions({ instructions: [...instructionsList, lastStop] });
+    sessionStorage.setItem('instructionsToLocation', JSON.stringify({ instructions: [...instructionsList, lastStop] }));
   }
 
   function checkDay() {
@@ -121,7 +145,7 @@ export default function place() {
     <>
       <Stack
         h="95vh"
-        backgroundImage={`data:image/jpeg;base64,${places.img}`}
+        backgroundImage={`data:image/jpeg;base64,${placeInfo.img}`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
@@ -138,7 +162,7 @@ export default function place() {
             textColor="whitesmoke"
             fontWeight="bold"
           >
-            {places.name}{" "}
+            {placeInfo.name}{" "}
             <Divider orientation="horizontal" pt="0.8rem"></Divider>
             <Text
               fontStyle="italic"
@@ -149,20 +173,20 @@ export default function place() {
               Business Hours:
             </Text>
             <Text fontWeight="bold" fontSize={15}>
-              {places.hours[checkDay()]}
+              {placeInfo.hours[checkDay()]}
             </Text>
           </Box>
         </Stack>
-        <Divider 
-        orientation="horizontal" 
-        pt="35vh" 
-        pb="10vh" 
-        marginBottom="5vh" />
+        <Divider
+          orientation="horizontal"
+          pt="35vh"
+          pb="10vh"
+          marginBottom="5vh" />
         {currInstructions.instructions.length === 0 ? (
-          <Button 
-          bg="blackAlpha.600" 
-          textColor="white" 
-          fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
+          <Button
+            bg="blackAlpha.600"
+            textColor="white"
+            fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
             Loading instructions...
           </Button>
         ) : (
@@ -174,7 +198,7 @@ export default function place() {
               textColor="white"
               fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
             >
-              Go to {places.name}
+              Go to {placeInfo.name}
             </Button>
           </Link>
         )}
