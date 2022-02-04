@@ -48,7 +48,7 @@ const addToViewedStops = () => {
         >
           <Stack spacing="0">
             <Text fontSize="lg">📍</Text>
-            <Text fontSize="1.2vh">Refresh <br></br>location</Text>
+            <Text fontSize="1.2vh">Refresh<br></br>location</Text>
             </Stack>
         </Button>
         <Link href="/selection">
@@ -61,8 +61,8 @@ const addToViewedStops = () => {
             onClick={addToViewedStops}
           >
             <Stack spacing="0">
-            <Text fontSize="lg">🏠 </Text>
-            <Text fontSize="1.2vh">Route <br></br> selection</Text>
+            <Text fontSize="lg">🏠</Text>
+            <Text fontSize="1.2vh">Choose<br></br>route</Text>
             </Stack>
           </Button>
         </Link>
@@ -71,12 +71,12 @@ const addToViewedStops = () => {
             borderColor="brand.dgrn"
             borderWidth="2px"
             rounded="full"
-            w="15"
+            w="16"
             h="12"
           >
             <Stack spacing="0">
             <Text fontSize="lg">🏁</Text>
-            <Text fontSize="1.2vh">Done for<br></br>the day</Text>
+            <Text fontSize="1.2vh">End<br></br>route</Text>
             </Stack>
           </Button>
         </Link>
