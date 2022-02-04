@@ -7,20 +7,36 @@ import axios from "axios";
 import viewedStops from "../states/viewedStops";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { useEffect } from "react";
-import Router from "next/router";
 
 export default function place() {
-  const userLocation = useRecoilValue(userGeoLocation);
-  const placeInfo = useRecoilValue<any>(placeDetail);
+  const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const vStop = useRecoilValue(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+
 
   useEffect(() => {
-    if (placeInfo.name === "") {
-      Router.push("/");
-    } else {
-      getDirections()
+    if (placeInfo.name !== "") {
+      getDirections();
     };
+
+    // Get the users location from sessionStorage
+    if (userLocation.coordinates.lat === 0) {
+      if (sessionStorage.getItem('userGeoLocation') !== null) {
+        setUserLocation(JSON.parse(sessionStorage.getItem('userGeoLocation') || ""));
+      } else {
+        console.error('No userLocation in sessionStorage');
+      }
+    }
+    // Set the place details to sessionStorage
+    if (placeInfo._id === "") {
+      if (sessionStorage.getItem('placeDetail') !== null) {       
+        setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
+      } else {
+        console.error("No placeDetail in sessionStorage");
+      }
+    }
+
   }, [userLocation]);
 
   async function getDirections() {
@@ -87,7 +103,7 @@ export default function place() {
         step.end_location.lat,
         step.end_location.lng
       ];
-      
+
       // getBearing function needs to be implemented
       const heading = getBearing(startCoord, endCoord);
 
@@ -105,9 +121,17 @@ export default function place() {
       stepObj.heading = heading;
       instructionsList.push(stepObj);
     }
-    
-    setCurrInstructions({instructions: instructionsList });
-    sessionStorage.setItem('instructionsToLocation', JSON.stringify(currInstructions));
+
+    const lastStop = {
+      directions: `You've arrived at ${placeInfo?.name}!`,
+      distance: "",
+      startCoord: instructionsList[instructionsList.length - 1].endCoord,
+      endCoord: instructionsList[instructionsList.length - 1].endCoord,
+      heading: instructionsList[instructionsList.length - 1].heading
+    }
+
+    setCurrInstructions({ instructions: [...instructionsList, lastStop] });
+    sessionStorage.setItem('instructionsToLocation', JSON.stringify({ instructions: [...instructionsList, lastStop] }));
   }
 
   function checkDay() {
@@ -153,16 +177,16 @@ export default function place() {
             </Text>
           </Box>
         </Stack>
-        <Divider 
-        orientation="horizontal" 
-        pt="35vh" 
-        pb="10vh" 
-        marginBottom="5vh" />
+        <Divider
+          orientation="horizontal"
+          pt="35vh"
+          pb="10vh"
+          marginBottom="5vh" />
         {currInstructions.instructions.length === 0 ? (
-          <Button 
-          bg="blackAlpha.600" 
-          textColor="white" 
-          fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
+          <Button
+            bg="blackAlpha.600"
+            textColor="white"
+            fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
             Loading instructions...
           </Button>
         ) : (

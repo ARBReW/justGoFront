@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Router from "next/router";
 import { useState, useEffect, Component } from "react";
 import { Stack, HStack, Button, Box, Divider, Text, IconButton } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
@@ -23,24 +22,53 @@ export default function navigation() {
   const [selectPlace, setSelectPlace] = useState(0);
 
   useEffect(() => {
-    if (placeInfo.name === "") {
-      Router.push("/");
-    }
 
-    //check session storage
-    if (currRoute.routeId === "" ) {
-      if (sessionStorage.getItem('currentRoute') !== null) {
-        const sessionRoute = sessionStorage.getItem('currentRoute') || "";
-        setCurrRoute(JSON.parse(sessionRoute));
+      // Save current route to sessionStorage
+      if (currRoute.routeId === "") {
+        if (sessionStorage.getItem('currentRoute') !== null) {
+          setCurrRoute(JSON.parse(sessionStorage.getItem('currentRoute') || ""));
+        } else {
+          console.error("No currentRoute in sessionStorage");
+        }
       }
-    }
 
-    handleRefreshButton();
+      if (placeInfo._id === "") {
+        // Save current place details to sessionStorage 
+        if (sessionStorage.getItem('placeDetail') !== null) {
+          setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
+        } else {
+          console.error("No placeDetail in sessionStorage");
+        }
+      }
+      // Save current instructions to the sessionStorage
+      if (currInstructions.instructions[0].directions === "") {
+        if (sessionStorage.getItem('instructionsToLocation') !== null) {
+          setCurrInstructions(JSON.parse(sessionStorage.getItem('instructionsToLocation') || ""));
+        } else {
+          console.error("No instructionsToLocation in sessionStorage");
+        }
+      }
+
+      if (userLocation.coordinates.lat === 0) {
+        if (sessionStorage.getItem('userGeoLocation') !== null) {
+          setUserLocation(JSON.parse(sessionStorage.getItem('userGeoLocation') || ""));
+        } else {
+          console.error("No userGeoLocation in sessionStorage");
+        }
+      }
+
+      handleRefreshButton();
+    
+
   }, [userLocation]);
 
 
   const handleRefreshButton = async () => {
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
+
+    if (coordinateString === "0,0") {
+      return;
+    }
 
     const response = await axios.get<any>(
       `https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
@@ -63,17 +91,24 @@ export default function navigation() {
       // add distance for each step
       const distance = step.distance.text;
       const distanceStr = `🚶 walk ` + `${distance}`;
-      const stepObj: any = { directions: "", distance: ""};
+      const stepObj: any = { directions: "", distance: "" };
       stepObj.directions = strippedStr;
       stepObj.distance = distanceStr;
-      stepObj.startCoord = [step.start_location.lat, step.start_location.lng]; 
+      stepObj.startCoord = [step.start_location.lat, step.start_location.lng];
       stepObj.endCoord = [step.end_location.lat, step.end_location.lng];
       instructionsList.push(stepObj);
     }
 
-    setCurrInstructions({instructions: instructionsList });
-    sessionStorage.setItem('instructionsToLocation', JSON.stringify(currInstructions));
+    const lastStop = {
+      directions: `You've arrived at ${placeInfo?.name}!`,
+      distance: "",
+      startCoord: instructionsList[instructionsList.length - 1].endCoord,
+      endCoord: instructionsList[instructionsList.length - 1].endCoord,
+      heading: instructionsList[instructionsList.length - 1].heading
+    }
 
+    setCurrInstructions({ instructions: [...instructionsList, lastStop]});
+    sessionStorage.setItem('instructionsToLocation', JSON.stringify({ instructions: [...instructionsList, lastStop ] }));
   };
 
 
@@ -99,11 +134,9 @@ export default function navigation() {
 
     // recurse to skip places already visited
     function recurse(index: number) {
-      if (
-        !traveledRoute.completedRoute.includes(currRoute.stops[nextPlaceIndex])
-      ) {
+      if (!traveledRoute.completedRoute.includes(currRoute.stops[nextPlaceIndex])) {
         setPlaceInfo(currRoute.stops[nextPlaceIndex]);
-        sessionStorage.setItem('placeDetail', JSON.stringify(placeInfo));
+        sessionStorage.setItem('placeDetail', JSON.stringify(currRoute.stops[nextPlaceIndex]));
         setSelectPlace(nextPlaceIndex);
         return;
       } else {
@@ -112,7 +145,7 @@ export default function navigation() {
     }
     if (nextPlaceIndex > currRoute.stops.length - 1) {
       setPlaceInfo(currRoute.stops[nextPlaceIndex - 1]);
-      sessionStorage.setItem('placeDetail', JSON.stringify(placeInfo));
+      sessionStorage.setItem('placeDetail', JSON.stringify(currRoute.stops[nextPlaceIndex - 1]));
     } else {
       recurse(nextPlaceIndex);
     }
@@ -132,7 +165,8 @@ export default function navigation() {
         coordinates: {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-        }}));
+        }
+      }));
     });
 
     // Update route on click
@@ -150,18 +184,21 @@ export default function navigation() {
           completedRoute: [...traveledRoute.completedRoute, placeInfo],
         }));
       }
-      
+
     }
     nextPlace();
   };
 
-  
+
   // instructions btns
   const handleBackBtn = () => {
-    if (loadDirections > 1) setLoadDirections(loadDirections - 1);
+    if (loadDirections > 1) {
+      setLoadDirections(loadDirections - 1);
+    } 
   };
+
   const handleNextBtn = () => {
-    if ((currInstructions.instructions.length - 1) > loadDirections) {
+    if ((currInstructions.instructions.length - 1) >= loadDirections) {
       setLoadDirections(loadDirections + 1);
     }
   };
@@ -179,11 +216,12 @@ export default function navigation() {
       lng: currInstructions.instructions[loadDirections - 1].startCoord[1]
     },
     visible: true,
-    pov: { heading: currInstructions.instructions[loadDirections - 1].heading, pitch: 0, zoom: 0},
+    pov: { heading: currInstructions.instructions[loadDirections - 1].heading, pitch: 0, zoom: 0 },
     fullscreenControl: false,
     addressControl: false,
     enableCloseButton: false,
-    zoomControl: false
+    zoomControl: false,
+    source: "OUTDOOR",
   }
 
   return (

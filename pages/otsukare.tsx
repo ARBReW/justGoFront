@@ -15,7 +15,7 @@ import placeDetail from "../states/placeDetail";
 import { useEffect } from "react";
 
 export default function showRoute() {
-  const [{completedRoute}, setCompletedRoute ] = useRecoilState<any>(userRoute);
+  const [{ completedRoute }, setCompletedRoute] = useRecoilState<any>(userRoute);
   const endImg = `data:image/jpeg;base64, ${completedRoute[completedRoute.length - 1]?.img}`;
   const clearPlace = useResetRecoilState(placeDetail);
   const clearCurrentRoute = useResetRecoilState(currentRoute);
@@ -29,17 +29,16 @@ export default function showRoute() {
   };
 
   useEffect(() => {
-  
+
     if (completedRoute.length === 0) {
       if (sessionStorage.getItem('userRoute') !== null) {
-        const sessionRoute = JSON.parse( sessionStorage.getItem('userRoute') || "");
-        setCompletedRoute(sessionRoute);
+        setCompletedRoute(JSON.parse(sessionStorage.getItem('userRoute') || ""));
       } else {
         console.error('No userRoute in sessionStorage');
       }
     }
   }, []);
-  
+
   return (
     <>
       <Stack h="95vh" align="center">
