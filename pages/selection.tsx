@@ -160,7 +160,7 @@ export default function selection() {
                   w="50vw"
                   fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
                   boxShadow="outline"
-                  outlineColor="brand.lgrn"
+                  //outlineColor="brand.lgrn"
                   borderWidth="2px"
                   key={place?._id + "3.1425"}
                   _id={place?._id}
@@ -189,7 +189,7 @@ export default function selection() {
                 bg="brand.dgrn"
                 onClick={handleRouteSelect}
                 boxShadow="outline"
-                outlineColor="brand.lgrn"
+                //outlineColor="brand.lgrn"
                 borderWidth="2px"
               >
                 JUST GO

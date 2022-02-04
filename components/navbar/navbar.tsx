@@ -73,7 +73,7 @@ const addToViewedStops = () => {
             boxShadow="outline"
             rounded="full"
             outlineColor="brand.lgrn"
-            borderWidth="2px"
+            outlineWidth="2px"
             w="15"
             h="12"
           >
