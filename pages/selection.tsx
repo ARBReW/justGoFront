@@ -157,7 +157,7 @@ const selection = () => {
                   p="2vh"
                   w="50vw"
                   fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
-                  outlineColor="brand.dgrn"
+                  borderColor="brand.dgrn"
                   borderWidth="2px"
                   key={place?._id + "3.1425"}
                   _id={place?._id}
@@ -185,8 +185,8 @@ const selection = () => {
                 color="whiteAlpha.900"
                 bg="brand.dgrn"
                 onClick={handleRouteSelect}
-                boxShadow="outline"
-                outlineColor="brand.dgrn"
+                //boxShadow="outline"
+                borderColor="brand.dgrn"
                 borderWidth="2px"
               >
                 JUST GO
