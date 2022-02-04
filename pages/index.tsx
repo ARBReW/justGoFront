@@ -80,7 +80,7 @@ const Home: NextPage = () => {
         justify="center"
         h="100vh"
         boxShadow="md"
-        bg="whiteAlpha.900"
+        bg="whiteAlpha.100"
         rounded="md"
       >
         <Image
@@ -159,7 +159,8 @@ const Home: NextPage = () => {
         {userLocation.coordinates.lat === 0 || !load ? (
           <Center paddingTop="15px">
             <Button
-              colorScheme="orange"
+              bg="brand.lbrn"
+              color="whiteAlpha.900"
               variant="solid"
               fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
             >
@@ -170,9 +171,13 @@ const Home: NextPage = () => {
           <Center paddingTop="15px">
             <Link href="/selection" passHref>
               <Button
-                colorScheme="green"
+                bg="brand.dgrn"
+                color="whiteAlpha.900"
                 variant="solid"
                 fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
+                boxShadow="outline"
+                outlineColor="brand.lgrn"
+                borderWidth="2px"
               >
                 I'm ready to GO
               </Button>

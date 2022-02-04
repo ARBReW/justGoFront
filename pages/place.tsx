@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { Stack, Button, Box, Divider, Text, HStack } from "@chakra-ui/react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
 import userGeoLocation from "../states/userGeoLocation";
@@ -120,13 +120,13 @@ export default function place() {
   return (
     <>
       <Stack
-        h="95vh"
+        h="91vh"
         backgroundImage={`data:image/jpeg;base64,${places.img}`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
       >
-        <Stack direction="column" spacing={4} pt={5} align="center">
+        <Stack direction="column" spacing={4} pt={5} pb={30} align="center">
           <Box
             bg="green.100"
             borderWidth="1px"
@@ -179,6 +179,7 @@ export default function place() {
           </Link>
         )}
       </Stack>
+      
     </>
   );
 }
