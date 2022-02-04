@@ -11,7 +11,7 @@ import viewedStops from "../states/viewedStops";
 import userGeoLocation from "../states/userGeoLocation";
 import Router from "next/router";
 
-export default function selection() {
+const selection = () => {
   const routesList = useRecoilValue(routes);
   const { places } = useRecoilValue(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
@@ -37,13 +37,13 @@ export default function selection() {
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
 
 
-  function checkPlaceInfo(place: any): any {
+  const checkPlaceInfo = (place: any): any => {
     if (traveledRoute.completedRoute.includes(place)) {
       return;
     } else return `data:image/jpeg;base64,${placeInfo?.img}`;
   }
 
-  function checkIfVisited() {
+  const checkIfVisited = () => {
     let indexNumber = 0;
     function recurse(index: number) {
       //break case
@@ -58,7 +58,7 @@ export default function selection() {
     recurse(indexNumber);
   }
 
-  function changeToRightRoute() {
+  const changeToRightRoute = () => {
     if (selectRoute === routesList.length - 1) {
       setSelectRoute(0);
       setSelectPlace(0);
@@ -68,7 +68,7 @@ export default function selection() {
     }
   }
 
-  function changeToLeftRoute() {
+  const changeToLeftRoute = () => {
     if (selectRoute === 0) {
       setSelectRoute(routesList.length - 1);
       setSelectPlace(0);
@@ -78,7 +78,7 @@ export default function selection() {
     }
   }
 
-  function handleRouteSelect() {
+  const handleRouteSelect = () => {
     setCurrRoute(routesList[selectRoute]);
     setVStop({
       ...vStop,
@@ -86,13 +86,13 @@ export default function selection() {
     });
   }
 
-  function handlePlaceClick(event: any) {
+  const handlePlaceClick = (event: any) => {
     const placeId = event.target.attributes._id.value;
     const place = places.find((place: any) => place._id === placeId);
     setBg(`data:image/jpeg;base64,${place!.img}`);
   }
 
-  function truncateName(name: string) {
+  const truncateName = (name: string) => {
     if (name.length >= 12) {
       return name.slice(0, 12) + "...";
     } else return name;
@@ -111,12 +111,10 @@ export default function selection() {
         <IconButton
           aria-label="right button"
           icon={<ArrowLeftIcon color="brand.lbrn"
-          borderColor="brand.brn"
-          boxShadow="outline"
-          outlineColor="brand.lgrn"
+          borderColor="brand.lbrn"
           borderWidth="2px"
           bg="brand.dbrn"  
-          borderRadius="5%" size="lg"/>}
+          borderRadius="15%" size="lg"/>}
           pr="5"
           variant="link"
           direction="right"
@@ -148,7 +146,7 @@ export default function selection() {
           spacing="8"
           p="2vh"
           bg="brand.dbrn"
-          opacity="0.8"
+          opacity="0.9"
           >
           {routesList[selectRoute].stops
             .slice()
@@ -159,8 +157,7 @@ export default function selection() {
                   p="2vh"
                   w="50vw"
                   fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
-                  boxShadow="outline"
-                  //outlineColor="brand.lgrn"
+                  outlineColor="brand.dgrn"
                   borderWidth="2px"
                   key={place?._id + "3.1425"}
                   _id={place?._id}
@@ -189,7 +186,7 @@ export default function selection() {
                 bg="brand.dgrn"
                 onClick={handleRouteSelect}
                 boxShadow="outline"
-                //outlineColor="brand.lgrn"
+                outlineColor="brand.dgrn"
                 borderWidth="2px"
               >
                 JUST GO
@@ -200,12 +197,10 @@ export default function selection() {
         <IconButton
           aria-label="right button"
           icon={<ArrowRightIcon color="brand.lbrn"
-          borderColor="brand.brn"
-          boxShadow="outline"
-          outlineColor="brand.lgrn"
+          borderColor="brand.lbrn"
           borderWidth="2px"
           bg="brand.dbrn"  
-          borderRadius="5%" size="lg"> </ArrowRightIcon>}
+          borderRadius="15%" size="lg"> </ArrowRightIcon>}
           pl="5"
           variant="link"
           direction="right"
@@ -216,4 +211,6 @@ export default function selection() {
     </>
   );
 };
+
+export default selection;
 

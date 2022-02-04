@@ -40,8 +40,7 @@ const addToViewedStops = () => {
       > 
         <Button
           onClick={handleUserLocation}
-          boxShadow="outline"
-          //outlineColor="brand.lgrn"
+          borderColor="brand.dgrn"
           borderWidth="2px"
           rounded="full"
           w="15"
@@ -54,8 +53,7 @@ const addToViewedStops = () => {
         </Button>
         <Link href="/selection">
           <Button
-            //boxShadow="outline"
-            borderColor="brand.lgrn"
+            borderColor="brand.dgrn"
             borderWidth="2px"
             rounded="full"
             w="15"
@@ -70,7 +68,8 @@ const addToViewedStops = () => {
         </Link>
         <Link href="/otsukare">
           <Button
-            boxShadow="outline"
+            borderColor="brand.dgrn"
+            borderWidth="2px"
             rounded="full"
             w="15"
             h="12"
