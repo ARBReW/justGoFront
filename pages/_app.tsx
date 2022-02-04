@@ -23,7 +23,11 @@ const colors = {
   },
 };
 
-const theme = extendTheme({ colors, breakpoints });
+const shadows = {
+  "outline": "0 0 0 2.1px #52796F"
+}
+
+const theme = extendTheme({ colors, breakpoints, shadows });
 
 function MyApp({ Component, pageProps, ...AppProps }: AppProps) {
 
