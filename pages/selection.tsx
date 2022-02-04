@@ -118,7 +118,7 @@ const selection = () => {
         >
           <Text
             colorScheme={"whiteAlpha"}
-            fontSize={25}
+            fontSize="25"
             textColor="whitesmoke"
             fontWeight="bold"
             textShadow='-1.1px -1.1px #52796F, -1px 1.1px #52796F, 1px -1.1px #52796F, 1px 1.1px #52796F'
@@ -167,7 +167,8 @@ const selection = () => {
                 borderColor="brand.lbrn"
                 borderWidth="2px"
                 bg="brand.dbrn"
-                borderRadius="15%" size="lg" />}
+                borderRadius="15%" 
+                size="lg" />}
               pr="5"
               variant="link"
               direction="right"
@@ -176,7 +177,10 @@ const selection = () => {
             ></IconButton>
 
             {userLocation.coordinates.lat === 0 ? (
-              <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="gray">
+              <Button borderRadius="50%" 
+              w="5rem" 
+              h="5rem" 
+              colorScheme="gray">
                 Loading...
               </Button>
             ) : (
@@ -202,7 +206,8 @@ const selection = () => {
                 borderColor="brand.lbrn"
                 borderWidth="2px"
                 bg="brand.dbrn"
-                borderRadius="15%" size="lg"> </ArrowRightIcon>}
+                borderRadius="15%" 
+                size="lg"> </ArrowRightIcon>}
               pl="5"
               variant="link"
               direction="right"

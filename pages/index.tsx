@@ -35,7 +35,7 @@ const Home: NextPage = () => {
 
 
   // get user location on login (to be updated on selection page)
-  function handleUserLocation() {
+  const handleUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       setUserLocation({
         coordinates: {
@@ -45,7 +45,7 @@ const Home: NextPage = () => {
       });
     });
   }
-  async function getData() {
+  const getData = async () => {
     try {
       if (sessionStorage.getItem("routes") === null) {
         const routeResponse = await axios.get(
