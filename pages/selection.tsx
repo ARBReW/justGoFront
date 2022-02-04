@@ -11,7 +11,7 @@ import viewedStops from "../states/viewedStops";
 import userGeoLocation from "../states/userGeoLocation";
 import Router from "next/router";
 
-const selection = () => {
+export default function selection() {
   const routesList = useRecoilValue(routes);
   const { places } = useRecoilValue(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
@@ -37,13 +37,13 @@ const selection = () => {
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
 
 
-  const checkPlaceInfo = (place: any): any => {
+  function checkPlaceInfo(place: any): any {
     if (traveledRoute.completedRoute.includes(place)) {
       return;
     } else return `data:image/jpeg;base64,${placeInfo?.img}`;
   }
 
-  const checkIfVisited = () => {
+  function checkIfVisited() {
     let indexNumber = 0;
     function recurse(index: number) {
       //break case
@@ -58,7 +58,7 @@ const selection = () => {
     recurse(indexNumber);
   }
 
-  const changeToRightRoute = () => {
+  function changeToRightRoute() {
     if (selectRoute === routesList.length - 1) {
       setSelectRoute(0);
       setSelectPlace(0);
@@ -68,7 +68,7 @@ const selection = () => {
     }
   }
 
-  const changeToLeftRoute = () => {
+  function changeToLeftRoute() {
     if (selectRoute === 0) {
       setSelectRoute(routesList.length - 1);
       setSelectPlace(0);
@@ -78,7 +78,7 @@ const selection = () => {
     }
   }
 
-  const handleRouteSelect = () => {
+  function handleRouteSelect() {
     setCurrRoute(routesList[selectRoute]);
     setVStop({
       ...vStop,
@@ -86,13 +86,13 @@ const selection = () => {
     });
   }
 
-  const handlePlaceClick = (event: any) => {
+  function handlePlaceClick(event: any) {
     const placeId = event.target.attributes._id.value;
     const place = places.find((place: any) => place._id === placeId);
     setBg(`data:image/jpeg;base64,${place!.img}`);
   }
 
-  const truncateName = (name: string) => {
+  function truncateName(name: string) {
     if (name.length >= 12) {
       return name.slice(0, 12) + "...";
     } else return name;
@@ -111,12 +111,12 @@ const selection = () => {
         <IconButton
           aria-label="right button"
           icon={<ArrowLeftIcon color="brand.lbrn"
-            borderColor="brand.brn"
-            boxShadow="outline"
-            outlineColor="brand.lgrn"
-            borderWidth="2px"
-            bg="brand.dbrn"
-            borderRadius="5%" size="lg" />}
+          borderColor="brand.brn"
+          boxShadow="outline"
+          outlineColor="brand.lgrn"
+          borderWidth="2px"
+          bg="brand.dbrn"  
+          borderRadius="5%" size="lg"/>}
           pr="5"
           variant="link"
           direction="right"
@@ -132,48 +132,48 @@ const selection = () => {
           marginTop="2px"
           maxH="85vh"
         >
-          <Text
-            colorScheme={"whiteAlpha"}
-            fontSize={25}
-            textColor="whitesmoke"
-            fontWeight="bold"
-            textShadow='-1.1px -1.1px #52796F, -1.1px 1.1px #52796F, 1.1px -1.1px #52796F, 1.1px 1.1px #52796F'
+            <Text
+              colorScheme={"whiteAlpha"}
+              fontSize={25}
+              textColor="whitesmoke"
+              fontWeight="bold"
+              textShadow='-1.1px -1.1px #52796F, -1px 1.1px #52796F, 1px -1.1px #52796F, 1px 1.1px #52796F'
+            >
+              Select a route
+            </Text>
+          <Stack 
+          border="2px solid"
+          borderRadius="md"
+          align="center"
+          spacing="8"
+          p="2vh"
+          bg="brand.dbrn"
+          opacity="0.8"
           >
-            Select a route
-          </Text>
-          <Stack
-            border="2px solid"
-            borderRadius="md"
-            align="center"
-            spacing="8"
-            p="2vh"
-            bg="brand.dbrn"
-            opacity="0.8"
-          >
-            {routesList[selectRoute].stops
-              .slice()
-              .reverse()
-              .map((place) => {
-                return (
-                  <Button
-                    p="2vh"
-                    w="50vw"
-                    fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
-                    boxShadow="outline"
-                    outlineColor="brand.lgrn"
-                    borderWidth="2px"
-                    key={place?._id + "3.1425"}
-                    _id={place?._id}
-                    onClick={handlePlaceClick}
-                    {...(traveledRoute.completedRoute.map((e) => (e.name)).includes(place.name)
-                      ? { bg: "gray", color: "gray.400" }
-                      : { bg: "white", color: "black" })}
-                  >
-                    <Image h="2vh" src={place?.type} pr="3px"></Image>
-                    {truncateName(place?.name)}
-                  </Button>
-                );
-              })}
+          {routesList[selectRoute].stops
+            .slice()
+            .reverse()
+            .map((place) => {
+              return (
+                <Button
+                  p="2vh"
+                  w="50vw"
+                  fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
+                  boxShadow="outline"
+                  outlineColor="brand.lgrn"
+                  borderWidth="2px"
+                  key={place?._id + "3.1425"}
+                  _id={place?._id}
+                  onClick={handlePlaceClick}
+                  {...(traveledRoute.completedRoute.map((e) => (e.name)).includes(place.name)
+                    ? { bg: "gray", color: "gray.400" }
+                    : { bg: "white", color: "black" })}
+                >
+                  <Image h="2vh" src={place?.type} pr="3px"></Image>
+                  {truncateName(place?.name)}
+                </Button>
+              );
+            })}
           </Stack>
           {userLocation.coordinates.lat === 0 ? (
             <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="gray">
@@ -200,12 +200,12 @@ const selection = () => {
         <IconButton
           aria-label="right button"
           icon={<ArrowRightIcon color="brand.lbrn"
-            borderColor="brand.brn"
-            boxShadow="outline"
-            outlineColor="brand.lgrn"
-            borderWidth="2px"
-            bg="brand.dbrn"
-            borderRadius="5%" size="lg"> </ArrowRightIcon>}
+          borderColor="brand.brn"
+          boxShadow="outline"
+          outlineColor="brand.lgrn"
+          borderWidth="2px"
+          bg="brand.dbrn"  
+          borderRadius="5%" size="lg"> </ArrowRightIcon>}
           pl="5"
           variant="link"
           direction="right"
@@ -217,4 +217,3 @@ const selection = () => {
   );
 };
 
-export default selection;
