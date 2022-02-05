@@ -7,12 +7,14 @@ import axios from "axios";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { useEffect } from "react";
 import viewedStops from "../states/viewedStops";
+import currentRoute from "../states/currentRoute";
 
 export default function place() {
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const vStop = useRecoilValue(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+  const [currRoute, setCurrRoute] = useRecoilState(currentRoute);
 
 
   useEffect(() => {
@@ -34,6 +36,14 @@ export default function place() {
         setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
       } else {
         console.error("No placeDetail in sessionStorage");
+      }
+    }
+    // Get the user's current route from storage
+    if (currRoute.routeId === "") {
+      if (sessionStorage.getItem('currentRoute') !== null) {
+        setCurrRoute(JSON.parse(sessionStorage.getItem('currentRoute') || ""));
+      } else {
+        console.error('No currentRoute in sessionStorage');
       }
     }
 

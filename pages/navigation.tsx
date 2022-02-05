@@ -23,42 +23,50 @@ const navigation = () => {
 
   useEffect(() => {
 
-      // Save current route to sessionStorage
-      if (currRoute.routeId === "") {
-        if (sessionStorage.getItem('currentRoute') !== null) {
-          setCurrRoute(JSON.parse(sessionStorage.getItem('currentRoute') || ""));
-        } else {
-          console.error("No currentRoute in sessionStorage");
-        }
+    // Save current route to recoil state
+    if (currRoute.routeId === "") {
+      if (sessionStorage.getItem('currentRoute') !== null) {
+        setCurrRoute(JSON.parse(sessionStorage.getItem('currentRoute') || ""));
+      } else {
+        console.error("No currentRoute in sessionStorage");
       }
+    }
 
-      if (placeInfo._id === "") {
-        // Save current place details to sessionStorage 
-        if (sessionStorage.getItem('placeDetail') !== null) {
-          setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
-        } else {
-          console.error("No placeDetail in sessionStorage");
-        }
+    if (traveledRoute.completedRoute.length === 0) {
+      if (sessionStorage.getItem('userRoute') !== null) {
+        setTraveledRoute(JSON.parse(sessionStorage.getItem('userRoute') || ""));
+      } else {
+        console.error("No userRoute in sessionStorage");
       }
-      // Save current instructions to the sessionStorage
-      if (currInstructions.instructions[0].directions === "") {
-        if (sessionStorage.getItem('instructionsToLocation') !== null) {
-          setCurrInstructions(JSON.parse(sessionStorage.getItem('instructionsToLocation') || ""));
-        } else {
-          console.error("No instructionsToLocation in sessionStorage");
-        }
-      }
+    }
 
-      if (userLocation.coordinates.lat === 0) {
-        if (sessionStorage.getItem('userGeoLocation') !== null) {
-          setUserLocation(JSON.parse(sessionStorage.getItem('userGeoLocation') || ""));
-        } else {
-          console.error("No userGeoLocation in sessionStorage");
-        }
+    if (placeInfo._id === "") {
+      // Save current place details to sessionStorage 
+      if (sessionStorage.getItem('placeDetail') !== null) {
+        setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
+      } else {
+        console.error("No placeDetail in sessionStorage");
       }
+    }
+    // Save current instructions to the sessionStorage
+    if (currInstructions.instructions[0].directions === "") {
+      if (sessionStorage.getItem('instructionsToLocation') !== null) {
+        setCurrInstructions(JSON.parse(sessionStorage.getItem('instructionsToLocation') || ""));
+      } else {
+        console.error("No instructionsToLocation in sessionStorage");
+      }
+    }
 
-      handleRefreshButton();
-    
+    if (userLocation.coordinates.lat === 0) {
+      if (sessionStorage.getItem('userGeoLocation') !== null) {
+        setUserLocation(JSON.parse(sessionStorage.getItem('userGeoLocation') || ""));
+      } else {
+        console.error("No userGeoLocation in sessionStorage");
+      }
+    }
+
+    handleRefreshButton();
+
 
   }, [userLocation]);
 
@@ -107,20 +115,25 @@ const navigation = () => {
       heading: instructionsList[instructionsList.length - 1].heading
     }
 
-    setCurrInstructions({ instructions: [...instructionsList, lastStop]});
-    sessionStorage.setItem('instructionsToLocation', JSON.stringify({ instructions: [...instructionsList, lastStop ] }));
+    setCurrInstructions({ instructions: [...instructionsList, lastStop] });
+    sessionStorage.setItem('instructionsToLocation', JSON.stringify({ instructions: [...instructionsList, lastStop] }));
   };
 
   // handle the next place btn
   const checkIfVisited = () => {
     let indexNumber = currRoute.stops.map((e) => e.name).indexOf(places.name) + 1;
+    
+    //return early when at end of array
+    if (indexNumber > currRoute.stops.length - 1) {
+      return currRoute.stops[currRoute.stops.length - 1];
+    }
+    
     const recurse = (index: number) => {
       //break case if place is already included in travelledRoute
-      if (
-        !traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])
-      ) {
+      if (!traveledRoute.completedRoute.includes(currRoute.stops[indexNumber])) {
         return;
       } else {
+        //if you've been there it will add one to the index
         recurse((indexNumber += 1));
       }
     }
@@ -169,7 +182,7 @@ const navigation = () => {
     });
 
     // Update route on click
-    if (!traveledRoute.completedRoute.includes(placeInfo)) {
+    if (!traveledRoute.completedRoute.map(place => place._id).includes(placeInfo._id)) {
       if (sessionStorage.getItem('userRoute') !== null && traveledRoute.completedRoute.length === 0) {
         const sessionUserRoute = sessionStorage.getItem('userRoute') || "";
         setTraveledRoute(JSON.parse(sessionUserRoute));
@@ -193,7 +206,9 @@ const navigation = () => {
   const handleBackBtn = () => {
     if (loadDirections > 1) {
       setLoadDirections(loadDirections - 1);
-    } 
+    } else {
+      setLoadDirections(currInstructions.instructions.length - 1)
+    }
   };
 
   const handleNextBtn = () => {
@@ -314,9 +329,8 @@ const navigation = () => {
           </HStack>
         </Stack>
         <Divider orientation="horizontal" marginBottom="5vh" pt="1vh" pb="1vh" />
-
         <Stack>
-          {currRoute.stops.indexOf(places) === currRoute.stops.length - 1 ? (
+          {currRoute.stops.map(stop => stop._id).indexOf(places._id) === currRoute.stops.length - 1 ? (
             <Center h="100%">
               <Link href="/otsukare">
                 <Button
@@ -358,7 +372,7 @@ const navigation = () => {
                   h="10vh"
                   onClick={updateUserRoute}
                 >
-                  I'm done here. <br></br> Take me to {checkIfVisited().name}
+                  I'm done here. <br></br> Take me to {checkIfVisited()?.name}
                 </Button>
               </Link>
             </Center>
