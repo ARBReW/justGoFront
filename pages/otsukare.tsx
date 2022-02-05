@@ -1,88 +1,109 @@
 import {
-  Button,
-  Heading,
   Text,
   Stack,
   Image,
   AspectRatio,
   HStack,
+  Box
 } from "@chakra-ui/react";
 import currentRoute from "../states/currentRoute";
-import { useRecoilValue, useResetRecoilState } from "recoil";
-import Link from "next/link";
+import { useRecoilValue, useResetRecoilState, useRecoilState } from "recoil";
 import userRoute from "../states/userRoute";
 import placeDetail from "../states/placeDetail";
+import { useEffect } from "react";
 
 export default function showRoute() {
-  const { completedRoute } = useRecoilValue(userRoute);
-  const route = useRecoilValue(currentRoute);
+  const [{ completedRoute }, setCompletedRoute] = useRecoilState<any>(userRoute);
   const endImg = `data:image/jpeg;base64, ${completedRoute[completedRoute.length - 1]?.img}`;
-  const clearPlace = useResetRecoilState(placeDetail);
-  const clearCurrentRoute = useResetRecoilState(currentRoute);
-  const clearUserRoute = useResetRecoilState(userRoute);
 
-  const clearUser = () => {
-    clearPlace();
-    clearCurrentRoute();
-    clearUserRoute();
-  };
+  useEffect(() => {
+
+    if (completedRoute.length === 0) {
+      if (sessionStorage.getItem('userRoute') !== null) {
+        setCompletedRoute(JSON.parse(sessionStorage.getItem('userRoute') || ""));
+      } else {
+        console.error('No userRoute in sessionStorage');
+      }
+    }
+  }, []);
 
   return (
     <>
-      <Stack h="95vh" align="center">
-        <Heading
-          pt="20"
+      <Stack h="95vh" align="center" overflow="scroll">
+        <Text
+          pt="15"
           justifyContent="center"
-          fontSize={["5vh", "5vh", "5vh", "5vh"]}
+          color="whitesmoke"
           fontFamily={"body"}
-          fontWeight="bold"
-          color="tomato"
+          m="5"
+          fontSize={25}
+          fontWeight={"bold"}
+          textShadow={"-1.1px -1.1px #52796F, -1px 1.1px #52796F, 1px -1.1px #52796F, 1px 1.1px #52796F"}
         >
-          🎊Otsukare 🎊
-        </Heading>
-
-        <AspectRatio pt="5" minW="300px" maxW="70%" maxH="50vh" ratio={4 / 3}>
+          Otsukare 
+        </Text>
+        {completedRoute[completedRoute.length - 1]?.img === undefined ? "" :
+        (<><AspectRatio 
+        pt="1" 
+        minW="300px" 
+        maxW="70%" 
+        maxH="50vh" 
+        ratio={4 / 3}>
           <Image
             src={endImg}
             rounded="lg"
             objectFit="cover"
             objectPosition="50%"
+            border="2px solid white"
+            boxShadow="dark-lg"
+            p="2"
+            bg="whiteAlpha.400"
           />
         </AspectRatio>
 
-        <Stack pt={10} spacing={2} align={"center"}>
+        <Stack pt="3" 
+        spacing="2" 
+        align="center">
           <Text
             fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
             textTransform={"uppercase"}
+            fontWeight="bold"
+            color="whitesmoke"
+            textShadow={"-1.1px -1.1px #52796F, -1px 1.1px #52796F, 1px -1.1px #52796F, 1px 1.1px #52796F"}
+            m="5"
           >
             Your route:
           </Text>
         </Stack>
+        </>)}
 
-        <div>
+        <Box
+        border="1px solid white"
+        rounded="lg"
+        boxShadow="dark-lg"
+        p="2"
+        bg="whiteAlpha.200">
           {completedRoute
             .slice()
             .reverse()
-            .map((stop) => (
-              <HStack bg="whiteAlpha.900" key={stop._id + "CC24 rocks"} w="100%" spacing="0">
-               <Text> {"✅ "} </Text>  <Image h="2vh" src={stop?.type} pr="3px"></Image> <Text>{stop?.name}</Text>
+            .map((stop: any) => (
+              <HStack bg="whiteAlpha.900" 
+              key={stop._id + "CC24 rocks"} 
+              w="100%" 
+              spacing="0.5" 
+              border="1px" 
+              rounded="sm">
+               <Text> {"✅ "} </Text>  
+               <Image 
+               h="2vh" 
+               //src={stop?.type} 
+               pr="3px"></Image> 
+               <Text>{stop?.name}</Text>
               </HStack>
             ))}
-        </div>
-
-        <Stack pt={10} align={"center"}>
-          <Link href="/" passHref>
-            <Button
-              colorScheme="blackAlpha"
-              variant="solid"
-              onClick={clearUser}
-              fontSize={["2.2vh", "2.2vh", "2.2vh", "2.2vh"]}
-            >
-              Return to login
-            </Button>
-          </Link>
-        </Stack>
+        </Box>
       </Stack>
     </>
   );
 }
+
