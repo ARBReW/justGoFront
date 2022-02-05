@@ -1,18 +1,40 @@
 import Link from "next/link";
-import { Button, Text, Stack, HStack } from "@chakra-ui/react";
+import { Button, Text, Stack, HStack, useToast, Spinner, Center, Progress, Skeleton, ToastId } from "@chakra-ui/react";
 import userGeoLocation from "../../states/userGeoLocation";
 import { useRecoilState } from "recoil";
 import placeDetail from "../../states/placeDetail";
 import viewedStops from "../../states/viewedStops";
-  
+import { useRouter } from "next/router";
+import React from "react";
+
 const Navbar = () => {
-const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-const [placeInfo, setPlaceInfo ]= useRecoilState(placeDetail);
-const [vStop, setVStop] = useRecoilState(viewedStops);
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+  const [placeInfo, setPlaceInfo] = useRecoilState(placeDetail);
+  const [vStop, setVStop] = useRecoilState(viewedStops);
+  const router = useRouter();
+  const locationToast = useToast();
+  let locationToastRef: ToastId;
 
+  const handleUserLocation = () => {
+    locationToast.closeAll();
+    locationToastRef = locationToast({
+      position: 'top',
+      duration: null,
+      render: () => (
+        <Progress size='lg' colorScheme='twitter' isIndeterminate />
+      )
+    }) || "";
 
-const handleUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
+      setTimeout(() => {
+        locationToast.update(locationToastRef, {
+          duration: 2000,
+          render: () => (
+            <Progress size='lg' colorScheme='green' value={100} />
+          )
+        });
+      }, 1500);
+
       setUserLocation({
         coordinates: {
           lat: position.coords.latitude,
@@ -30,7 +52,7 @@ const handleUserLocation = () => {
   }
 
   function addToViewedStops() {
-    
+
     if (placeInfo._id === "") {
       if (sessionStorage.getItem('placeDetail') !== null) {
         setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
@@ -41,14 +63,14 @@ const handleUserLocation = () => {
 
     // Save the current place to the viewedStops 
     setVStop({
-       ...vStop, //default value
-       viewedStops: [...vStop.viewedStops, placeInfo],
-     });
+      ...vStop, //default value
+      viewedStops: [...vStop.viewedStops, placeInfo],
+    });
 
-     // Save the current place to sessionStorage
-     sessionStorage.setItem('viewedStops', JSON.stringify(vStop));
+    // Save the current place to sessionStorage
+    sessionStorage.setItem('viewedStops', JSON.stringify(vStop));
   }
-  
+
   return (
     <>
       <HStack
@@ -57,7 +79,7 @@ const handleUserLocation = () => {
         bgColor="brand.dbrn"
         w="100%"
         h="100%"
-      > 
+      >
         <Button
           onClick={handleUserLocation}
           borderColor="brand.dgrn"
@@ -68,38 +90,52 @@ const handleUserLocation = () => {
         >
           <Stack spacing="0">
             <Text fontSize="lg">📍</Text>
-            <Text fontSize="1.2vh">Refresh<br></br>location</Text>
-            </Stack>
+            <Text fontSize="1.5vh">Refresh<br></br>location</Text>
+          </Stack>
         </Button>
         <Link href="/selection">
           <Button
             borderColor="brand.dgrn"
             borderWidth="2px"
             rounded="full"
-            w="15"
+            w="17"
             h="12"
             onClick={addToViewedStops}
           >
             <Stack spacing="0">
-            <Text fontSize="lg">🏠</Text>
-            <Text fontSize="1.2vh">Choose<br></br>route</Text>
+              <Text fontSize="lg">🏠</Text>
+              <Text fontSize="1.5vh">Choose<br></br>route</Text>
             </Stack>
           </Button>
         </Link>
-        <Link href="/otsukare">
+        {[`/otsukare`].includes(router.pathname) ? (<Link href="/">
           <Button
             borderColor="brand.dgrn"
             borderWidth="2px"
             rounded="full"
-            w="16"
+            w="20"
             h="12"
           >
             <Stack spacing="0">
-            <Text fontSize="lg">🏁</Text>
-            <Text fontSize="1.2vh">End<br></br>route</Text>
+              <Text fontSize="md">↩️</Text>
+              <Text fontSize="1.5vh">Back to<br></br>Login</Text>
+            </Stack>
+          </Button>
+        </Link>) : (<Link href="/otsukare">
+          <Button
+            borderColor="brand.dgrn"
+            borderWidth="2px"
+            rounded="full"
+            w="20"
+            h="12"
+          >
+            <Stack spacing="0">
+              <Text fontSize="lg">🏁</Text>
+              <Text fontSize="1.5vh">End<br></br>route</Text>
             </Stack>
           </Button>
         </Link>
+        )}
       </HStack>
     </>
   );
