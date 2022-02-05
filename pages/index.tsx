@@ -107,7 +107,7 @@ const Home: NextPage = () => {
         justify="center"
         h="100vh"
         boxShadow="md"
-        bg="whiteAlpha.100"
+        bg="#D2D8B380"
         rounded="md"
       >
         <Image
@@ -187,8 +187,10 @@ const Home: NextPage = () => {
           <Center paddingTop="15px">
             <Button
               bg="brand.lbrn"
+              borderColor="brand.dbrn"
               color="whiteAlpha.900"
               variant="solid"
+              borderWidth="2px"
               fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
             >
               Loading locations...
@@ -202,7 +204,7 @@ const Home: NextPage = () => {
                 color="whiteAlpha.900"
                 variant="solid"
                 fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
-                boxShadow="outline"
+                //wboxShadow="outline"
                 outlineColor="brand.lgrn"
                 borderWidth="2px"
               >

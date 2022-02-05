@@ -6,13 +6,11 @@ import {
   HStack,
   Box
 } from "@chakra-ui/react";
-import currentRoute from "../states/currentRoute";
-import { useRecoilValue, useResetRecoilState, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import userRoute from "../states/userRoute";
-import placeDetail from "../states/placeDetail";
 import { useEffect } from "react";
 
-export default function showRoute() {
+const showRoute = () => {
   const [{ completedRoute }, setCompletedRoute] = useRecoilState<any>(userRoute);
   const endImg = `data:image/jpeg;base64, ${completedRoute[completedRoute.length - 1]?.img}`;
 
@@ -29,15 +27,15 @@ export default function showRoute() {
 
   return (
     <>
-      <Stack h="95vh" align="center" overflow="scroll">
+      <Stack h="95vh" align="center">
         <Text
           pt="15"
           justifyContent="center"
           color="whitesmoke"
-          fontFamily={"body"}
-          m="5"
-          fontSize={25}
-          fontWeight={"bold"}
+          fontFamily="body"
+          m="3"
+          fontSize="25"
+          fontWeight="bold"
           textShadow={"-1.1px -1.1px #52796F, -1px 1.1px #52796F, 1px -1.1px #52796F, 1px 1.1px #52796F"}
         >
           Otsukare 
@@ -55,22 +53,22 @@ export default function showRoute() {
             objectFit="cover"
             objectPosition="50%"
             border="2px solid white"
-            boxShadow="dark-lg"
+            //boxShadow="dark-lg"
             p="2"
             bg="whiteAlpha.400"
           />
         </AspectRatio>
 
-        <Stack pt="3" 
+        <Stack pt="2" 
         spacing="2" 
         align="center">
           <Text
             fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
-            textTransform={"uppercase"}
+            textTransform="uppercase"
             fontWeight="bold"
             color="whitesmoke"
             textShadow={"-1.1px -1.1px #52796F, -1px 1.1px #52796F, 1px -1.1px #52796F, 1px 1.1px #52796F"}
-            m="5"
+            m="3"
           >
             Your route:
           </Text>
@@ -78,25 +76,28 @@ export default function showRoute() {
         </>)}
 
         <Box
-        border="1px solid white"
+        border="2px solid white"
         rounded="lg"
-        boxShadow="dark-lg"
-        p="2"
-        bg="whiteAlpha.200">
+       // borderColor="brand.dgrn"
+        bg="whiteAlpha.400"
+        overflow="scroll"
+        maxH="30vh"
+        >
           {completedRoute
             .slice()
             .reverse()
             .map((stop: any) => (
-              <HStack bg="whiteAlpha.900" 
+              <HStack 
+              bg="whiteAlpha.900" 
               key={stop._id + "CC24 rocks"} 
               w="100%" 
-              spacing="0.5" 
-              border="1px" 
-              rounded="sm">
+              spacing="2" 
+              rounded="sm"
+              color="brand.dbrn"
+              >
                <Text> {"✅ "} </Text>  
                <Image 
                h="2vh" 
-               //src={stop?.type} 
                pr="3px"></Image> 
                <Text>{stop?.name}</Text>
               </HStack>
@@ -107,3 +108,4 @@ export default function showRoute() {
   );
 }
 
+export default showRoute;

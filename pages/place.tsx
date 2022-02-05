@@ -163,12 +163,12 @@ export default function place() {
             p="4"
             align="center"
             borderRadius="md"
-            bgColor="brand.dgrn"
+            bg="#52796F90"
             fontSize="18"
-            textColor="whitesmoke"
+            textColor="white"
             fontWeight="bold"
-            textShadow='-0.5px -0.5px #D4AA7D, -0.5px 0.5px #D4AA7D, 0.5px -0.5px #D4AA7D, 0.5px 0.5px #D4AA7D'
-            opacity="0.9"
+            //textShadow='-0.5px -0.5px #D4AA7D, -0.5px 0.5px #D4AA7D, 0.5px -0.5px #D4AA7D, 0.5px 0.5px #D4AA7D'
+            //opacity="0.9"
           >
             {placeInfo.name}{" "}
             <Divider orientation="horizontal" pt="0.8rem"></Divider>
@@ -205,7 +205,7 @@ export default function place() {
                 justifyContent="center"
                 whiteSpace="normal"
                 wordwrap="break-word"
-                bg="brand.brn"
+                bg="#D4AA7D90"
                 w="75vw"
                 textColor="white"
                 fontSize="2.3vh"
@@ -214,7 +214,6 @@ export default function place() {
                 p="0"
                 m="0"
                 h="10vh"
-                opacity="0.9"
               >
                 Directions to <br />{placeInfo.name}
               </Button>

@@ -226,7 +226,7 @@ const navigation = () => {
     <>
       <Stack
         h="95vh"
-        backgroundImage={`linear-gradient(rgba(192,192,192, 0.8), rgba(192,192,192, 0.8)), url(data:image/jpeg;base64,${places.img})`}
+        backgroundImage={`linear-gradient(rgba(192,192,192, 0.9), rgba(192,192,192, 0.9)), url(data:image/jpeg;base64,${places.img})`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
@@ -243,12 +243,10 @@ const navigation = () => {
             p="4"
             align="center"
             borderRadius="md"
-            bgColor="brand.dgrn"
+            bg="#52796F95"
             fontSize="18"
-            textColor="whitesmoke"
+            textColor="white"
             fontWeight="bold"
-            textShadow='-0.5px -0.5px #D4AA7D, -0.5px 0.5px #D4AA7D, 0.5px -0.5px #D4AA7D, 0.5px 0.5px #D4AA7D'
-            opacity="0.9"
           >
             {places.name} <br></br>
           </Box>
@@ -259,7 +257,7 @@ const navigation = () => {
           </LoadScript>
 
           <HStack
-            align="center"
+            justify="center"
             spacing="0"
             w="90vw">
             <IconButton
@@ -278,7 +276,6 @@ const navigation = () => {
             <Box
               borderRadius="md"
               bg="gray"
-              opacity="0.9"
               w="70%"
               p="5"
               h="15vh"
@@ -292,7 +289,7 @@ const navigation = () => {
                     <Text
                       key={index * 5.1245}
                       fontSize="16"
-                      color="grey.700"
+                      color="grey.600"
                       textAlign="center"
                       p="5px">
                       {step.directions}
@@ -327,7 +324,7 @@ const navigation = () => {
                   justifyContent="center"
                   whiteSpace="normal"
                   wordwrap="break-word"
-                  bg="brand.brn"
+                  bg="#D4AA7D95"
                   w="75vw"
                   textColor="white"
                   fontSize="2.3vh"
@@ -336,7 +333,6 @@ const navigation = () => {
                   p="0"
                   m="0"
                   h="10vh"
-                  opacity="0.9"
                   onClick={updateUserRoute}
                 >
                   Done for the day
@@ -351,7 +347,7 @@ const navigation = () => {
                   justifyContent="center"
                   whiteSpace="normal"
                   wordwrap="break-word"
-                  bg="brand.brn"
+                  bg="#D4AA7D95"
                   w="75vw"
                   textColor="white"
                   fontSize="2.3vh"
@@ -360,7 +356,6 @@ const navigation = () => {
                   p="0"
                   m="0"
                   h="10vh"
-                  opacity="0.9"
                   onClick={updateUserRoute}
                 >
                   I'm done here. <br></br> Take me to {checkIfVisited().name}
