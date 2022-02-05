@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Stack, Button, Box, Divider, Text } from "@chakra-ui/react";
+import { Stack, Button, Box, Divider, Text, Center } from "@chakra-ui/react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import placeDetail from "../states/placeDetail";
 import userGeoLocation from "../states/userGeoLocation";
 import axios from "axios";
-import viewedStops from "../states/viewedStops";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { useEffect } from "react";
+import viewedStops from "../states/viewedStops";
 
 export default function place() {
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
@@ -134,7 +134,7 @@ export default function place() {
     sessionStorage.setItem('instructionsToLocation', JSON.stringify({ instructions: [...instructionsList, lastStop] }));
   }
 
-  function checkDay() {
+  const checkDay = () => {
     const dayOfTheWeek = new Date().getDay() - 1 //0-6 
     if (dayOfTheWeek === - 1) {
       return 6;
@@ -144,30 +144,38 @@ export default function place() {
   return (
     <>
       <Stack
-        h="95vh"
+        h="91vh"
         backgroundImage={`data:image/jpeg;base64,${placeInfo.img}`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
       >
-        <Stack direction="column" spacing={4} pt={5} align="center">
+        <Stack
+          direction="column"
+          spacing="4"
+          pt="5"
+          pb="30"
+          align="center">
           <Box
-            bg="green.100"
-            borderWidth="1px"
-            w="70%"
-            p={4}
+            borderWidth="2px"
+            borderColor="brand.dbrn"
+            w="75vw"
+            p="4"
             align="center"
-            bgColor="gray.500"
-            fontSize={20}
+            borderRadius="md"
+            bgColor="brand.dgrn"
+            fontSize="18"
             textColor="whitesmoke"
             fontWeight="bold"
+            textShadow='-0.5px -0.5px #D4AA7D, -0.5px 0.5px #D4AA7D, 0.5px -0.5px #D4AA7D, 0.5px 0.5px #D4AA7D'
+            opacity="0.9"
           >
             {placeInfo.name}{" "}
             <Divider orientation="horizontal" pt="0.8rem"></Divider>
             <Text
               fontStyle="italic"
               fontWeight="normal"
-              fontSize={15}
+              fontSize="15"
               pt="0.8rem"
             >
               Business Hours:
@@ -179,30 +187,42 @@ export default function place() {
         </Stack>
         <Divider
           orientation="horizontal"
-          pt="35vh"
+          pt="30vh"
           pb="10vh"
           marginBottom="5vh" />
         {currInstructions.instructions.length === 0 ? (
           <Button
-            bg="blackAlpha.600"
+            bg="brand.brn"
             textColor="white"
             fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
             Loading instructions...
           </Button>
         ) : (
-          <Link href="/navigation" passHref>
-            <Button
-              whiteSpace="normal"
-              wordwrap="break-word"
-              bg="blackAlpha.600"
-              textColor="white"
-              fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
-            >
-              Go to {placeInfo.name}
-            </Button>
-          </Link>
+          <Center h="100%">
+            <Link href="/navigation" passHref>
+              <Button
+                alignItems="center"
+                justifyContent="center"
+                whiteSpace="normal"
+                wordwrap="break-word"
+                bg="brand.brn"
+                w="75vw"
+                textColor="white"
+                fontSize="2.3vh"
+                borderColor="brand.lgrn"
+                borderWidth="1.5px"
+                p="0"
+                m="0"
+                h="10vh"
+                opacity="0.9"
+              >
+                Directions to <br />{placeInfo.name}
+              </Button>
+            </Link>
+          </Center>
         )}
       </Stack>
     </>
   );
 }
+

@@ -15,25 +15,44 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import userGeoLocation from "../states/userGeoLocation";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 import locationStates from "../states/locationStates";
 import axios from "axios";
+import placeDetail from "../states/placeDetail";
+import currentRoute from "../states/currentRoute";
+import userRoute from "../states/userRoute";
 
 const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [places, setPlaces] = useRecoilState(locationStates);
   const [load, setLoad] = useState(false);
+  const clearPlace = useResetRecoilState(placeDetail);
+  const clearCurrentRoute = useResetRecoilState(currentRoute);
+  const clearUserRoute = useResetRecoilState(userRoute);
 
+  
   useEffect(() => {
     (async () => {
+      clearUser();
       handleUserLocation();
       await getData();
       setLoad(true);
     })()
   }, []);
 
-
+  const clearUser = () => {
+    sessionStorage.removeItem('userRoute');
+    sessionStorage.removeItem('currentRoute');
+    sessionStorage.removeItem('instructionsToLocation');
+    sessionStorage.removeItem('viewedStops');
+    sessionStorage.removeItem('userGeoLocation');
+    sessionStorage.removeItem('placeDetail');
+    clearPlace();
+    clearCurrentRoute();
+    clearUserRoute();
+  };
+  
   // get user location on login (to be updated on selection page)
   function handleUserLocation() {
     //Save current geolocation to recoil state
@@ -70,8 +89,8 @@ const Home: NextPage = () => {
       else {
         const { routes, places } = JSON.parse(sessionStorage.getItem("locationStates") || "");
         setPlaces({
-          routes: JSON.parse(routes),
-          places: JSON.parse(places)
+          routes: routes,
+          places: places
         });
       }
     } catch (error) {
@@ -88,7 +107,7 @@ const Home: NextPage = () => {
         justify="center"
         h="100vh"
         boxShadow="md"
-        bg="whiteAlpha.900"
+        bg="whiteAlpha.100"
         rounded="md"
       >
         <Image
@@ -167,7 +186,8 @@ const Home: NextPage = () => {
         {userLocation.coordinates.lat === 0 || !load ? (
           <Center paddingTop="15px">
             <Button
-              colorScheme="orange"
+              bg="brand.lbrn"
+              color="whiteAlpha.900"
               variant="solid"
               fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
             >
@@ -178,9 +198,13 @@ const Home: NextPage = () => {
           <Center paddingTop="15px">
             <Link href="/selection" passHref>
               <Button
-                colorScheme="green"
+                bg="brand.dgrn"
+                color="whiteAlpha.900"
                 variant="solid"
                 fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
+                boxShadow="outline"
+                outlineColor="brand.lgrn"
+                borderWidth="2px"
               >
                 I'm ready to GO
               </Button>

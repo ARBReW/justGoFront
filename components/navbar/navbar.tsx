@@ -1,21 +1,17 @@
 import Link from "next/link";
-import { IconButton, Button } from "@chakra-ui/react";
-import { HStack } from "@chakra-ui/react";
-import { RepeatIcon } from "@chakra-ui/icons";
+import { Button, Text, Stack, HStack } from "@chakra-ui/react";
 import userGeoLocation from "../../states/userGeoLocation";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import placeDetail from "../../states/placeDetail";
 import viewedStops from "../../states/viewedStops";
-
   
 const Navbar = () => {
 const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
 const [placeInfo, setPlaceInfo ]= useRecoilState(placeDetail);
 const [vStop, setVStop] = useRecoilState(viewedStops);
 
-  
-  function handleUserLocation() {
-    //Save current geolocation to recoil state
+
+const handleUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       setUserLocation({
         coordinates: {
@@ -57,41 +53,51 @@ const [vStop, setVStop] = useRecoilState(viewedStops);
     <>
       <HStack
         justify="center"
-        spacing="20"
-        bgColor="gray.700"
+        spacing="10"
+        bgColor="brand.dbrn"
         w="100%"
         h="100%"
       > 
-        <IconButton
-          aria-label="refresh location"
-          icon={<RepeatIcon />}
+        <Button
           onClick={handleUserLocation}
-          size="lg"
-          boxShadow="outline"
+          borderColor="brand.dgrn"
+          borderWidth="2px"
           rounded="full"
-          borderRadius="100%"
-        ></IconButton>
+          w="15"
+          h="12"
+        >
+          <Stack spacing="0">
+            <Text fontSize="lg">📍</Text>
+            <Text fontSize="1.2vh">Refresh<br></br>location</Text>
+            </Stack>
+        </Button>
         <Link href="/selection">
           <Button
-            boxShadow="outline"
+            borderColor="brand.dgrn"
+            borderWidth="2px"
             rounded="full"
-            borderRadius="100%"
-            w={12}
-            h={12}
+            w="15"
+            h="12"
             onClick={addToViewedStops}
           >
-            🏠
+            <Stack spacing="0">
+            <Text fontSize="lg">🏠</Text>
+            <Text fontSize="1.2vh">Choose<br></br>route</Text>
+            </Stack>
           </Button>
         </Link>
         <Link href="/otsukare">
           <Button
-            boxShadow="outline"
+            borderColor="brand.dgrn"
+            borderWidth="2px"
             rounded="full"
-            borderRadius="100%"
-            w={12}
-            h={12}
+            w="16"
+            h="12"
           >
-            🏁
+            <Stack spacing="0">
+            <Text fontSize="lg">🏁</Text>
+            <Text fontSize="1.2vh">End<br></br>route</Text>
+            </Stack>
           </Button>
         </Link>
       </HStack>

@@ -1,16 +1,16 @@
-import { Button, Center, Stack, Text, IconButton, Image } from "@chakra-ui/react";
+import { Button, Center, Stack, Text, IconButton, Image, HStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import currentRoute from "../states/currentRoute";
 import locationStates, { routes } from "../states/locationStates";
 import placeDetail from "../states/placeDetail";
-import { ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from "@chakra-ui/icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import viewedStops from "../states/viewedStops";
 import userGeoLocation from "../states/userGeoLocation";
 
-export default function selection() {
+const selection = () => {
   const routesList = useRecoilValue(routes);
   const [places, setPlaces] = useRecoilState<any>(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
@@ -62,12 +62,14 @@ export default function selection() {
     } else return `data:image/jpeg;base64,${placeInfo?.img}`;
   }
 
-  function checkIfVisited() {
+  const checkIfVisited = () => {
     let indexNumber = 0;
 
     function recurse(index: number) {
       //break case
-      if (!traveledRoute.completedRoute.map((e) => (e.name)).includes(currRoute.stops[indexNumber].name)
+      if (indexNumber === 4){
+        setSelectPlace(4);
+      } else if (!traveledRoute.completedRoute.map((e) => (e.name)).includes(currRoute.stops[indexNumber].name)
       ) {
         setSelectPlace(indexNumber);
         return;
@@ -78,7 +80,7 @@ export default function selection() {
     recurse(indexNumber);
   }
 
-  function changeToRightRoute() {
+  const changeToRightRoute = () => {
     if (selectRoute === routesList.length - 1) {
       setSelectRoute(0);
       setSelectPlace(0);
@@ -88,7 +90,7 @@ export default function selection() {
     }
   }
 
-  function changeToLeftRoute() {
+  const changeToLeftRoute = () => {
     if (selectRoute === 0) {
       setSelectRoute(routesList.length - 1);
       setSelectPlace(0);
@@ -116,116 +118,140 @@ export default function selection() {
     sessionStorage.setItem('viewedStops', JSON.stringify(vStop));
   }
 
-  function handlePlaceClick(event: any) {
+  const handlePlaceClick = (event: any) => {
     const placeId = event.target.attributes._id.value;
-    const place = places.find((place: any) => place._id === placeId);
+    const place = places.places.find((place: any) => place._id === placeId);
     setBg(`data:image/jpeg;base64,${place!.img}`);
   }
 
-  // We can use the below chunk of code for skipping places (changing selectPlace)
-  // setSelectPlace(
-  //   routesList[selectRoute].stops
-  //     .map((place) => place?.placeId)
-  //     .indexOf(placeId)
-  // );
-  //setPlaceInfo(place);
-
-  function truncateName(name: string) {
-    if (name.length >= 15) {
-      return name.slice(0, 15) + "...";
+  const truncateName = (name: string) => {
+    if (name.length >= 17) {
+      return name.slice(0, 17) + "...";
     } else return name;
   }
 
   return (
     <>
       <Center
-        h="95vh"
+        h="100vh"
         backgroundImage={bg ? bg : ""}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
         direction="row"
       >
-        <IconButton
-          aria-label="right button"
-          icon={<ArrowLeftIcon />}
-          pr="5"
-          variant="link"
-          direction="right"
-          onClick={changeToLeftRoute}
-          fontSize="40"
-        ></IconButton>
-
         <Stack
           p="3px"
           spacing="5"
           direction="column"
           align="center"
           marginTop="2px"
-          maxH="80vh"
+          maxH="85vh"
         >
           <Text
             colorScheme={"whiteAlpha"}
-            bgColor="gray.500"
-            fontSize={20}
+            fontSize="25"
             textColor="whitesmoke"
-            textTransform={"uppercase"}
-            p="2"
-            marginBottom={20}
             fontWeight="bold"
+            textShadow='-1.1px -1.1px #52796F, -1px 1.1px #52796F, 1px -1.1px #52796F, 1px 1.1px #52796F'
           >
             Select a route
           </Text>
+          <Stack
+            border="2px solid"
+            borderRadius="md"
+            align="center"
+            spacing="7"
+            p="2vh"
+            w="75vw"
+            bg="brand.dbrn"
+            opacity="0.6"
+          >
+            {routesList[selectRoute].stops
+              .slice()
+              .reverse()
+              .map((place) => {
+                return (
+                  <Button
+                    p="3vh"
+                    w="60vw"
+                    opacity="0.9"
+                    fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
+                    borderColor="brand.dgrn"
+                    borderWidth="2px"
+                    key={place?._id + "3.1425"}
+                    _id={place?._id}
+                    onClick={handlePlaceClick}
+                    {...(traveledRoute.completedRoute.map((e) => (e.name)).includes(place.name)
+                      ? { bg: "gray", color: "gray.400" }
+                      : { bg: "white", color: "black" })}
+                  >
+                    <Image h="2vh" src={place?.type} pr="3px"></Image>
+                    {truncateName(place?.name)}
+                  </Button>
+                );
+              })}
+          </Stack>
+          <HStack>
+            <IconButton
+              aria-label="right button"
+              icon={<ArrowLeftIcon color="brand.lbrn"
+                borderColor="brand.lbrn"
+                borderWidth="2px"
+                bg="brand.dbrn"
+                borderRadius="15%" 
+                size="lg" />}
+              pr="5"
+              variant="link"
+              direction="right"
+              onClick={changeToLeftRoute}
+              fontSize="40"
+            ></IconButton>
 
-          {routesList[selectRoute].stops
-            .slice()
-            .reverse()
-            .map((place) => {
-              return (
-                <Button
-                  p="1vh"
-                  fontSize={["2.2vh", "2.2vh", "2.2vh", "2.2vh"]}
-                  key={place?._id + "3.1425"}
-                  _id={place?._id}
-                  onClick={handlePlaceClick}
-                  {...(traveledRoute.completedRoute.map((e) => (e.name)).includes(place.name)
-                    ? { bg: "gray", color: "gray.400" }
-                    : { bg: "white", color: "black" })}
-                >
-                  <Image h="2vh" src={place?.type} pr="3px"></Image>
-                  {truncateName(place?.name)}
-                </Button>
-              );
-            })}
-          <ArrowUpIcon w="20" h="20" color="black" />
-          {userLocation.coordinates.lat === 0 ? (
-            <Button borderRadius="50%" w="5rem" h="5rem" colorScheme="gray">
-              Loading...
-            </Button>
-          ) : (
-            <Link href="/place" passHref>
-              <Button
-                borderRadius="50%"
-                w="5rem"
-                h="5rem"
-                colorScheme="orange"
-                onClick={handleRouteSelect}
-              >
-                JUST GO
+            {userLocation.coordinates.lat === 0 ? (
+              <Button borderRadius="50%" 
+              w="5rem" 
+              h="5rem" 
+              colorScheme="gray">
+                Loading...
               </Button>
-            </Link>
-          )}
+            ) : (
+              <Link href="/place" passHref>
+                <Button
+                  borderRadius="50%"
+                  w="5rem"
+                  h="5rem"
+                  color="whiteAlpha.900"
+                  bg="brand.dgrn"
+                  onClick={handleRouteSelect}
+                  borderColor="brand.lgrn"
+                  borderWidth="2px"
+                >
+                  JUST GO
+                </Button>
+              </Link>
+            )}
+
+            <IconButton
+              aria-label="right button"
+              icon={<ArrowRightIcon color="brand.lbrn"
+                borderColor="brand.lbrn"
+                borderWidth="2px"
+                bg="brand.dbrn"
+                borderRadius="15%" 
+                size="lg"> </ArrowRightIcon>}
+              pl="5"
+              variant="link"
+              direction="right"
+              onClick={changeToRightRoute}
+              fontSize="40"
+            ></IconButton>
+          </HStack>
         </Stack>
-        <IconButton
-          aria-label="right button"
-          icon={<ArrowRightIcon />}
-          pl="5"
-          variant="link"
-          direction="right"
-          onClick={changeToRightRoute}
-          fontSize="40"
-        ></IconButton>
       </Center>
     </>
   );
-}
+};
+
+export default selection;
+
