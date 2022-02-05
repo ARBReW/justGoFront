@@ -9,11 +9,10 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import userRoute, { userRouteInterface } from "../states/userRoute";
 import viewedStops from "../states/viewedStops";
 import userGeoLocation from "../states/userGeoLocation";
-import Router from "next/router";
 
 const selection = () => {
   const routesList = useRecoilValue(routes);
-  const { places } = useRecoilValue(locationStates);
+  const [places, setPlaces] = useRecoilState<any>(locationStates);
   const [selectRoute, setSelectRoute] = useState(0);
   const [selectPlace, setSelectPlace] = useState(0);
   const [bg, setBg] = useState("");
@@ -25,19 +24,39 @@ const selection = () => {
 
 
   useEffect(() => {
+    // Get user location from sessionStorage
     if (userLocation.coordinates.lat === 0) {
-      Router.push("/")
+      if (sessionStorage.getItem('userGeoLocation') !== null) {
+        setUserLocation(JSON.parse(sessionStorage.getItem('userGeoLocation') || ""));
+      } else {
+        console.error("No userGeoLocation in sessionStorage");
+      }
     };
+
+    //Setting the state called places with locationStates in sessionStorage when default
+    if (routesList[0]._id === "") {
+      if (sessionStorage.getItem('locationStates') !== null) {
+        setPlaces(JSON.parse(sessionStorage.getItem('locationStates') || ""));
+      } else {
+        console.error("No locationStates in sessionStorage");
+      }
+    }
+    // Save the current route to recoil state
     setCurrRoute(routesList[selectRoute]);
+
     if (traveledRoute.completedRoute.length > 0) {
-      checkIfVisited()
+      checkIfVisited();
     };
+
+    // Save the current route to sessionStorage
     setPlaceInfo(routesList[selectRoute].stops[selectPlace]);
+    sessionStorage.setItem('placeDetail', JSON.stringify(routesList[selectRoute].stops[selectPlace]));
     setBg(checkPlaceInfo(placeInfo));
+
   }, [selectRoute, selectPlace, placeInfo, userLocation]);
 
 
-  const checkPlaceInfo = (place: any): any => {
+  function checkPlaceInfo(place: any): any {
     if (traveledRoute.completedRoute.includes(place)) {
       return;
     } else return `data:image/jpeg;base64,${placeInfo?.img}`;
@@ -45,9 +64,12 @@ const selection = () => {
 
   const checkIfVisited = () => {
     let indexNumber = 0;
+
     function recurse(index: number) {
       //break case
-      if (!traveledRoute.completedRoute.map((e) => (e.name)).includes(currRoute.stops[indexNumber].name)
+      if (indexNumber === 4){
+        setSelectPlace(4);
+      } else if (!traveledRoute.completedRoute.map((e) => (e.name)).includes(currRoute.stops[indexNumber].name)
       ) {
         setSelectPlace(indexNumber);
         return;
@@ -78,17 +100,27 @@ const selection = () => {
     }
   }
 
-  const handleRouteSelect = () => {
+  function handleRouteSelect() {
+
+    //Save the current route to recoil state
     setCurrRoute(routesList[selectRoute]);
+
+    //Save the current route to sessionStorage
+    sessionStorage.setItem('currentRoute', JSON.stringify(currRoute));
+
+    //Save the current place to recoil state  
     setVStop({
       ...vStop,
       viewedStops: [...vStop.viewedStops, placeInfo],
     });
+
+    //Save the current place to sessionStorage
+    sessionStorage.setItem('viewedStops', JSON.stringify(vStop));
   }
 
   const handlePlaceClick = (event: any) => {
     const placeId = event.target.attributes._id.value;
-    const place = places.find((place: any) => place._id === placeId);
+    const place = places.places.find((place: any) => place._id === placeId);
     setBg(`data:image/jpeg;base64,${place!.img}`);
   }
 

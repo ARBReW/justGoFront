@@ -7,26 +7,29 @@ import {
   Box
 } from "@chakra-ui/react";
 import currentRoute from "../states/currentRoute";
-import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, useRecoilState } from "recoil";
 import userRoute from "../states/userRoute";
 import placeDetail from "../states/placeDetail";
+import { useEffect } from "react";
 
-const showRoute = () => {
-  const { completedRoute } = useRecoilValue(userRoute);
+export default function showRoute() {
+  const [{ completedRoute }, setCompletedRoute] = useRecoilState<any>(userRoute);
   const endImg = `data:image/jpeg;base64, ${completedRoute[completedRoute.length - 1]?.img}`;
-  const clearPlace = useResetRecoilState(placeDetail);
-  const clearCurrentRoute = useResetRecoilState(currentRoute);
-  const clearUserRoute = useResetRecoilState(userRoute);
 
-  const clearUser = () => {
-    clearPlace();
-    clearCurrentRoute();
-    clearUserRoute();
-  };
+  useEffect(() => {
+
+    if (completedRoute.length === 0) {
+      if (sessionStorage.getItem('userRoute') !== null) {
+        setCompletedRoute(JSON.parse(sessionStorage.getItem('userRoute') || ""));
+      } else {
+        console.error('No userRoute in sessionStorage');
+      }
+    }
+  }, []);
 
   return (
     <>
-      <Stack h="95vh" align="center">
+      <Stack h="95vh" align="center" overflow="scroll">
         <Text
           pt="15"
           justifyContent="center"
@@ -39,8 +42,8 @@ const showRoute = () => {
         >
           Otsukare 
         </Text>
-
-        <AspectRatio 
+        {completedRoute[completedRoute.length - 1]?.img === undefined ? "" :
+        (<><AspectRatio 
         pt="1" 
         minW="300px" 
         maxW="70%" 
@@ -72,6 +75,7 @@ const showRoute = () => {
             Your route:
           </Text>
         </Stack>
+        </>)}
 
         <Box
         border="1px solid white"
@@ -82,7 +86,7 @@ const showRoute = () => {
           {completedRoute
             .slice()
             .reverse()
-            .map((stop) => (
+            .map((stop: any) => (
               <HStack bg="whiteAlpha.900" 
               key={stop._id + "CC24 rocks"} 
               w="100%" 
@@ -103,4 +107,3 @@ const showRoute = () => {
   );
 }
 
-export default showRoute;

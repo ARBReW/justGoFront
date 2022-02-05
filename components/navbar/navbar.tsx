@@ -7,7 +7,7 @@ import viewedStops from "../../states/viewedStops";
   
 const Navbar = () => {
 const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
-const [placeInfo, setPlaceInfo] = useRecoilState(placeDetail)
+const [placeInfo, setPlaceInfo ]= useRecoilState(placeDetail);
 const [vStop, setVStop] = useRecoilState(viewedStops);
 
 
@@ -19,14 +19,34 @@ const handleUserLocation = () => {
           lng: position.coords.longitude,
         },
       });
+      //Save current geolocation to sessionStorage
+      sessionStorage.setItem('userGeoLocation', JSON.stringify({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+      }));
     });
   }
 
-const addToViewedStops = () => {
-     setVStop({
-       ...vStop,
+  function addToViewedStops() {
+    
+    if (placeInfo._id === "") {
+      if (sessionStorage.getItem('placeDetail') !== null) {
+        setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
+      } else {
+        console.error("No placeDetail in sessionStorage");
+      }
+    }
+
+    // Save the current place to the viewedStops 
+    setVStop({
+       ...vStop, //default value
        viewedStops: [...vStop.viewedStops, placeInfo],
      });
+
+     // Save the current place to sessionStorage
+     sessionStorage.setItem('viewedStops', JSON.stringify(vStop));
   }
   
   return (

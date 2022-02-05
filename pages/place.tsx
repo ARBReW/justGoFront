@@ -6,23 +6,40 @@ import userGeoLocation from "../states/userGeoLocation";
 import axios from "axios";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { useEffect } from "react";
-import Router from "next/router";
+import viewedStops from "../states/viewedStops";
 
-const place = () => {
-  const places = useRecoilValue(placeDetail);
-  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+export default function place() {
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
+  const vStop = useRecoilValue(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
+  const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+
 
   useEffect(() => {
-    if (placeInfo.name === "") {
-      Router.push("/");
-    } else {
-      getUserLocation()
+    if (placeInfo.name !== "") {
+      getDirections();
     };
+
+    // Get the users location from sessionStorage
+    if (userLocation.coordinates.lat === 0) {
+      if (sessionStorage.getItem('userGeoLocation') !== null) {
+        setUserLocation(JSON.parse(sessionStorage.getItem('userGeoLocation') || ""));
+      } else {
+        console.error('No userLocation in sessionStorage');
+      }
+    }
+    // Set the place details to sessionStorage
+    if (placeInfo._id === "") {
+      if (sessionStorage.getItem('placeDetail') !== null) {       
+        setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
+      } else {
+        console.error("No placeDetail in sessionStorage");
+      }
+    }
+
   }, [userLocation]);
 
-  async function getUserLocation() {
+  async function getDirections() {
 
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
 
@@ -105,7 +122,16 @@ const place = () => {
       instructionsList.push(stepObj);
     }
 
-    setCurrInstructions({ instructions: instructionsList });
+    const lastStop = {
+      directions: `You've arrived at ${placeInfo?.name}!`,
+      distance: "",
+      startCoord: instructionsList[instructionsList.length - 1].endCoord,
+      endCoord: instructionsList[instructionsList.length - 1].endCoord,
+      heading: instructionsList[instructionsList.length - 1].heading
+    }
+
+    setCurrInstructions({ instructions: [...instructionsList, lastStop] });
+    sessionStorage.setItem('instructionsToLocation', JSON.stringify({ instructions: [...instructionsList, lastStop] }));
   }
 
   const checkDay = () => {
@@ -119,7 +145,7 @@ const place = () => {
     <>
       <Stack
         h="91vh"
-        backgroundImage={`data:image/jpeg;base64,${places.img}`}
+        backgroundImage={`data:image/jpeg;base64,${placeInfo.img}`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
@@ -144,7 +170,7 @@ const place = () => {
             textShadow='-0.5px -0.5px #D4AA7D, -0.5px 0.5px #D4AA7D, 0.5px -0.5px #D4AA7D, 0.5px 0.5px #D4AA7D'
             opacity="0.9"
           >
-            {places.name}{" "}
+            {placeInfo.name}{" "}
             <Divider orientation="horizontal" pt="0.8rem"></Divider>
             <Text
               fontStyle="italic"
@@ -154,8 +180,8 @@ const place = () => {
             >
               Business Hours:
             </Text>
-            <Text fontWeight="bold" fontSize="15">
-              {places.hours[checkDay()]}
+            <Text fontWeight="bold" fontSize={15}>
+              {placeInfo.hours[checkDay()]}
             </Text>
           </Box>
         </Stack>
@@ -190,7 +216,7 @@ const place = () => {
                 h="10vh"
                 opacity="0.9"
               >
-                Directions to <br />{places.name}
+                Directions to <br />{placeInfo.name}
               </Button>
             </Link>
           </Center>
@@ -200,4 +226,3 @@ const place = () => {
   );
 }
 
-export default place;

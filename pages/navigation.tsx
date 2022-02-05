@@ -1,6 +1,5 @@
 import Link from "next/link";
-import Router from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component } from "react";
 import { Stack, HStack, Button, Box, Divider, Text, IconButton, Center } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -14,7 +13,7 @@ import axios from "axios";
 
 const navigation = () => {
   const places = useRecoilValue(placeDetail);
-  const currRoute = useRecoilValue(currentRoute);
+  const [currRoute, setCurrRoute] = useRecoilState(currentRoute);
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [traveledRoute, setTraveledRoute] = useRecoilState<userRouteInterface>(userRoute);
@@ -23,15 +22,53 @@ const navigation = () => {
   const [selectPlace, setSelectPlace] = useState(0);
 
   useEffect(() => {
-    if (placeInfo.name === "") {
-      Router.push("/");
-    }
-    handleRefreshButton();
+
+      // Save current route to sessionStorage
+      if (currRoute.routeId === "") {
+        if (sessionStorage.getItem('currentRoute') !== null) {
+          setCurrRoute(JSON.parse(sessionStorage.getItem('currentRoute') || ""));
+        } else {
+          console.error("No currentRoute in sessionStorage");
+        }
+      }
+
+      if (placeInfo._id === "") {
+        // Save current place details to sessionStorage 
+        if (sessionStorage.getItem('placeDetail') !== null) {
+          setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
+        } else {
+          console.error("No placeDetail in sessionStorage");
+        }
+      }
+      // Save current instructions to the sessionStorage
+      if (currInstructions.instructions[0].directions === "") {
+        if (sessionStorage.getItem('instructionsToLocation') !== null) {
+          setCurrInstructions(JSON.parse(sessionStorage.getItem('instructionsToLocation') || ""));
+        } else {
+          console.error("No instructionsToLocation in sessionStorage");
+        }
+      }
+
+      if (userLocation.coordinates.lat === 0) {
+        if (sessionStorage.getItem('userGeoLocation') !== null) {
+          setUserLocation(JSON.parse(sessionStorage.getItem('userGeoLocation') || ""));
+        } else {
+          console.error("No userGeoLocation in sessionStorage");
+        }
+      }
+
+      handleRefreshButton();
+    
+
   }, [userLocation]);
 
 
   const handleRefreshButton = async () => {
     const coordinateString = `${userLocation.coordinates.lat},${userLocation.coordinates.lng}`;
+
+    if (coordinateString === "0,0") {
+      return;
+    }
 
     const response = await axios.get<any>(
       `https://88tf8ip678.execute-api.ap-northeast-1.amazonaws.com/prod/directions/data`,
@@ -40,10 +77,10 @@ const navigation = () => {
           origin: coordinateString,
           destination: placeInfo.coord.toString(),
         },
-      })
+      });
 
     const instructionsList = [];
-    for await (let step of response.data.routes[0].legs[0].steps) {
+    for await (let step of response.data.routes[0]?.legs[0]?.steps) {
       //clean up HTML, add arrows
       const strippedStr = step.html_instructions
         .replace(/<[^>]+>/g, " ")
@@ -62,7 +99,16 @@ const navigation = () => {
       instructionsList.push(stepObj);
     }
 
-    setCurrInstructions({ instructions: instructionsList });
+    const lastStop = {
+      directions: `You've arrived at ${placeInfo?.name}!`,
+      distance: "",
+      startCoord: instructionsList[instructionsList.length - 1].endCoord,
+      endCoord: instructionsList[instructionsList.length - 1].endCoord,
+      heading: instructionsList[instructionsList.length - 1].heading
+    }
+
+    setCurrInstructions({ instructions: [...instructionsList, lastStop]});
+    sessionStorage.setItem('instructionsToLocation', JSON.stringify({ instructions: [...instructionsList, lastStop ] }));
   };
 
   // handle the next place btn
@@ -86,11 +132,10 @@ const navigation = () => {
     let nextPlaceIndex = currRoute.stops.map((e) => e.name).indexOf(places.name) + 1;
 
     // recurse to skip places already visited
-    const recurse = (index: number) => {
-      if (
-        !traveledRoute.completedRoute.includes(currRoute.stops[nextPlaceIndex])
-      ) {
+    function recurse(index: number) {
+      if (!traveledRoute.completedRoute.includes(currRoute.stops[nextPlaceIndex])) {
         setPlaceInfo(currRoute.stops[nextPlaceIndex]);
+        sessionStorage.setItem('placeDetail', JSON.stringify(currRoute.stops[nextPlaceIndex]));
         setSelectPlace(nextPlaceIndex);
         return;
       } else {
@@ -99,6 +144,7 @@ const navigation = () => {
     }
     if (nextPlaceIndex > currRoute.stops.length - 1) {
       setPlaceInfo(currRoute.stops[nextPlaceIndex - 1]);
+      sessionStorage.setItem('placeDetail', JSON.stringify(currRoute.stops[nextPlaceIndex - 1]));
     } else {
       recurse(nextPlaceIndex);
     }
@@ -113,13 +159,31 @@ const navigation = () => {
           lng: position.coords.longitude,
         },
       });
+
+      sessionStorage.setItem('userGeoLocation', JSON.stringify({
+        coordinates: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        }
+      }));
     });
 
+    // Update route on click
     if (!traveledRoute.completedRoute.includes(placeInfo)) {
-      setTraveledRoute({
-        ...traveledRoute,
-        completedRoute: [...traveledRoute.completedRoute, placeInfo],
-      });
+      if (sessionStorage.getItem('userRoute') !== null && traveledRoute.completedRoute.length === 0) {
+        const sessionUserRoute = sessionStorage.getItem('userRoute') || "";
+        setTraveledRoute(JSON.parse(sessionUserRoute));
+      } else {
+        setTraveledRoute({
+          ...traveledRoute,
+          completedRoute: [...traveledRoute.completedRoute, placeInfo],
+        });
+        sessionStorage.setItem('userRoute', JSON.stringify({
+          ...traveledRoute,
+          completedRoute: [...traveledRoute.completedRoute, placeInfo],
+        }));
+      }
+
     }
     nextPlace();
   };
@@ -127,10 +191,13 @@ const navigation = () => {
 
   // instructions btns
   const handleBackBtn = () => {
-    if (loadDirections > 1) setLoadDirections(loadDirections - 1);
+    if (loadDirections > 1) {
+      setLoadDirections(loadDirections - 1);
+    } 
   };
+
   const handleNextBtn = () => {
-    if ((currInstructions.instructions.length - 1) > loadDirections) {
+    if ((currInstructions.instructions.length - 1) >= loadDirections) {
       setLoadDirections(loadDirections + 1);
     }
   };
@@ -151,7 +218,8 @@ const navigation = () => {
     fullscreenControl: false,
     addressControl: false,
     enableCloseButton: false,
-    zoomControl: false
+    zoomControl: false,
+    source: "OUTDOOR",
   }
 
   return (

@@ -18,7 +18,7 @@ const locationStates = atom({
   ],
   places: [
     {
-      _id: "", // = placeId in routes
+      _id: "", // placeId in routes
       google_Id: "",
       name: "",
       coord: [0, 0],
