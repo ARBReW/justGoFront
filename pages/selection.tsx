@@ -164,8 +164,7 @@ const selection = () => {
             spacing="7"
             p="2vh"
             w="75vw"
-            bg="brand.dbrn"
-            opacity="0.6"
+            bg="#483D3F70"
           >
             {routesList[selectRoute].stops
               .slice()
