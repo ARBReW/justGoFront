@@ -241,7 +241,7 @@ const navigation = () => {
     <>
       <Stack
         h="95vh"
-        backgroundImage={`linear-gradient(rgba(192,192,192, 0.9), rgba(192,192,192, 0.9)), url(data:image/jpeg;base64,${places.img})`}
+        backgroundImage={`linear-gradient(rgba(128,128,128, 0.7), rgba(128,128,128, 0.7)), url(data:image/jpeg;base64,${places.img})`}
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
         backgroundSize="cover"
@@ -258,7 +258,7 @@ const navigation = () => {
             p="4"
             align="center"
             borderRadius="md"
-            bg="#52796F95"
+            bg="#52796F97"
             fontSize="18"
             textColor="white"
             fontWeight="bold"
@@ -290,7 +290,7 @@ const navigation = () => {
             </IconButton>
             <Box
               borderRadius="md"
-              bg="gray"
+              bg="gray.100"
               w="70%"
               p="5"
               h="15vh"
@@ -304,7 +304,7 @@ const navigation = () => {
                     <Text
                       key={index * 5.1245}
                       fontSize="16"
-                      color="grey.600"
+                      color="grey.800"
                       textAlign="center"
                       p="5px">
                       {step.directions}
@@ -338,7 +338,7 @@ const navigation = () => {
                   justifyContent="center"
                   whiteSpace="normal"
                   wordwrap="break-word"
-                  bg="#D4AA7D95"
+                  bg="#D4AA7D97"
                   w="75vw"
                   textColor="white"
                   fontSize="2.3vh"
@@ -347,6 +347,7 @@ const navigation = () => {
                   p="0"
                   m="0"
                   h="10vh"
+                  _hover={{ opacity: "0.8"}}
                   onClick={updateUserRoute}
                 >
                   Done for the day
@@ -370,6 +371,7 @@ const navigation = () => {
                   p="0"
                   m="0"
                   h="10vh"
+                  _hover={{ opacity: "0.8"}}
                   onClick={updateUserRoute}
                 >
                   I'm done here. <br></br> Take me to {checkIfVisited()?.name}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, Text, Stack, HStack, useToast, Spinner, Center, Progress, Skeleton, ToastId } from "@chakra-ui/react";
+import { Button, Text, Stack, HStack, useToast, Progress, ToastId } from "@chakra-ui/react";
 import userGeoLocation from "../../states/userGeoLocation";
 import { useRecoilState } from "recoil";
 import placeDetail from "../../states/placeDetail";
@@ -85,8 +85,8 @@ const Navbar = () => {
           borderColor="brand.dgrn"
           borderWidth="2px"
           rounded="full"
-          w="15"
-          h="12"
+          w={["10vh", "10vh", "11vh"]}
+          h={["8vh", "8vh", "9vh"]}
         >
           <Stack spacing="0">
             <Text fontSize="lg">📍</Text>
@@ -98,8 +98,8 @@ const Navbar = () => {
             borderColor="brand.dgrn"
             borderWidth="2px"
             rounded="full"
-            w="17"
-            h="12"
+            w={["10vh", "10vh", "11vh"]}
+            h={["8vh", "8vh", "9vh"]}
             onClick={addToViewedStops}
           >
             <Stack spacing="0">
@@ -113,8 +113,8 @@ const Navbar = () => {
             borderColor="brand.dgrn"
             borderWidth="2px"
             rounded="full"
-            w="20"
-            h="12"
+            w={["10vh", "10vh", "11vh"]}
+            h={["8vh", "8vh", "9vh"]}
           >
             <Stack spacing="0">
               <Text fontSize="md">↩️</Text>
@@ -126,8 +126,8 @@ const Navbar = () => {
             borderColor="brand.dgrn"
             borderWidth="2px"
             rounded="full"
-            w="20"
-            h="12"
+            w={["10vh", "10vh", "11vh"]}
+            h={["8vh", "8vh", "9vh"]}
           >
             <Stack spacing="0">
               <Text fontSize="lg">🏁</Text>

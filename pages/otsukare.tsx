@@ -53,7 +53,6 @@ const showRoute = () => {
             objectFit="cover"
             objectPosition="50%"
             border="2px solid white"
-            //boxShadow="dark-lg"
             p="2"
             bg="whiteAlpha.400"
           />
@@ -78,7 +77,6 @@ const showRoute = () => {
         <Box
         border="2px solid white"
         rounded="lg"
-       // borderColor="brand.dgrn"
         bg="whiteAlpha.400"
         overflow="scroll"
         maxH="30vh"

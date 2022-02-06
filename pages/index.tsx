@@ -10,6 +10,7 @@ import {
   Input,
   Button,
   Divider,
+  Img
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -22,6 +23,7 @@ import axios from "axios";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute from "../states/userRoute";
+import logo from "../img/logo.png";
 
 const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
@@ -107,11 +109,12 @@ const Home: NextPage = () => {
         justify="center"
         h="100vh"
         boxShadow="md"
-        bg="#D2D8B380"
+        bg="#D2D8B370"
         rounded="md"
       >
-        <Image
-          src="https://kanji-symbol.net/common/images/txt/num0008-gyo.gif"
+        <Img
+          src="img/logo.png"
+          //src="https://kanji-symbol.net/common/images/txt/num0008-gyo.gif"
           mb="6"
           mt="3"
           alt="JustGoLogo"
@@ -187,11 +190,12 @@ const Home: NextPage = () => {
           <Center paddingTop="15px">
             <Button
               bg="brand.lbrn"
-              borderColor="brand.dbrn"
-              color="whiteAlpha.900"
+              color="brand.dbrn"
               variant="solid"
-              borderWidth="2px"
               fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
+              outlineColor="brand.dbrn"
+              borderWidth="2px"
+              _hover={{ opacity: "0.8"}}
             >
               Loading locations...
             </Button>
@@ -201,12 +205,12 @@ const Home: NextPage = () => {
             <Link href="/selection" passHref>
               <Button
                 bg="brand.dgrn"
-                color="whiteAlpha.900"
+                color="white"
                 variant="solid"
                 fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
-                //wboxShadow="outline"
-                outlineColor="brand.lgrn"
+                outlineColor="brand.dgrn"
                 borderWidth="2px"
+                _hover={{ opacity: "0.8"}}
               >
                 I'm ready to GO
               </Button>

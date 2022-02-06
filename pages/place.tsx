@@ -204,6 +204,7 @@ export default function place() {
           <Button
             bg="brand.brn"
             textColor="white"
+            _hover={{ opacity: "0.8"}}
             fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
             Loading instructions...
           </Button>
@@ -224,6 +225,7 @@ export default function place() {
                 p="0"
                 m="0"
                 h="10vh"
+                _hover={{ opacity: "0.8"}}
               >
                 Directions to <br />{placeInfo.name}
               </Button>
