@@ -118,16 +118,21 @@ const Home: NextPage = () => {
           mt="3"
           alt="JustGoLogo"
           mx="auto"
-          maxW={["15vw", "15vw", "45vw", "35vw"]}
+          maxW={["15vw", "15vw", "75vw", "25vw"]}
           height="auto"
         />
         {true ? (
-          <Text textAlign="center" fontWeight="bold">
-            "You only make the fun when you just GO"
+          <Text textAlign="center" 
+          fontStyle="italic"
+          fontWeight="bold"
+          color="brand.dbrn">
+            "The 5-stop route app that makes exploring <br></br>fun, easy and spontaneous!"
           </Text>
         ) : (
           <div>
-            <Heading as="h1" fontSize={["2vh", "2vh", "3vh", "4vh"]}>
+            <Heading 
+            as="h1" 
+            fontSize={["2vh", "2vh", "3vh", "4vh"]}>
               Log in and Just GO.{" "}
             </Heading>
             <Text
@@ -209,10 +214,10 @@ const Home: NextPage = () => {
                 outlineColor="brand.dgrn"
                 borderWidth="2px"
                 _hover={{ bg: "brand.lgrn", color: "brand.dgrn" }}
-                //_active={{ bg: "brand.lgrn", color: "brand.dgrn" }}
+                _active={{ bg: "brand.lgrn", color: "brand.dgrn" }}
                 _focus={{ bg: "brand.lgrn", color: "brand.dgrn" }}
               >
-                I'm ready to GO
+                Are you ready to go?
               </Button>
             </Link>
           </Center>
