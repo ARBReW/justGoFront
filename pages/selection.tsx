@@ -227,6 +227,7 @@ const selection = () => {
                   borderWidth="2px"
                   _hover={{ bg: "brand.lgrn", color: "brand.dgrn"}}
                   _active={{ bg: "brand.lgrn", color: "brand.dgrn"}}
+                  _focus={{ bg: "brand.lgrn", color: "brand.dgrn"}}
                 >
                   JUST GO
                 </Button>

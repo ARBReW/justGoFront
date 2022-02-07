@@ -210,6 +210,7 @@ const Home: NextPage = () => {
                 borderWidth="2px"
                 _hover={{ bg: "brand.lgrn", color: "brand.dgrn" }}
                 _active={{ bg: "brand.lgrn", color: "brand.dgrn" }}
+                _focus={{ bg: "brand.lgrn", color: "brand.dgrn" }}
               >
                 I'm ready to GO
               </Button>
