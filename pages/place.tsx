@@ -226,7 +226,7 @@ export default function place() {
                 m="0"
                 h="10vh"
                 _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
-                _active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                //_active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
                 _focus={{ bg: "brand.lbrn", color: "brand.dbrn"}}
               >
                 Directions to <br />{placeInfo.name}

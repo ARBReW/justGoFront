@@ -348,7 +348,8 @@ const navigation = () => {
                   m="0"
                   h="10vh"
                   _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
-                  _active={{ color: "brand.dbrn"}}
+                  //_active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  _focus={{ bg: "brand.lbrn", color: "brand.dbrn"}}
                   onClick={updateUserRoute}
                 >
                   Done for the day
@@ -373,7 +374,7 @@ const navigation = () => {
                   m="0"
                   h="10vh"
                   _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
-                  _active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  //_active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
                   _focus={{ bg: "brand.lbrn", color: "brand.dbrn"}}
                   onClick={updateUserRoute}
                 >
