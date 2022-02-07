@@ -220,7 +220,7 @@ const navigation = () => {
   // street view settings
   const containerStyle = {
     width: '40vh',
-    height: '35vh'
+    height: '37vh'
   };
 
   const details = {
@@ -249,13 +249,15 @@ const navigation = () => {
         <Stack
           direction="column"
           spacing="4"
-          pt="5"
+          pt="2vh"
           align="center">
           <Box
+            maxH={["12vh", "12vh", "12vh"]}
             borderWidth="2px"
             borderColor="brand.dbrn"
             w="75vw"
             p="4"
+            justify="center"
             align="center"
             borderRadius="md"
             bg="#52796F97"
@@ -292,10 +294,10 @@ const navigation = () => {
               borderRadius="md"
               bg="gray.100"
               w="70%"
-              p="5"
-              h="15vh"
-              alignItems="center"
-              justifyContent="center"
+              p="3"
+              maxH={["15vh", "15vh", "15vh"]}
+              align="center"
+              justify="center"
               overflow="scroll">
               {currInstructions.instructions
                 .slice(loadDirections - 1, loadDirections)
@@ -306,7 +308,7 @@ const navigation = () => {
                       fontSize="16"
                       color="grey.800"
                       textAlign="center"
-                      p="5px">
+                      p="3">
                       {step.directions}
                       <br></br>
                       {step.distance}
@@ -325,10 +327,17 @@ const navigation = () => {
                 borderColor="brand.lbrn"
                 borderWidth="2px"
                 bg="brand.dbrn"
-                borderRadius="15%" size="lg"></ArrowRightIcon>} ></IconButton>
+                borderRadius="15%" 
+                size="lg"></ArrowRightIcon>} ></IconButton>
           </HStack>
         </Stack>
-        <Divider orientation="horizontal" marginBottom="5vh" pt="1vh" pb="1vh" />
+        <Box 
+        pb="2vh"
+        minH={["15vh", "15vh", "15vh"]}>
+        <Divider orientation="horizontal" 
+        mt="2vh"
+        mb="1vh" 
+        />
         <Stack>
           {currRoute.stops.map(stop => stop._id).indexOf(places._id) === currRoute.stops.length - 1 ? (
             <Center h="100%">
@@ -348,7 +357,7 @@ const navigation = () => {
                   m="0"
                   h="10vh"
                   _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
-                  //_active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  _active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
                   _focus={{ bg: "brand.lbrn", color: "brand.dbrn"}}
                   onClick={updateUserRoute}
                 >
@@ -360,8 +369,8 @@ const navigation = () => {
             <Center h="100%">
               <Link href="/place" passHref>
                 <Button
-                  alignItems="center"
-                  justifyContent="center"
+                  align="center"
+                  justify="center"
                   whiteSpace="normal"
                   wordwrap="break-word"
                   bg="#D4AA7D97"
@@ -374,8 +383,8 @@ const navigation = () => {
                   m="0"
                   h="10vh"
                   _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
-                  //_active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
-                  //_focus={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  _active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  _focus={{ bg: "brand.lbrn", color: "brand.dbrn"}}
                   onClick={updateUserRoute}
                 >
                   I'm done here. <br></br> Take me to {checkIfVisited()?.name}
@@ -383,7 +392,8 @@ const navigation = () => {
               </Link>
             </Center>
           )}
-        </Stack>
+            </Stack>
+        </Box>
       </Stack>
     </>
   );
