@@ -338,7 +338,7 @@ const navigation = () => {
                   justifyContent="center"
                   whiteSpace="normal"
                   wordwrap="break-word"
-                  bg="#D4AA7D97"
+                  bg="#D4AA7D95"
                   w="75vw"
                   textColor="white"
                   fontSize="2.3vh"
@@ -347,7 +347,8 @@ const navigation = () => {
                   p="0"
                   m="0"
                   h="10vh"
-                  _hover={{ opacity: "0.8"}}
+                  _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  _active={{ color: "brand.dbrn"}}
                   onClick={updateUserRoute}
                 >
                   Done for the day
@@ -362,7 +363,7 @@ const navigation = () => {
                   justifyContent="center"
                   whiteSpace="normal"
                   wordwrap="break-word"
-                  bg="#D4AA7D95"
+                  bg="#D4AA7D97"
                   w="75vw"
                   textColor="white"
                   fontSize="2.3vh"
@@ -371,7 +372,8 @@ const navigation = () => {
                   p="0"
                   m="0"
                   h="10vh"
-                  _hover={{ opacity: "0.8"}}
+                  _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  _active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
                   onClick={updateUserRoute}
                 >
                   I'm done here. <br></br> Take me to {checkIfVisited()?.name}

@@ -164,7 +164,7 @@ export default function place() {
           direction="column"
           spacing="4"
           pt="5"
-          pb="30"
+          pb="33"
           align="center">
           <Box
             borderWidth="2px"
@@ -177,8 +177,6 @@ export default function place() {
             fontSize="18"
             textColor="white"
             fontWeight="bold"
-            //textShadow='-0.5px -0.5px #D4AA7D, -0.5px 0.5px #D4AA7D, 0.5px -0.5px #D4AA7D, 0.5px 0.5px #D4AA7D'
-            //opacity="0.9"
           >
             {placeInfo.name}{" "}
             <Divider orientation="horizontal" pt="0.8rem"></Divider>
@@ -197,15 +195,17 @@ export default function place() {
         </Stack>
         <Divider
           orientation="horizontal"
-          pt="30vh"
-          pb="10vh"
-          marginBottom="5vh" />
+          pt="35vh"
+          pb="5vh"
+          //mb="1vh" 
+          />
         {currInstructions.instructions.length === 0 ? (
           <Button
             bg="brand.brn"
             textColor="white"
-            _hover={{ opacity: "0.8"}}
-            fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
+            fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
+            _focus={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+            _active={{ bg: "brand.lbrn", color: "brand.dbrn"}}>
             Loading instructions...
           </Button>
         ) : (
@@ -225,7 +225,9 @@ export default function place() {
                 p="0"
                 m="0"
                 h="10vh"
-                _hover={{ opacity: "0.8"}}
+                _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                _active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                //_focus={{ color: "brand.dbrn"}}
               >
                 Directions to <br />{placeInfo.name}
               </Button>

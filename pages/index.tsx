@@ -10,7 +10,6 @@ import {
   Input,
   Button,
   Divider,
-  Img
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -23,7 +22,7 @@ import axios from "axios";
 import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute from "../states/userRoute";
-import logo from "../img/logo.png";
+
 
 const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
@@ -112,15 +111,14 @@ const Home: NextPage = () => {
         bg="#D2D8B370"
         rounded="md"
       >
-        <Img
-          src="img/logo.png"
+        <Image
+          src="/logo.png"
           //src="https://kanji-symbol.net/common/images/txt/num0008-gyo.gif"
           mb="6"
           mt="3"
           alt="JustGoLogo"
           mx="auto"
-          maxW={["15vh", "15vh", "20vh", "25vh"]}
-          width="10wh"
+          maxW={["15vw", "15vw", "45vw", "35vw"]}
           height="auto"
         />
         {true ? (
@@ -195,7 +193,7 @@ const Home: NextPage = () => {
               fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
               outlineColor="brand.dbrn"
               borderWidth="2px"
-              _hover={{ opacity: "0.8"}}
+              _active={{ opacity: "0.8"}}
             >
               Loading locations...
             </Button>
@@ -210,7 +208,8 @@ const Home: NextPage = () => {
                 fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
                 outlineColor="brand.dgrn"
                 borderWidth="2px"
-                _hover={{ opacity: "0.8"}}
+                _hover={{ bg: "brand.lgrn", color: "brand.dgrn" }}
+                _active={{ bg: "brand.lgrn", color: "brand.dgrn" }}
               >
                 I'm ready to GO
               </Button>

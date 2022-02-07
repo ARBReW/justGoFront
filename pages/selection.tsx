@@ -220,12 +220,13 @@ const selection = () => {
                   borderRadius="50%"
                   w="5rem"
                   h="5rem"
-                  color="whiteAlpha.900"
+                  color="white"
                   bg="brand.dgrn"
                   onClick={handleRouteSelect}
                   borderColor="brand.lgrn"
                   borderWidth="2px"
-                  _hover={{ opacity: "0.8"}}
+                  _hover={{ bg: "brand.lgrn", color: "brand.dgrn"}}
+                  _active={{ bg: "brand.lgrn", color: "brand.dgrn"}}
                 >
                   JUST GO
                 </Button>
