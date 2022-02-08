@@ -14,8 +14,7 @@ import { Stack } from "@chakra-ui/react";
         p="0"
         m="0"
         h="90%"
-        //bgGradient="radial(#D2D8B3, #D4AA7D)"
-        bg="#D2D8B3"
+        bg="#D2D8B370"
       >
         <div>{props.children}</div>
       </Stack>

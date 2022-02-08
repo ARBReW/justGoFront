@@ -31,7 +31,7 @@ const showRoute = () => {
         <Text
           pt="15"
           justifyContent="center"
-          color="whitesmoke"
+          color="white"
           fontFamily="body"
           m="3"
           fontSize="25"
@@ -53,7 +53,6 @@ const showRoute = () => {
             objectFit="cover"
             objectPosition="50%"
             border="2px solid white"
-            //boxShadow="dark-lg"
             p="2"
             bg="whiteAlpha.400"
           />
@@ -66,7 +65,7 @@ const showRoute = () => {
             fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
             textTransform="uppercase"
             fontWeight="bold"
-            color="whitesmoke"
+            color="white"
             textShadow={"-1.1px -1.1px #52796F, -1px 1.1px #52796F, 1px -1.1px #52796F, 1px 1.1px #52796F"}
             m="3"
           >
@@ -78,10 +77,10 @@ const showRoute = () => {
         <Box
         border="2px solid white"
         rounded="lg"
-       // borderColor="brand.dgrn"
         bg="whiteAlpha.400"
         overflow="scroll"
         maxH="30vh"
+        mr="10"
         >
           {completedRoute
             .slice()
