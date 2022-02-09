@@ -8,11 +8,12 @@
     Before continuing, ensure that the latest version of node is installed: v16.13.2
 
 ## Getting Started 
-
+```
 - Install npm packages: npm install
 - Clone repo: git clone https://github.com/brianlee9090/CC24-seniorprojectfront
 - Start frontend: npm run dev
 - Start backend: npm start:dev
+```
    
 ### Test Break down:
 
@@ -22,7 +23,7 @@
 ## Tech-stack:
 
     This project uses the React and Next.js frameworks. Next.js provides various features to optomize production: hybrid & static server rendering, Typescript support, smart bundling, route pre-fetching, and more with no config needed. And for design, we incorporated the Chakra UI component library to build our React application. 
-
+```
 - Frontend:
     - React.js
     - Next.js
@@ -36,15 +37,17 @@
 - Deployment
     - Frontend: Vercel
     - Backend: Heroku
+```
 
 
 # Features 
     The key feature of 'Just Go' is to provide the user with the ability to navigate an unknown area by: (1) accessing the users geolocation; (2) using and continuously accessing the user's geolocation to provide a real-time street view as they navigate through a neighborhood; and (3) provide the user with up-to-date directions as their geolocation changes
 
 # Usage 
-"./image1.png"
-"./image2.png"
-"./image3.png"
+<a href=""><img src="./images/image1.png" height="300px" margin="auto">
+<a href=""><img src="./images/image3.png" height="300px">
+<a href=""><img src="./images/image2.png" height="300px">
+</a>
 
 # Contributing
     If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thank you.
