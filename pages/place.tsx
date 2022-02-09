@@ -7,12 +7,14 @@ import axios from "axios";
 import instructionsToLocation from "../states/instructionsToLocation";
 import { useEffect } from "react";
 import viewedStops from "../states/viewedStops";
+import currentRoute from "../states/currentRoute";
 
 export default function place() {
   const [placeInfo, setPlaceInfo] = useRecoilState<any>(placeDetail);
   const vStop = useRecoilValue(viewedStops);
   const [currInstructions, setCurrInstructions] = useRecoilState<any>(instructionsToLocation);
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
+  const [currRoute, setCurrRoute] = useRecoilState(currentRoute);
 
 
   useEffect(() => {
@@ -30,10 +32,18 @@ export default function place() {
     }
     // Set the place details to sessionStorage
     if (placeInfo._id === "") {
-      if (sessionStorage.getItem('placeDetail') !== null) {       
+      if (sessionStorage.getItem('placeDetail') !== null) {
         setPlaceInfo(JSON.parse(sessionStorage.getItem('placeDetail') || ""));
       } else {
         console.error("No placeDetail in sessionStorage");
+      }
+    }
+    // Get the user's current route from storage
+    if (currRoute.routeId === "") {
+      if (sessionStorage.getItem('currentRoute') !== null) {
+        setCurrRoute(JSON.parse(sessionStorage.getItem('currentRoute') || ""));
+      } else {
+        console.error('No currentRoute in sessionStorage');
       }
     }
 
@@ -153,22 +163,20 @@ export default function place() {
         <Stack
           direction="column"
           spacing="4"
-          pt="5"
-          pb="30"
+          pt="2vh"
           align="center">
           <Box
+            minH={["24vh", "24vh", "24vh"]}
             borderWidth="2px"
             borderColor="brand.dbrn"
             w="75vw"
             p="4"
             align="center"
             borderRadius="md"
-            bgColor="brand.dgrn"
+            bg="#52796F90"
             fontSize="18"
-            textColor="whitesmoke"
+            textColor="white"
             fontWeight="bold"
-            textShadow='-0.5px -0.5px #D4AA7D, -0.5px 0.5px #D4AA7D, 0.5px -0.5px #D4AA7D, 0.5px 0.5px #D4AA7D'
-            opacity="0.9"
           >
             {placeInfo.name}{" "}
             <Divider orientation="horizontal" pt="0.8rem"></Divider>
@@ -180,47 +188,56 @@ export default function place() {
             >
               Business Hours:
             </Text>
-            <Text fontWeight="bold" fontSize={15}>
+            <Text fontWeight="bold" fontSize="15">
               {placeInfo.hours[checkDay()]}
             </Text>
           </Box>
         </Stack>
-        <Divider
-          orientation="horizontal"
-          pt="30vh"
-          pb="10vh"
-          marginBottom="5vh" />
-        {currInstructions.instructions.length === 0 ? (
-          <Button
-            bg="brand.brn"
-            textColor="white"
-            fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}>
-            Loading instructions...
-          </Button>
-        ) : (
-          <Center h="100%">
-            <Link href="/navigation" passHref>
-              <Button
-                alignItems="center"
-                justifyContent="center"
-                whiteSpace="normal"
-                wordwrap="break-word"
-                bg="brand.brn"
-                w="75vw"
-                textColor="white"
-                fontSize="2.3vh"
-                borderColor="brand.lgrn"
-                borderWidth="1.5px"
-                p="0"
-                m="0"
-                h="10vh"
-                opacity="0.9"
-              >
-                Directions to <br />{placeInfo.name}
-              </Button>
-            </Link>
-          </Center>
-        )}
+        <Box 
+        pt="48vh"
+        pb="2vh"
+        minH={["15vh", "15vh", "15vh"]}>
+          <Divider
+            orientation="horizontal"
+            mt="2vh"
+          />
+          {currInstructions.instructions.length === 0 ? (
+            <Button
+              position="absolute"
+              bg="brand.brn"
+              textColor="white"
+              fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
+              _focus={{ bg: "brand.lbrn", color: "brand.dbrn" }}
+              _active={{ bg: "brand.lbrn", color: "brand.dbrn" }}>
+              Loading instructions...
+            </Button>
+          ) : (
+            <Center h="100%">
+              <Link href="/navigation" passHref>
+                <Button
+                  align="center"
+                  justify="center"
+                  whiteSpace="normal"
+                  wordwrap="break-word"
+                  bg="#D4AA7D90"
+                  w="75vw"
+                  textColor="white"
+                  fontSize="2.3vh"
+                  borderColor="brand.lgrn"
+                  borderWidth="1.5px"
+                  p="0"
+                  m="0"
+                  h="10vh"
+                  _hover={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  _active={{ bg: "brand.lbrn", color: "brand.dbrn"}}
+                  _focus={{ bg: "brand.lbrn", color: "brand.dbrn" }}
+                >
+                  Directions to <br />{placeInfo.name}
+                </Button>
+              </Link>
+            </Center>
+          )}
+        </Box>
       </Stack>
     </>
   );

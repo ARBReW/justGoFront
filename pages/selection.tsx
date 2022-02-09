@@ -164,8 +164,7 @@ const selection = () => {
             spacing="7"
             p="2vh"
             w="75vw"
-            bg="brand.dbrn"
-            opacity="0.6"
+            bg="#483D3F70"
           >
             {routesList[selectRoute].stops
               .slice()
@@ -175,7 +174,7 @@ const selection = () => {
                   <Button
                     p="3vh"
                     w="60vw"
-                    opacity="0.9"
+                    //opacity="0.9"
                     fontSize={["2.3vh", "2.3vh", "2.3vh", "2.3vh"]}
                     borderColor="brand.dgrn"
                     borderWidth="2px"
@@ -183,7 +182,7 @@ const selection = () => {
                     _id={place?._id}
                     onClick={handlePlaceClick}
                     {...(traveledRoute.completedRoute.map((e) => (e.name)).includes(place.name)
-                      ? { bg: "gray", color: "gray.400" }
+                      ? { bg: "gray.400", color: "black" }
                       : { bg: "white", color: "black" })}
                   >
                     <Image h="2vh" src={place?.type} pr="3px"></Image>
@@ -212,7 +211,7 @@ const selection = () => {
               <Button borderRadius="50%" 
               w="5rem" 
               h="5rem" 
-              colorScheme="gray">
+              bg="brand.lgrn">
                 Loading...
               </Button>
             ) : (
@@ -221,11 +220,14 @@ const selection = () => {
                   borderRadius="50%"
                   w="5rem"
                   h="5rem"
-                  color="whiteAlpha.900"
+                  color="white"
                   bg="brand.dgrn"
                   onClick={handleRouteSelect}
                   borderColor="brand.lgrn"
                   borderWidth="2px"
+                  _hover={{ bg: "brand.lgrn", color: "brand.dgrn"}}
+                  _active={{ bg: "brand.lgrn", color: "brand.dgrn"}}
+                  _focus={{ bg: "brand.lgrn", color: "brand.dgrn"}}
                 >
                   JUST GO
                 </Button>

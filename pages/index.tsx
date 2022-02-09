@@ -23,6 +23,7 @@ import placeDetail from "../states/placeDetail";
 import currentRoute from "../states/currentRoute";
 import userRoute from "../states/userRoute";
 
+
 const Home: NextPage = () => {
   const [userLocation, setUserLocation] = useRecoilState(userGeoLocation);
   const [places, setPlaces] = useRecoilState(locationStates);
@@ -107,26 +108,31 @@ const Home: NextPage = () => {
         justify="center"
         h="100vh"
         boxShadow="md"
-        bg="whiteAlpha.100"
+        bg="#D2D8B370"
         rounded="md"
       >
         <Image
-          src="https://kanji-symbol.net/common/images/txt/num0008-gyo.gif"
+          src="/logo.png"
+          //src="https://kanji-symbol.net/common/images/txt/num0008-gyo.gif"
           mb="6"
           mt="3"
           alt="JustGoLogo"
           mx="auto"
-          maxW={["15vh", "15vh", "20vh", "25vh"]}
-          width="10wh"
+          maxW={["15vw", "15vw", "75vw", "25vw"]}
           height="auto"
         />
         {true ? (
-          <Text textAlign="center" fontWeight="bold">
-            "You only make the fun when you just GO"
+          <Text textAlign="center" 
+          fontStyle="italic"
+          fontWeight="bold"
+          color="brand.dbrn">
+            "The 5-stop route app that makes exploring <br></br>fun, easy and spontaneous!"
           </Text>
         ) : (
           <div>
-            <Heading as="h1" fontSize={["2vh", "2vh", "3vh", "4vh"]}>
+            <Heading 
+            as="h1" 
+            fontSize={["2vh", "2vh", "3vh", "4vh"]}>
               Log in and Just GO.{" "}
             </Heading>
             <Text
@@ -187,9 +193,12 @@ const Home: NextPage = () => {
           <Center paddingTop="15px">
             <Button
               bg="brand.lbrn"
-              color="whiteAlpha.900"
+              color="brand.dbrn"
               variant="solid"
               fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
+              outlineColor="brand.dbrn"
+              borderWidth="2px"
+              _active={{ opacity: "0.8"}}
             >
               Loading locations...
             </Button>
@@ -199,14 +208,16 @@ const Home: NextPage = () => {
             <Link href="/selection" passHref>
               <Button
                 bg="brand.dgrn"
-                color="whiteAlpha.900"
+                color="white"
                 variant="solid"
                 fontSize={["2.5vh", "2.5vh", "2.5vh", "2.5vh"]}
-                boxShadow="outline"
-                outlineColor="brand.lgrn"
+                outlineColor="brand.dgrn"
                 borderWidth="2px"
+                _hover={{ bg: "brand.lgrn", color: "brand.dgrn" }}
+                _active={{ bg: "brand.lgrn", color: "brand.dgrn" }}
+                _focus={{ bg: "brand.lgrn", color: "brand.dgrn" }}
               >
-                I'm ready to GO
+                Are you ready to go?
               </Button>
             </Link>
           </Center>
