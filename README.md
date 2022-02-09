@@ -42,6 +42,9 @@
     The key feature of 'Just Go' is to provide the user with the ability to navigate an unknown area by: (1) accessing the users geolocation; (2) using and continuously accessing the user's geolocation to provide a real-time street view as they navigate through a neighborhood; and (3) provide the user with up-to-date directions as their geolocation changes
 
 # Usage 
+"./image1.png"
+"./image2.png"
+"./image3.png"
 
 # Contributing
     If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thank you.
