@@ -31,8 +31,7 @@ Before continuing, ensure that the latest version of node is installed: v16.13.2
 
 ## Getting Started 
 
-- Clone the repository:  
-```git clone https://github.com/brianlee9090/CC24-seniorprojectfront```
+- Clone the repository: `git clone https://github.com/brianlee9090/CC24-seniorprojectfront`
 - Install npm packages: `npm install`
 - Start frontend:  `npm run dev`
 
@@ -54,8 +53,11 @@ This project uses the React and Next.js frameworks. Next.js provides various fea
     - Frontend: Vercel
     - Backend: Heroku
 
-
-# Usage 
+## Usage 
+<a href=""><img src="./images/image1.png" height="300px" margin="auto">
+<a href=""><img src="./images/image3.png" height="300px">
+<a href=""><img src="./images/image2.png" height="300px">
+</a>
 
 # Contributing
  If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thank you.
@@ -67,8 +69,8 @@ Push to the Branch (git push origin feature/AmazingFeature)
 Open a Pull Request
 
 # Credits 
-- Brian Lee
-- Ana Scuturici
-- Wesley Lee
-- Richard Beavis
-- Roman Montoya
+- Project tech lead: [Brian Lee](https://github.com/brianlee9090)
+- Frontend developer: [Ana Scuturici](https://github.com/AnaScuturici)
+- Fullstack developer & technologist: [Wesley Lee](https://github.com/leewes5928)
+- Fullstack developer: [Richard Beavis](https://github.com/richardpbCC)
+- Fullstack developer: [Roman Montoya]((https://github.com/Roman4u)
