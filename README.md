@@ -1,14 +1,9 @@
 <br />
 <div align="center">
   <a href="https://github.com/brianlee9090/CC24-seniorprojectfront">
-    <img src="public/logo.png" alt="Logo" width="120" height="120">
+    <img src="public/logo.png" alt="Logo" width="150" height="150">
   </a>
-
 <h3 align="center">Just GO</h3>
-
-  <p align="center">
-    This project was developed during our time as students at <a href="https://www.codechrysalis.io/">Code Chrysalis</a> 
-  </p>
 </div>
 
 ### Description
@@ -39,7 +34,7 @@ After the user has reached the destination, they can select the 'I'm done here".
 </a>
 
 ### Project presentation & demo
-[Youtube](https://www.youtube.com/watch?v=iNLA8MqJN6A&t=8s&ab_channel=CodeChrysalis%5B%E3%82%B3%E3%83%BC%E3%83%89%E3%82%AF%E3%83%AA%E3%82%B5%E3%83%AA%E3%82%B9%5D)
+Please watch out presentation on [Youtube](https://www.youtube.com/watch?v=iNLA8MqJN6A&t=8s&ab_channel=CodeChrysalis%5B%E3%82%B3%E3%83%BC%E3%83%89%E3%82%AF%E3%83%AA%E3%82%B5%E3%83%AA%E3%82%B9%5D)
 
 ### Backend repository
 The backend repository for this app can be found [here](https://github.com/brianlee9090/CC24-seniorprojectback).  
@@ -71,5 +66,10 @@ This project uses the React and Next.js frameworks. Next.js provides various fea
 - Fullstack developer: [Richard Beavis](https://github.com/richardpbCC)
 - Fullstack developer: [Roman Montoya](https://github.com/Roman4u)
 
-### Want to contribute?
- If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thank you.
+### Acknowledgements
+This project was developed during our time as students at [Code Chrysalis](https://www.codechrysalis.io/).  
+A big thank you to our instructors, the staff and our cohort mates at CC for all the support during the development of our app.  
+
+### Contributing  
+If you have a suggestion that would make our app better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".  
+If you like our project, please give us a star! Thank you!
