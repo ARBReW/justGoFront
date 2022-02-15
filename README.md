@@ -24,12 +24,18 @@ The key feature of 'Just Go' is to provide the user with the ability to navigate
 (3) provide the user with up-to-date directions as their geolocation changes
 
 ### How to use Just GO
-The web version of the app is hosted [here](https://cc-24-seniorprojectfront-63tgc340b-brianlee9090.vercel.app/).
-<a href=""><img src="./images/image5.png" alt="login-page" height="200px" margin="auto">
-<a href=""><img src="./images/image1.png" alt="route-page" height="200px">
-<a href=""><img src="./images/image3.png" alt="place-page" height="200px">
-<a href=""><img src="./images/image4.png" alt="nav-page" height="200px">
-<a href=""><img src="./images/image2.png" alt="trip-history" height="200px">
+The web version of the app is hosted [here](https://cc-24-seniorprojectfront-63tgc340b-brianlee9090.vercel.app/).  
+
+- Login page
+<a href=""><img src="./images/image5.png" alt="login-page" height="200px" margin="auto"></a>  
+- Route page
+<a href=""><img src="./images/image1.png" alt="route-page" height="200px" margin="auto"></a>  
+- Place page  
+<a href=""><img src="./images/image3.png" alt="place-page" height="200px" margin="auto"></a>
+- nav page  
+<a href=""><img src="./images/image4.png" alt="nav-page" height="200px" margin="auto"></a>  
+- Trip History page  
+<a href=""><img src="./images/image2.png" alt="trip-history" height="200px" margin="auto">
 </a>
 
 ### Project presentation & demo
