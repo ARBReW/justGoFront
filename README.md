@@ -8,11 +8,11 @@
 
 ### Description
 
-Just Go is a user-friendly, innovative web application that allows users explore local areas using geolocation to find places recommended by locals.  
+Just GO is a user-friendly, innovative web application that allows users explore local areas using geolocation to find places recommended by locals.  
   
 The motivation behind this project was to provide both travelers and visitors a curated, 5 stop location itinerary that allows users to explore and get to know local neighborhoods. The app's primary focus is to provide users with a manageable itinerary that can be accomplished in less than a day. To alleviate the stress of navigating through an unknown area, the app includes three key functionalities to assist the user getting from location to location: geolocation, real-time street view, and user-friendly directions.   Currently, the app is specific to the Tokyo Roppongi area, but with goals to expand to more locations.   
 
-The key feature of 'Just Go' is to provide the user with the ability to navigate an unknown area by:  
+The key feature of 'Just GO' is to provide the user with the ability to navigate an unknown area by:  
 (1) accessing the users geolocation;  
 (2) updating the user's geolocation to provide a real-time street view as they navigate through a neighborhood;  
 (3) provide the user with up-to-date directions as their geolocation changes
@@ -26,7 +26,7 @@ The web version of the app is hosted [here](https://cc-24-seniorprojectfront-63t
 <a href=""><img src="./images/image1.png" alt="route-page" height="200px" margin="auto"></a>  
 - On this page, the users can confirm the name of the place and whether the place is open or not on that day. If they like the place, the users can click on the 'Directions to ...' button, in order to see how they can get there.    
 <a href=""><img src="./images/image3.png" alt="place-page" height="200px" margin="auto"></a>
--  On the navigation page, the users can see step-by-step instructions on how to get to the selected place, by clicking on the left and right arrows. As they navigate through the instructions, the street-view will update simultanously. At any point, the user can click on the 'Refresh location' at the bottom of the screen, and the directions will be updated to start from their current location.  
+-  On the navigation page, the users can see step-by-step instructions on how to get to the selected place, by clicking on the left and right arrows. As they navigate through the instructions, the street-view image will update simultanously. At any point, the user can click on the 'Refresh location' at the bottom of the screen, and the directions will be updated to start from their current location.  
 After the user has reached the destination, they can select the 'I'm done here"...' button to be directed to the next place in the route.  
 <a href=""><img src="./images/image4.png" alt="nav-page" height="200px" margin="auto"></a>  
 - At the end of the route, the users are presented with a list of the places they have visited that day. They can also finish a route early, by selecting the 'End Route' button on the bottom of the screen.  
@@ -34,7 +34,7 @@ After the user has reached the destination, they can select the 'I'm done here".
 </a>
 
 ### Project presentation & demo
-Please watch out presentation on [Youtube](https://www.youtube.com/watch?v=iNLA8MqJN6A&t=8s&ab_channel=CodeChrysalis%5B%E3%82%B3%E3%83%BC%E3%83%89%E3%82%AF%E3%83%AA%E3%82%B5%E3%83%AA%E3%82%B9%5D)
+Please watch out presentation on [Youtube](https://www.youtube.com/watch?v=iNLA8MqJN6A&t=8s&ab_channel=CodeChrysalis%5B%E3%82%B3%E3%83%BC%E3%83%89%E3%82%AF%E3%83%AA%E3%82%B5%E3%83%AA%E3%82%B9%5D).
 
 ### Backend repository
 The backend repository for this app can be found [here](https://github.com/brianlee9090/CC24-seniorprojectback).  
