@@ -15,9 +15,8 @@
 
 Just Go is a user-friendly, innovative web application that allows users explore local areas using geolocation to find places recommended by locals.  
   
-The motivation behind this project was to provide both travelers and visitors a curated, 5 stop location itinerary that allows users to explore and get to know local neighborhoods. The app's primary focus is to provide users with a manageable itinerary that can be accomplished in less than a day. When users login to the app they are presented with various routes that contain 5 stops, all within a 15 min. walking distance. Users can choose which route to take by pressing the 'Just Go' button and begin their exploration of a neighborhood. To alleviate the stress of navigating through an unknown area, the app includes three key functionalities to assist the user getting from location to location: geolocation, real-time street view, and user friendly directions . Currently, the app is specific to the Tokyo Roppongi area, but with goals to expand to more locations.   
+The motivation behind this project was to provide both travelers and visitors a curated, 5 stop location itinerary that allows users to explore and get to know local neighborhoods. The app's primary focus is to provide users with a manageable itinerary that can be accomplished in less than a day. To alleviate the stress of navigating through an unknown area, the app includes three key functionalities to assist the user getting from location to location: geolocation, real-time street view, and user-friendly directions.   Currently, the app is specific to the Tokyo Roppongi area, but with goals to expand to more locations.   
 
-### Features 
 The key feature of 'Just Go' is to provide the user with the ability to navigate an unknown area by:  
 (1) accessing the users geolocation;  
 (2) updating the user's geolocation to provide a real-time street view as they navigate through a neighborhood;  
@@ -26,15 +25,16 @@ The key feature of 'Just Go' is to provide the user with the ability to navigate
 ### How to use Just GO
 The web version of the app is hosted [here](https://cc-24-seniorprojectfront-63tgc340b-brianlee9090.vercel.app/).  
 
-- Login page
+- When users open Just GO, they are presented with a screen featuring the app logo, and a buttton which turns green once the user's geolocation is updated and the connection with the server is established.    
 <a href=""><img src="./images/image5.png" alt="login-page" height="200px" margin="auto"></a>  
-- Route page
+- On the next page, the users can select one of the several routes, by clicking left and right on the arow buttons on the bottom of the screen. Once the user has decided on a route, they can click the 'Just GO' button and they will be directed to the first place in the selected route.  
 <a href=""><img src="./images/image1.png" alt="route-page" height="200px" margin="auto"></a>  
-- Place page  
+- On this page, the users can confirm the name of the place and whether the place is open or not on that day. If they like the place, the users can click on the 'Directions to ...' button, in order to see how they can get there.    
 <a href=""><img src="./images/image3.png" alt="place-page" height="200px" margin="auto"></a>
-- nav page  
+-  On the navigation page, the users can see step-by-step instructions on how to get to the selected place, by clicking on the left and right arrows. As they navigate through the instructions, the street-view will update simultanously. At any point, the user can click on the 'Refresh location' at the bottom of the screen, and the directions will be updated to start from their current location.  
+After the user has reached the destination, they can select the 'I'm done here"...' button to be directed to the next place in the route.  
 <a href=""><img src="./images/image4.png" alt="nav-page" height="200px" margin="auto"></a>  
-- Trip History page  
+- At the end of the route, the users are presented with a list of the places they have visited that day. They can also finish a route early, by selecting the 'End Route' button on the bottom of the screen.  
 <a href=""><img src="./images/image2.png" alt="trip-history" height="200px" margin="auto">
 </a>
 
