@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-  <a href="https://github.com/brianlee9090/CC24-seniorprojectfront">
+  <a href="https://github.com/ARBReW/justGoFront">
     <img src="public/logo.png" alt="Logo" width="150" height="150">
   </a>
 <h3 align="center">Just GO</h3>
@@ -18,7 +18,7 @@ The key feature of 'Just GO' is to provide the user with the ability to navigate
 (3) provide the user with up-to-date directions as their geolocation changes
 
 ### How to use Just GO
-The web version of the app is hosted [here](https://cc-24-seniorprojectfront-63tgc340b-brianlee9090.vercel.app/).  
+The web version of the app is hosted [here](https://justgo-cc24.herokuapp.com/).  
 
 - When users open Just GO, they are presented with a screen featuring the app logo, and a buttton which turns green once the user's geolocation is updated and the connection with the server is established.    
 <a href=""><img src="./images/image5.png" alt="login-page" height="200px" margin="auto"></a>  
@@ -37,14 +37,14 @@ After the user has reached the destination, they can select the 'I'm done here".
 Please watch out presentation on [Youtube](https://www.youtube.com/watch?v=iNLA8MqJN6A&t=8s&ab_channel=CodeChrysalis%5B%E3%82%B3%E3%83%BC%E3%83%89%E3%82%AF%E3%83%AA%E3%82%B5%E3%83%AA%E3%82%B9%5D).
 
 ### Backend repository
-The backend repository for this app can be found [here](https://github.com/brianlee9090/CC24-seniorprojectback).  
+The backend repository for this app can be found [here](https://github.com/ARBReW/justGoBack).  
 
 ### Getting Started 
 For optimal results, please make sure that the Node.js version on your local machine is `v16.13.2` or above.  
 
 - Clone the repositories:  
-    - frontend:  ```git clone https://github.com/brianlee9090/CC24-seniorprojectfront```
-    - backend repo:  ```git clone https://github.com/brianlee9090/CC24-seniorprojectback```
+    - frontend:  ```git clone https://github.com/ARBReW/justGoFront.git```
+    - backend repo:  ```git clone https://github.com/ARBReW/justGoBack.git```
 - Install npm packages: `npm install`
 - Start frontend:  `npm run dev`
 - Start backend: `npm start:dev`
