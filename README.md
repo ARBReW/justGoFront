@@ -20,23 +20,27 @@ The key feature of 'Just GO' is to provide the user with the ability to navigate
 ### How to use Just GO
 The web version of the app is hosted [here](https://justgo-cc24.herokuapp.com/).  
 
-- When users open Just GO, they are presented with a screen featuring the app logo, and a buttton which turns green once the user's geolocation is updated and the connection with the server is established.  
+- When users open Just GO, they are presented with a screen featuring the app logo, and a buttton which turns green once the user's geolocation is updated and the connection with the server is established.    
 <p align="center"> 
 <a href=""><img src="./images/image5.png" alt="login-page" height="200px" margin="auto"></a>  
-</p>
+</p>  
+  
 - On the next page, the users can select one of the several routes, by clicking left and right on the arow buttons on the bottom of the screen. Once the user has decided on a route, they can click the 'Just GO' button and they will be directed to the first place in the selected route. 
 <p align="center">  
 <a href=""><img src="./images/image1.png" alt="route-page" height="200px" margin="auto"></a>  
 </p>
+  
 - On this page, the users can confirm the name of the place and whether the place is open or not on that day. If they like the place, the users can click on the 'Directions to ...' button, in order to see how they can get there.  
 <p align="center">   
 <a href=""><img src="./images/image3.png" alt="place-page" height="200px" margin="auto"></a>
 </p>
+  
 -  On the navigation page, the users can see step-by-step instructions on how to get to the selected place, by clicking on the left and right arrows. As they navigate through the instructions, the street-view image will update simultanously. At any point, the user can click on the 'Refresh location' at the bottom of the screen, and the directions will be updated to start from their current location.  
 After the user has reached the destination, they can select the 'I'm done here"...' button to be directed to the next place in the route.
 <p align="center">   
 <a href=""><img src="./images/image4.png" alt="nav-page" height="200px" margin="auto"></a>  
 </p>
+  
 - At the end of the route, the users are presented with a list of the places they have visited that day. They can also finish a route early, by selecting the 'End Route' button on the bottom of the screen.
 <p align="center">   
 <a href=""><img src="./images/image2.png" alt="trip-history" height="200px" margin="auto">
@@ -44,8 +48,9 @@ After the user has reached the destination, they can select the 'I'm done here".
 </a>
 
 ### Project presentation & demo
-You can view the demo video of Just GO [here](https://drive.google.com/file/d/1zrjiTqp_OldZtjQuSNOt6gLw8gG0nzfT/view?usp=sharing),
-or watch our team presentation on [Youtube](https://youtu.be/iNLA8MqJN6A?t=556).
+
+Please watch our presentation on [Youtube](https://www.youtube.com/watch?v=iNLA8MqJN6A&t=8s&ab_channel=CodeChrysalis%5B%E3%82%B3%E3%83%BC%E3%83%89%E3%82%AF%E3%83%AA%E3%82%B5%E3%83%AA%E3%82%B9%5D).
+
 
 ### Backend repository
 The backend repository for this app can be found [here](https://github.com/ARBReW/justGoBack).  
