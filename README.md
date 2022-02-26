@@ -48,9 +48,8 @@ After the user has reached the destination, they can select the 'I'm done here".
 </a>
 
 ### Project presentation & demo
-
-Please watch our presentation on [Youtube](https://www.youtube.com/watch?v=iNLA8MqJN6A&t=8s&ab_channel=CodeChrysalis%5B%E3%82%B3%E3%83%BC%E3%83%89%E3%82%AF%E3%83%AA%E3%82%B5%E3%83%AA%E3%82%B9%5D).
-
+You can view the demo video of Just GO [here](https://drive.google.com/file/d/1zrjiTqp_OldZtjQuSNOt6gLw8gG0nzfT/view?usp=sharing),
+or watch our team presentation on [Youtube](https://youtu.be/iNLA8MqJN6A?t=556).
 
 ### Backend repository
 The backend repository for this app can be found [here](https://github.com/ARBReW/justGoBack).  
