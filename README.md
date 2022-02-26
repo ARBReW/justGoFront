@@ -48,7 +48,9 @@ After the user has reached the destination, they can select the 'I'm done here".
 </a>
 
 ### Project presentation & demo
+
 Please watch our presentation on [Youtube](https://www.youtube.com/watch?v=iNLA8MqJN6A&t=8s&ab_channel=CodeChrysalis%5B%E3%82%B3%E3%83%BC%E3%83%89%E3%82%AF%E3%83%AA%E3%82%B5%E3%83%AA%E3%82%B9%5D).
+
 
 ### Backend repository
 The backend repository for this app can be found [here](https://github.com/ARBReW/justGoBack).  
